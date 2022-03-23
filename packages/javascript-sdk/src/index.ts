@@ -5,9 +5,9 @@ import {Staking} from "./staking";
 
 export class BasSdk {
 
-    private keyProvider: KeyProvider;
-    private staking: Staking;
-    private governance: Governance;
+    private keyProvider?: KeyProvider;
+    private staking?: Staking;
+    private governance?: Governance;
 
     constructor(
         private readonly config: IConfig
@@ -16,21 +16,23 @@ export class BasSdk {
 
     public async connect(): Promise<void> {
         const keyProvider = new KeyProvider(this.config)
+        // connect web3
         await keyProvider.connectFromInjected()
+        // init providers
         this.keyProvider = keyProvider
         this.staking = new Staking(keyProvider)
         this.governance = new Governance(keyProvider)
     }
 
     public getKeyProvider(): KeyProvider {
-        return this.keyProvider
+        return this.keyProvider!;
     }
 
     public getStaking(): Staking {
-        return this.staking
+        return this.staking!;
     }
 
     public getGovernance(): Governance {
-        return this.governance;
+        return this.governance!;
     }
 }

@@ -37,7 +37,7 @@ export class Staking {
             .delegate(validator)
             .encodeABI()
         return this.keyProvider.sendTx({
-            to: this.keyProvider.stakingAddress,
+            to: this.keyProvider.stakingAddress!,
             value: amount,
             data: data,
         })
@@ -48,7 +48,7 @@ export class Staking {
             .undelegate(validator, amount)
             .encodeABI()
         return this.keyProvider.sendTx({
-            to: this.keyProvider.stakingAddress,
+            to: this.keyProvider.stakingAddress!,
             data: data,
         })
     }
@@ -58,7 +58,7 @@ export class Staking {
     }
 
     public async getMyStakingRewards(validator: Web3Address): Promise<Web3Uint256> {
-        const [delegator] = this.keyProvider.accounts
+        const [delegator] = this.keyProvider.accounts!
         return this.keyProvider.stakingContract!.methods.getDelegatorFee(validator, delegator).call()
     }
 
@@ -67,7 +67,7 @@ export class Staking {
     }
 
     public async getMyDelegatedAmount(validator: Web3Address): Promise<Web3Uint256> {
-        const [currentAccount] = this.keyProvider.accounts
+        const [currentAccount] = this.keyProvider.accounts!
         const result = await this.keyProvider.stakingContract!.methods
             .getValidatorDelegation(validator, currentAccount)
             .call()

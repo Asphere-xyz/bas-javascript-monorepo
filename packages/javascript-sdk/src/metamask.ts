@@ -14,7 +14,7 @@ export const waitForExpectedNetworkOrThrow = async (web3: Web3, config: IConfig)
         });
     } catch (error) {
         // This error code indicates that the chain has not been added to MetaMask.
-        if (error.code === 4902) {
+        if ((error as any).code === 4902) {
             await tryAddMetaMaskNetwork(web3, config);
             throw new Error(`Network for ${config.chainName} is not configured in your MetaMask`);
         }
@@ -29,8 +29,8 @@ export const tryAddMetaMaskNetwork = async (web3: Web3, config: IConfig): Promis
             params: [{chainId: numberToHex(config.chainId)}],
         });
         return true
-    } catch (switchError: any) {
-        if (switchError.code !== 4902) {
+    } catch (switchError) {
+        if ((switchError as any).code !== 4902) {
             console.error(switchError)
             return false
         }
@@ -47,7 +47,7 @@ export const tryAddMetaMaskNetwork = async (web3: Web3, config: IConfig): Promis
             ],
         });
         return true
-    } catch (addError: any) {
+    } catch (addError) {
         console.error(addError)
     }
     return false

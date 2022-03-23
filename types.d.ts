@@ -1,3 +1,0 @@
-interface IWindow {
-    ethereum?: any;
-}

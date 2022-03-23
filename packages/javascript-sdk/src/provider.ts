@@ -82,7 +82,7 @@ export class KeyProvider implements IKeyProvider {
         const web3 = new Web3(provider as any);
         try {
             await web3.eth.requestAccounts()
-        } catch (e: any) {
+        } catch (e) {
             console.error(e)
             throw new Error(`Can't request provider's account`);
         }
@@ -90,9 +90,9 @@ export class KeyProvider implements IKeyProvider {
     }
 
     private async unlockAccounts(web3: Web3): Promise<Web3Address[]> {
-        let unlockedAccounts: string[] = [];
+        let unlockedAccounts: Web3Address[] = [];
         try {
-            unlockedAccounts = await web3.eth.getAccounts();
+            unlockedAccounts = await web3.eth.requestAccounts();
         } catch (e) {
             console.error(e);
             throw new Error('User denied access to account');
@@ -124,14 +124,14 @@ export class KeyProvider implements IKeyProvider {
             minValidatorStakeAmount,
             minStakingAmount,
         ] = await Promise.all([
-            this.chainConfigContract.methods.getActiveValidatorsLength().call(),
-            this.chainConfigContract.methods.getEpochBlockInterval().call(),
-            this.chainConfigContract.methods.getMisdemeanorThreshold().call(),
-            this.chainConfigContract.methods.getFelonyThreshold().call(),
-            this.chainConfigContract.methods.getValidatorJailEpochLength().call(),
-            this.chainConfigContract.methods.getUndelegatePeriod().call(),
-            this.chainConfigContract.methods.getMinValidatorStakeAmount().call(),
-            this.chainConfigContract.methods.getMinStakingAmount().call(),
+            this.chainConfigContract!.methods.getActiveValidatorsLength().call(),
+            this.chainConfigContract!.methods.getEpochBlockInterval().call(),
+            this.chainConfigContract!.methods.getMisdemeanorThreshold().call(),
+            this.chainConfigContract!.methods.getFelonyThreshold().call(),
+            this.chainConfigContract!.methods.getValidatorJailEpochLength().call(),
+            this.chainConfigContract!.methods.getUndelegatePeriod().call(),
+            this.chainConfigContract!.methods.getMinValidatorStakeAmount().call(),
+            this.chainConfigContract!.methods.getMinStakingAmount().call(),
         ])
         return {
             activeValidatorsLength,
@@ -146,8 +146,8 @@ export class KeyProvider implements IKeyProvider {
     }
 
     public async sendTx(sendOptions: { to: string; data?: string; value?: string; }): Promise<IPendingTx> {
-        return await sendTransactionAsync(this.web3, {
-            from: this.accounts[0],
+        return await sendTransactionAsync(this.web3!, {
+            from: this.accounts![0],
             to: sendOptions.to,
             data: sendOptions.data,
         })

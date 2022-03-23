@@ -37,13 +37,13 @@ export class ProposalBuilder {
     }
 
     public async addDeployer(account: Web3Address): Promise<ProposalBuilder> {
-        const isDeployer = this.keyProvider.deployerProxyContract.methods.isDeployer(account).call();
+        const isDeployer = this.keyProvider.deployerProxyContract!.methods.isDeployer(account).call();
         if (isDeployer) {
             throw new Error(`Account ${account} is already deployer`)
         }
-        const inputData = this.keyProvider.deployerProxyContract.methods.addDeployer(account).encodeABI()
+        const inputData = this.keyProvider.deployerProxyContract!.methods.addDeployer(account).encodeABI()
         this.actions.push({
-            target: this.keyProvider.deployerProxyAddress,
+            target: this.keyProvider.deployerProxyAddress!,
             inputData: inputData,
             value: '0x00',
         });
@@ -51,13 +51,13 @@ export class ProposalBuilder {
     }
 
     public async removeDeployer(account: Web3Address): Promise<ProposalBuilder> {
-        const isDeployer = this.keyProvider.deployerProxyContract.methods.isDeployer(account).call();
+        const isDeployer = this.keyProvider.deployerProxyContract!.methods.isDeployer(account).call();
         if (!isDeployer) {
             throw new Error(`Account ${account} is not a deployer`)
         }
-        const inputData = this.keyProvider.deployerProxyContract.methods.removeDeployer(account).encodeABI()
+        const inputData = this.keyProvider.deployerProxyContract!.methods.removeDeployer(account).encodeABI()
         this.actions.push({
-            target: this.keyProvider.deployerProxyAddress,
+            target: this.keyProvider.deployerProxyAddress!,
             inputData: inputData,
             value: '0x00',
         });
@@ -86,10 +86,10 @@ export class Governance {
     }
 
     public async getProposals(options: PastEventOptions = {}): Promise<IGovernanceProposal[]> {
-        const events = await this.keyProvider!.governanceContract.getPastEvents('ProposalCreated', options) as any[],
+        const events = await this.keyProvider.governanceContract!.getPastEvents('ProposalCreated', options) as any[],
             result: IGovernanceProposal[] = []
         for (const {returnValues} of events) {
-            const state = await this.keyProvider!.governanceContract.methods.state(returnValues.proposalId).call()
+            const state = await this.keyProvider.governanceContract!.methods.state(returnValues.proposalId).call()
             result.push({
                 id: returnValues.proposalId,
                 // @ts-ignore
@@ -124,14 +124,14 @@ export class Governance {
             values = builder.actions.map((a) => a.value);
         let data: string
         if (builder.votingPeriod) {
-            data = this.keyProvider!.governanceContract.methods.proposeWithCustomVotingPeriod(targets, values, inputs, builder.description, builder.votingPeriod);
+            data = this.keyProvider.governanceContract!.methods.proposeWithCustomVotingPeriod(targets, values, inputs, builder.description, builder.votingPeriod);
         } else {
-            data = this.keyProvider!.governanceContract.methods.propose(targets, values, inputs, builder.description);
+            data = this.keyProvider.governanceContract!.methods.propose(targets, values, inputs, builder.description);
         }
-        return this.keyProvider.sendTx({to: this.keyProvider.governanceAddress, data: data});
+        return this.keyProvider.sendTx({to: this.keyProvider.governanceAddress!, data: data});
     }
 
-    public async executeProposal(id: string): Promise<IPendingTx> {
+    public async executeProposal(): Promise<IPendingTx> {
         throw new Error(`not implemented`);
     }
 }
