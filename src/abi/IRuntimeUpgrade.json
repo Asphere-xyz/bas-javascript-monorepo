@@ -1,0 +1,25 @@
+[
+  {
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "systemContractAddress",
+        "type": "address"
+      },
+      {
+        "internalType": "bytes",
+        "name": "newByteCode",
+        "type": "bytes"
+      },
+      {
+        "internalType": "bytes",
+        "name": "applyFunction",
+        "type": "bytes"
+      }
+    ],
+    "name": "upgradeSystemSmartContract",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  }
+]
