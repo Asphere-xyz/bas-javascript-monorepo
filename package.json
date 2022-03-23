@@ -4,19 +4,19 @@
     "packages/*"
   ],
   "description": "Typescript monorepo",
-  "repository": "https://github.com/stereobooster/typescript-monorepo",
+  "repository": "https://github.com/ankr-network/bas-javascript-monorepo",
   "license": "MIT",
   "private": true,
   "scripts": {
     "prestart": "yarn build",
     "start": "run-p start:*",
-    "start:stories": "lerna run start --stream --scope=@stereobooster/stories",
+    "start:stories": "lerna run start --stream --scope=@ankr.com/stories",
     "start:watch": "tsc --build --watch",
     "pretest": "yarn build",
     "test": "jest --config=jest.json",
-    "test:stories": "lerna run test --stream --scope=@stereobooster/stories",
+    "test:stories": "lerna run test --stream --scope=@ankr.com/stories",
     "build": "tsc --build",
-    "build:stories": "lerna run build --stream --scope=@stereobooster/stories",
+    "build:stories": "lerna run build --stream --scope=@ankr.com/stories",
     "clean": "rimraf packages/*/{tsconfig.tsbuildinfo,lib,dist}"
   },
   "devDependencies": {
@@ -36,6 +36,6 @@
     "react-test-renderer": "^16.8.6",
     "rimraf": "^2.6.3",
     "ts-jest": "^24.0.2",
-    "typescript": "^3.4.5"
+    "typescript": "^4.6.2"
   }
 }

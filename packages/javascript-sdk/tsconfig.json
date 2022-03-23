@@ -1,12 +1,14 @@
 {
   "include": [
-    "src"
+    "src",
+    "src/**/*.json"
   ],
   "extends": "../../tsconfig.json",
   "compilerOptions": {
     "outDir": "lib",
     "rootDir": "src",
-    "baseUrl": "."
+    "baseUrl": ".",
+    "useDefineForClassFields": true
   },
   "references": []
 }

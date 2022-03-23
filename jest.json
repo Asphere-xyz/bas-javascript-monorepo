@@ -11,6 +11,6 @@
     }
   },
   "moduleNameMapper": {
-    "@stereobooster/(.*)$": "<rootDir>/packages/$1"
+    "@ankr.com/(.*)$": "<rootDir>/packages/$1"
   }
 }

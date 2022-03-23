@@ -5,7 +5,7 @@
   "main": "./lib/index.js",
   "types": "./lib/index.d.ts",
   "repository": "",
-  "author": "stereobooster <stereobooster@gmail.com>",
+  "author": "Dmitry Savonin <dmitry@ankr.com>",
   "license": "MIT",
   "publishConfig": {
     "access": "public"

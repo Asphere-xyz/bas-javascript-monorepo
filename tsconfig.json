@@ -32,7 +32,7 @@
     "forceConsistentCasingInFileNames": true,
     "baseUrl": ".",
     "paths": {
-      "@stereobooster/*": [
+      "@ankr.com/*": [
         "packages/*/src"
       ]
     },
@@ -45,6 +45,9 @@
   "references": [
     {
       "path": "packages/javascript-sdk"
+    },
+    {
+      "path": "packages/staking-ui"
     }
   ]
 }
