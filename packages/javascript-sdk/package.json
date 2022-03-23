@@ -1,6 +1,6 @@
 {
   "name": "@ankr.com/bas-javascript-sdk",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "",
   "main": "./lib/index.js",
   "types": "./lib/index.d.ts",
@@ -20,8 +20,6 @@
     "web3-eth-contract": "^1.7.1",
     "web3-utils": "^1.7.1"
   },
-  "peerDependencies": {},
-  "devDependencies": {},
   "scripts": {
     "start": "tsc -w --preserveWatchOutput"
   }
