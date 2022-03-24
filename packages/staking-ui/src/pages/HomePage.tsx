@@ -8,8 +8,6 @@ import {
 import ProposalTable from "../components/ProposalTable";
 import {useChilizStore} from "../stores";
 import CreateProposalForm from "../components/CreateProposalForm";
-import DeployerTable from "../components/DeployerTable";
-import SmartContractTable from "../components/SmartContractTable";
 import ValidatorTable from "../components/ValidatorTable";
 
 const ProposalNav = observer((props: any): ReactElement => {
@@ -32,22 +30,6 @@ const ProposalNav = observer((props: any): ReactElement => {
       <Button size={"large"} type={"primary"} onClick={() => {
         setDrawerVisible(true)
       }} icon={<PlusOutlined translate/>}>Create Proposal</Button>
-    </div>
-  );
-})
-
-const DeployerNav = observer((props: any): ReactElement => {
-  return (
-    <div>
-      <DeployerTable/>
-    </div>
-  );
-})
-
-const SmartContractNav = observer((props: any): ReactElement => {
-  return (
-    <div>
-      <SmartContractTable/>
     </div>
   );
 })
@@ -96,20 +78,12 @@ const HomePage = observer((props: IHomePageProps): ReactElement => {
         <Menu.Item key="voting_power" icon={<LockOutlined translate/>}>
           Voting Power
         </Menu.Item>
-        <Menu.Item key="deployer" icon={<LockOutlined translate/>}>
-          Deployers
-        </Menu.Item>
-        <Menu.Item key="smart_contract" icon={<LockOutlined translate/>}>
-          Smart Contracts
-        </Menu.Item>
         <Menu.Item key="validator" icon={<LockOutlined translate/>}>
           Validators
         </Menu.Item>
       </Menu>
       <br/>
       {currentTab === 'governance' && <ProposalNav/>}
-      {currentTab === 'deployer' && <DeployerNav/>}
-      {currentTab === 'smart_contract' && <SmartContractNav/>}
       {currentTab === 'validator' && <ValidatorNav/>}
       <Divider/>
       <b>blockNumber</b>: {blockInfo.blockNumber}<br/>

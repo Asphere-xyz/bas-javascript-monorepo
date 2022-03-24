@@ -1,9 +1,10 @@
 import {Button, Table} from "antd";
 import {observer} from "mobx-react";
 import {useChilizStore} from "../stores";
-import {BasStore, IValidator} from "../stores/BasStore";
+import {BasStore} from "../stores/BasStore";
 import {useLocalGridStore} from "../stores/LocalGridStore";
 import {BigNumber} from "bignumber.js"
+import {Web3Uint256, IValidator} from "@ankr.com/bas-javascript-sdk";
 
 const createTableColumns = (store: BasStore) => {
   return [
@@ -62,8 +63,8 @@ const createTableColumns = (store: BasStore) => {
               if (!amount) return;
               const bigAmount = new BigNumber(amount).multipliedBy(10**18).toString(10)
               console.log(`Amount is: ${bigAmount}`)
-              const result = await store.delegateTo(validator.validator, `${bigAmount}`),
-                receipt = await result.receiptPromise;
+              const result = await store.getBasSdk().getStaking().delegateTo(validator.validator, `${bigAmount}`),
+                receipt = await result.receipt;
               console.log(`Receipt: ${JSON.stringify(receipt, null, 2)}`);
             }}>Delegate</Button>
             &nbsp;
@@ -72,8 +73,8 @@ const createTableColumns = (store: BasStore) => {
               const amount = prompt('Enter undelegation amount (in ether): ')
               if (!amount) return;
               console.log(`Amount is: ${(Number(amount) * 10 ** 18).toFixed(0)}`)
-              const result = await store.undelegateFrom(validator.validator, `${(Number(amount) * 10 ** 18).toFixed(0)}`),
-                receipt = await result.receiptPromise;
+              const result = await store.getBasSdk().getStaking().undelegateFrom(validator.validator, `${(Number(amount) * 10 ** 18).toFixed(0)}`),
+                receipt = await result.receipt;
               console.log(`Receipt: ${JSON.stringify(receipt, null, 2)}`);
             }}>Undelegate</Button>
           </>
@@ -86,17 +87,25 @@ const createTableColumns = (store: BasStore) => {
 export interface IValidatorTableProps {
 }
 
+interface IValidatorWithAmounts extends IValidator {
+  myDelegatedAmount: Web3Uint256;
+  validatorFee: Web3Uint256;
+  myStakingRewards: Web3Uint256;
+}
+
 const ValidatorTableProps = observer((props: IValidatorTableProps) => {
   const store = useChilizStore()
-  const grid = useLocalGridStore<IValidator>(async (offset: number, limit: number): Promise<[IValidator[], boolean]> => {
-    const validators = await store.getActiveValidators()
+  const grid = useLocalGridStore<IValidator>(async (offset: number, limit: number): Promise<[IValidatorWithAmounts[], boolean]> => {
+    const validators = await store.getBasSdk().getStaking().getValidators(),
+      result: IValidatorWithAmounts[] = []
     for (const validator of validators) {
-      validator.myDelegatedAmount = await store.getMyDelegatedAmount(validator.validator)
-      validator.validatorFee = await store.getValidatorRewards(validator.validator)
-      validator.myStakingRewards = await store.getMyStakingRewards(validator.validator)
+      result.push(Object.assign({}, validator, {
+        myDelegatedAmount: await store.getBasSdk().getStaking().getMyDelegatedAmount(validator.validator),
+        validatorFee: await store.getBasSdk().getStaking().getValidatorRewards(validator.validator),
+        myStakingRewards: await store.getBasSdk().getStaking().getMyStakingRewards(validator.validator),
+      }));
     }
-    console.log(validators)
-    return [validators, false]
+    return [result, false]
   })
   return (
     <Table

@@ -4,7 +4,7 @@ import {useChilizStore} from "../stores";
 import {BasStore} from "../stores/BasStore";
 import {useLocalGridStore} from "../stores/LocalGridStore";
 import {ReactElement} from "react";
-import {TProposalStatus} from "@ankr.com/bas-javascript-sdk";
+import {IGovernanceProposal, TProposalStatus} from "@ankr.com/bas-javascript-sdk";
 
 const renderStatus = (status: TProposalStatus): ReactElement => {
   const colors: Record<string, string> = {
@@ -71,66 +71,63 @@ const createTableColumns = (store: BasStore) => {
       key: 'description',
       render: (description: string) => description.length > 30 ? description.substr(0, 30) + '...' : description,
     },
-    {
-      render: (event: IProposal) => {
-        if (`${event.status}` === 'Active') {
-          return (
-            <Button.Group>
-              <Button type={"primary"} onClick={async () => {
-                const {transactionHash, receiptPromise} = await store.voteForProposal(event.proposalId),
-                  receipt = await receiptPromise
-                console.log(transactionHash)
-                console.log(receipt)
-              }}>Vote For</Button>
-              <Button onClick={async () => {
-                const {transactionHash, receiptPromise} = await store.voteAgainstProposal(event.proposalId),
-                  receipt = await receiptPromise
-                console.log(transactionHash)
-                console.log(receipt)
-              }}>Vote Against</Button>
-            </Button.Group>
-          )
-        } else if (`${event.status}` === 'Succeeded' || `${event.status}` === 'Queued') {
-          return (
-            <Button.Group>
-              <Button type={"primary"} onClick={async () => {
-                const {transactionHash, receiptPromise} = await store.executeProposal(event),
-                  receipt = await receiptPromise
-                console.log(transactionHash)
-                console.log(receipt)
-              }}>Execute</Button>
-            </Button.Group>
-          )
-        }
-        return;
-      }
-    }
+    // {
+    //   render: (event: IProposal) => {
+    //     if (`${event.status}` === 'Active') {
+    //       return (
+    //         <Button.Group>
+    //           <Button type={"primary"} onClick={async () => {
+    //             const {transactionHash, receiptPromise} = await store.voteForProposal(event.proposalId),
+    //               receipt = await receiptPromise
+    //             console.log(transactionHash)
+    //             console.log(receipt)
+    //           }}>Vote For</Button>
+    //           <Button onClick={async () => {
+    //             const {transactionHash, receiptPromise} = await store.voteAgainstProposal(event.proposalId),
+    //               receipt = await receiptPromise
+    //             console.log(transactionHash)
+    //             console.log(receipt)
+    //           }}>Vote Against</Button>
+    //         </Button.Group>
+    //       )
+    //     } else if (`${event.status}` === 'Succeeded' || `${event.status}` === 'Queued') {
+    //       return (
+    //         <Button.Group>
+    //           <Button type={"primary"} onClick={async () => {
+    //             const {transactionHash, receiptPromise} = await store.executeProposal(event),
+    //               receipt = await receiptPromise
+    //             console.log(transactionHash)
+    //             console.log(receipt)
+    //           }}>Execute</Button>
+    //         </Button.Group>
+    //       )
+    //     }
+    //     return;
+    //   }
+    // }
   ];
 }
 
 export interface IProposalTableProps {
 }
 
-const ProposalExplainer = ({event}: { event: IProposal }) => {
+const ProposalExplainer = ({event}: { event: IGovernanceProposal }) => {
   return (
     <div>
       <Descriptions
-        title={`Proposal: #${event.proposalId}`}
+        title={`Proposal: #${event.id}`}
         layout={'horizontal'}
         size={'small'}
         column={1}
         bordered
       >
-        <Descriptions.Item key="id" label="ID">{event.proposalId}</Descriptions.Item>
+        <Descriptions.Item key="id" label="ID">{event.id}</Descriptions.Item>
         <Descriptions.Item key="status" label="Status">{renderStatus(event.status)}</Descriptions.Item>
-        <Descriptions.Item key="governanceAddress" label="Governance Address">{event.address}</Descriptions.Item>
-        <Descriptions.Item key="blockHash" label="Block Hash">{event.blockHash}</Descriptions.Item>
-        <Descriptions.Item key="blockNumber" label="Block Number">{event.blockNumber}</Descriptions.Item>
+        <Descriptions.Item key="governanceAddress" label="Governance Address">{event.proposer}</Descriptions.Item>
         <Descriptions.Item key="startBlock" label="Start Block">{event.startBlock}</Descriptions.Item>
         <Descriptions.Item key="endBlock" label="End Block">{event.endBlock}</Descriptions.Item>
         <Descriptions.Item key="proposer" label="Proposer Address">{event.proposer}</Descriptions.Item>
-        <Descriptions.Item key="transactionHash" label="Transaction Hash">{event.transactionHash}</Descriptions.Item>
-        <Descriptions.Item key="description" label="Description">{event.description}</Descriptions.Item>
+        <Descriptions.Item key="description" label="Description">{event.desc}</Descriptions.Item>
       </Descriptions>
       <br/>
       <Descriptions
@@ -142,7 +139,7 @@ const ProposalExplainer = ({event}: { event: IProposal }) => {
       >
         {event.targets.map((value, index) => (
           <Descriptions.Item key={value}
-                             label={`${value} (${event.values[index]} wei)`}>{event.calldatas[index]}</Descriptions.Item>
+                             label={`${value} (${event.values[index]} wei)`}>{event.inputs[index]}</Descriptions.Item>
         ))}
       </Descriptions>
       <br/>
@@ -152,14 +149,15 @@ const ProposalExplainer = ({event}: { event: IProposal }) => {
 
 const ProposalTable = observer((props: IProposalTableProps) => {
   const store = useChilizStore()
-  const grid = useLocalGridStore<IProposal>(async (offset: number, limit: number): Promise<[IProposal[], boolean]> => {
-    return [await store.getProposals({fromBlock: 'earliest', toBlock: 'latest'}), false]
+  const grid = useLocalGridStore<IGovernanceProposal>(async (offset: number, limit: number): Promise<[IGovernanceProposal[], boolean]> => {
+    const proposals = await store.getBasSdk().getGovernance().getProposals({fromBlock: 'earliest', toBlock: 'latest'})
+    return [proposals, false]
   })
   return (
     <Table
       loading={grid.isLoading} pagination={grid.paginationConfig} dataSource={grid.items}
       expandable={{
-        expandedRowRender: (event: IProposal) => {
+        expandedRowRender: (event: IGovernanceProposal) => {
           return <ProposalExplainer event={event}/>
         },
       }}

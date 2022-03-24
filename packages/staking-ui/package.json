@@ -36,7 +36,9 @@
   },
   "devDependencies": {
     "@ankr.com/bas-javascript-sdk": "*",
-    "@babel/plugin-proposal-class-properties": "^7.16.7",
+    "@babel/core": "^7.17.8",
+    "@babel/preset-env": "^7.16.11",
+    "@types/react-dom": "^17.0.14",
     "env-cmd": "^10.1.0"
   },
   "scripts": {
