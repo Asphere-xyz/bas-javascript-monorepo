@@ -17,7 +17,6 @@
     "clean": "rimraf packages/*/{tsconfig.tsbuildinfo,lib,dist}"
   },
   "devDependencies": {
-    "@0x/abi-gen": "^5.8.0",
     "@babel/core": "^7.4.5",
     "@babel/preset-env": "^7.4.5",
     "@babel/preset-react": "^7.0.0",
