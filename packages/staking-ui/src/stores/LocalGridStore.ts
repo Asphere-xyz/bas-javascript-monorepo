@@ -1,20 +1,20 @@
-import {action, computed, makeAutoObservable} from "mobx";
 import {TablePaginationConfig} from "antd";
+import {action, computed, makeAutoObservable} from "mobx";
 import {DependencyList, useEffect, useMemo} from "react";
 
 export type LocalGridStoreDataHandler<T> = (offset: number, limit: number) => Promise<[T[], boolean]>
 
 export class LocalGridStore<T> {
 
-  public currentPage: number = 0;
+  public currentPage = 0;
 
-  public pageSize: number = 10;
+  public pageSize = 10;
 
   public items: T[] = [];
 
-  public isLoading: boolean = false;
+  public isLoading = false;
 
-  public hasMore: boolean = false;
+  public hasMore = false;
 
   public constructor(private readonly dataHandler: LocalGridStoreDataHandler<T>) {
     makeAutoObservable(this)
@@ -22,6 +22,7 @@ export class LocalGridStore<T> {
 
   @computed
   get paginationConfig(): TablePaginationConfig {
+    // eslint-disable-next-line @typescript-eslint/no-this-alias
     const that = this;
     const config: TablePaginationConfig = {
       current: this.currentPage + 1,
@@ -58,7 +59,8 @@ export class LocalGridStore<T> {
 
   @action
   async fetchItems(): Promise<void> {
-    this.isLoading = true
+    this.isLoading = true;
+    // eslint-disable-next-line prefer-const
     let [newItems, hasMore] = await this.dataHandler(this.currentPage * this.pageSize, this.pageSize);
     if (hasMore) {
       newItems = newItems.slice(0, newItems.length - 1)

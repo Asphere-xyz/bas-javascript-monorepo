@@ -5,6 +5,7 @@
   ],
   "extends": "../../tsconfig.json",
   "compilerOptions": {
+    "jsx": "preserve",
     "outDir": "lib",
     "rootDir": "src",
     "baseUrl": ".",

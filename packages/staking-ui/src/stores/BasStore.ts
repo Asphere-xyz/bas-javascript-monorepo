@@ -1,11 +1,11 @@
-import {action, makeAutoObservable} from "mobx";
 import {BasSdk, IConfig} from "@ankr.com/bas-javascript-sdk";
+import {action, makeAutoObservable} from "mobx";
 
 const makeDefaultConfig = (chainId: number, chainName: string, rpcUrl: string): IConfig => {
   return {
-    chainId: chainId,
-    chainName: chainName,
-    rpcUrl: rpcUrl,
+    chainId,
+    chainName,
+    rpcUrl,
     // BSC-compatible contracts
     stakingAddress: '0x0000000000000000000000000000000000001000',
     slashingIndicatorAddress: '0x0000000000000000000000000000000000001001',
@@ -24,7 +24,7 @@ export const TESTNET_CONFIG: IConfig = makeDefaultConfig(17242, 'BAS testnet', '
 
 export class BasStore {
 
-  public isConnected: boolean = false
+  public isConnected = false
 
   private readonly sdk: BasSdk
 
@@ -38,7 +38,7 @@ export class BasStore {
   }
 
   @action
-  public async connectFromInjected() {
+  public async connectFromInjected(): Promise<void> {
     this.isConnected = false
     if (!this.sdk.isConnected()) {
       await this.sdk.connect()
@@ -66,8 +66,8 @@ export class BasStore {
     minValidatorStakeAmount: number;
     minStakingAmount: number;
   }> {
-    const chainConfig = await this.sdk.getChainConfig(),
-      chainParams = await this.sdk.getChainParams();
-    return Object.assign({}, chainConfig, chainParams)
+    const chainConfig = await this.sdk.getChainConfig();
+      const chainParams = await this.sdk.getChainParams();
+    return { ...chainConfig, ...chainParams}
   }
 }

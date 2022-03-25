@@ -1,8 +1,10 @@
 import {MobXProviderContext} from 'mobx-react'
+import { IValueMap } from 'mobx-react/dist/types/IValueMap';
 import React from "react";
+
 import {BasStore, DEVNET_CONFIG, TESTNET_CONFIG} from "./BasStore";
 
-let currentEnvironment = process.env.REACT_APP_ENVIRONMENT || 'devnet';
+const currentEnvironment = process.env.REACT_APP_ENVIRONMENT || 'devnet';
 
 console.log(`Current env is: ${currentEnvironment}`)
 
@@ -15,11 +17,11 @@ if (currentEnvironment === 'devnet') {
 
 const basStore = new BasStore(config)
 basStore.connectFromInjected().then(async () => {
-  const [currentAccount] = basStore.getBasSdk().getKeyProvider().accounts!
-  console.log(`Current account is: ${currentAccount}`)
+  const currentAccount = basStore.getBasSdk().getKeyProvider().accounts;
+  console.log(`Current account is: ${[currentAccount]}`)
 })
 
-export const useStores = () => {
+export const useStores: any = () => {
   return React.useContext(MobXProviderContext)
 }
 

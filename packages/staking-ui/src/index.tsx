@@ -1,12 +1,11 @@
+import {Provider} from "mobx-react";
 import React from 'react';
 import ReactDOM from 'react-dom';
+import {BrowserRouter} from "react-router-dom";
 
 import './index.css';
-import reportWebVitals from './reportWebVitals';
-
 import IndexPage from "./pages";
-import {Provider} from "mobx-react";
-import {BrowserRouter} from "react-router-dom";
+import reportWebVitals from './reportWebVitals';
 
 const App = () => {
   return (

@@ -5,14 +5,14 @@ import {sendTransactionAsync, waitForExpectedNetworkOrThrow} from "./metamask";
 import {Contract} from "web3-eth-contract";
 import detectEthereumProvider from "@metamask/detect-provider";
 
-const STAKING_ABI = require('./abi/Staking.json')
-const SLASHING_INDICATOR_ABI = require('./abi/SlashingIndicator.json')
-const SYSTEM_REWARD_ABI = require('./abi/SystemReward.json')
-const STAKING_POOL_ABI = require('./abi/StakingPool.json')
-const GOVERNANCE_ABI = require('./abi/Governance.json')
-const CHAIN_CONFIG_ABI = require('./abi/ChainConfig.json')
-const RUNTIME_UPGRADE_ABI = require('./abi/RuntimeUpgrade.json')
-const DEPLOYER_PROXY_ABI = require('./abi/DeployerProxy.json')
+const STAKING_ABI = require('../src/abi/Staking.json')
+const SLASHING_INDICATOR_ABI = require('../src/abi/SlashingIndicator.json')
+const SYSTEM_REWARD_ABI = require('../src/abi/SystemReward.json')
+const STAKING_POOL_ABI = require('../src/abi/StakingPool.json')
+const GOVERNANCE_ABI = require('../src/abi/Governance.json')
+const CHAIN_CONFIG_ABI = require('../src/abi/ChainConfig.json')
+const RUNTIME_UPGRADE_ABI = require('../src/abi/RuntimeUpgrade.json')
+const DEPLOYER_PROXY_ABI = require('../src/abi/DeployerProxy.json')
 
 export class KeyProvider implements IKeyProvider {
 

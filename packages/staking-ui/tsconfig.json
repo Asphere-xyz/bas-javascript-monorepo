@@ -1,5 +1,10 @@
 {
+  "extends": "../../tsconfig.json",
   "compilerOptions": {
+    "jsx": "preserve",
+    "rootDirs": [
+      "."
+    ],
     "target": "es5",
     "lib": [
       "dom",
@@ -16,17 +21,14 @@
     "module": "esnext",
     "moduleResolution": "node",
     "resolveJsonModule": true,
-    "isolatedModules": true,
+    "isolatedModules": false,
     "noEmit": true,
-    "experimentalDecorators": true,
-    "jsx": "react-jsx"
+    // "jsx": "react",
+    "baseUrl": "src",
+    "experimentalDecorators": true
   },
   "include": [
-    "src"
+    "src",
+    "typings/**/*.d.ts"
   ],
-  "references": [
-    {
-      "path": "../javascript-sdk"
-    }
-  ]
 }

@@ -1,35 +1,39 @@
-import {observer} from "mobx-react";
-import {ReactElement, useEffect, useState} from "react";
-import {Button, Divider, Drawer, Menu} from "antd";
 import {
   LockOutlined,
   PlusOutlined,
 } from "@ant-design/icons";
-import ProposalTable from "../components/ProposalTable";
-import {useChilizStore} from "../stores";
+import {Button, Divider, Drawer, Menu} from "antd";
+import {observer} from "mobx-react";
+import {ReactElement, useEffect, useState} from "react";
+
 import CreateProposalForm from "../components/CreateProposalForm";
+import ProposalTable from "../components/ProposalTable";
 import ValidatorTable from "../components/ValidatorTable";
+import {useChilizStore} from "../stores";
 
 const ProposalNav = observer((props: any): ReactElement => {
   const [drawerVisible, setDrawerVisible] = useState(false)
   return (
     <div>
       <Drawer
+        bodyStyle={{paddingBottom: 80}}
         title="Create proposal"
+        visible={drawerVisible}
         width={500}
         onClose={() => {
           setDrawerVisible(false)
         }}
-        bodyStyle={{paddingBottom: 80}}
-        visible={drawerVisible}
       >
         <CreateProposalForm/>
       </Drawer>
+
       <ProposalTable/>
+
       <br/>
-      <Button size={"large"} type={"primary"} onClick={() => {
+
+      <Button icon={<PlusOutlined translate="yes"/>} size="large" type="primary" onClick={() => {
         setDrawerVisible(true)
-      }} icon={<PlusOutlined translate/>}>Create Proposal</Button>
+      }}>Create Proposal</Button>
     </div>
   );
 })
@@ -66,42 +70,114 @@ const HomePage = observer((props: IHomePageProps): ReactElement => {
   return (
     <div>
       <Menu
+        mode="horizontal"
         selectedKeys={[currentTab]}
         onSelect={({selectedKeys}) => {
           setCurrentTab(selectedKeys[0])
         }}
-        mode="horizontal"
       >
-        <Menu.Item key="governance" icon={<LockOutlined translate/>}>
+        <Menu.Item key="governance" icon={<LockOutlined translate="yes"/>}>
           Governance
         </Menu.Item>
-        <Menu.Item key="voting_power" icon={<LockOutlined translate/>}>
+
+        <Menu.Item key="voting_power" icon={<LockOutlined translate="yes"/>}>
           Voting Power
         </Menu.Item>
-        <Menu.Item key="validator" icon={<LockOutlined translate/>}>
+
+        <Menu.Item key="validator" icon={<LockOutlined translate="yes"/>}>
           Validators
         </Menu.Item>
       </Menu>
+
       <br/>
+
       {currentTab === 'governance' && <ProposalNav/>}
+
       {currentTab === 'validator' && <ValidatorNav/>}
+
       <Divider/>
-      <b>blockNumber</b>: {blockInfo.blockNumber}<br/>
-      <b>currentEpoch</b>: {blockInfo.epoch}<br/>
-      <b>nextEpochBlock</b>: {blockInfo.nextEpochBlock}&nbsp;(in {blockInfo.nextEpochInSec} sec
-      or {(blockInfo.nextEpochInSec / 60).toFixed(1)} min)<br/>
-      <b>blockTime</b>: {blockInfo.blockTime}<br/>
+
+      <b>blockNumber</b>: 
+      
+      {blockInfo.blockNumber}
+        
       <br/>
-      <b>activeValidatorsLength</b>: {blockInfo.activeValidatorsLength}<br/>
-      <b>epochBlockInterval</b>: {blockInfo.epochBlockInterval}<br/>
-      <b>misdemeanorThreshold</b>: {blockInfo.misdemeanorThreshold}<br/>
-      <b>felonyThreshold</b>: {blockInfo.felonyThreshold}<br/>
-      <b>validatorJailEpochLength</b>: {blockInfo.validatorJailEpochLength}<br/>
-      <b>undelegatePeriod</b>: {blockInfo.undelegatePeriod}<br/>
-      <b>minValidatorStakeAmount</b>: {blockInfo.minValidatorStakeAmount}<br/>
-      <b>minStakingAmount</b>: {blockInfo.minStakingAmount}<br/>
+
+      <b>currentEpoch</b>: 
+        
+      {blockInfo.epoch}
+        
+      <br/>
+
+      <b>nextEpochBlock</b>: 
+      
+      {blockInfo.nextEpochBlock}
+      
+      &nbsp;(in {blockInfo.nextEpochInSec} sec
+
+      or {(blockInfo.nextEpochInSec / 60).toFixed(1)} min)
+      
+      <br/>
+
+      <b>blockTime</b>: 
+
+        {blockInfo.blockTime}
+
+      <br/>
+
+      <br/>
+
+      <b>activeValidatorsLength</b>: 
+      
+      {blockInfo.activeValidatorsLength}
+      
+      <br/>
+
+      <b>epochBlockInterval</b>: 
+      
+      {blockInfo.epochBlockInterval}
+      
+      <br/>
+
+      <b>misdemeanorThreshold</b>: 
+      
+      {blockInfo.misdemeanorThreshold}
+      
+      <br/>
+
+      <b>felonyThreshold</b>: 
+      
+      {blockInfo.felonyThreshold}
+      
+      <br/>
+
+      <b>validatorJailEpochLength</b>: 
+      
+      {blockInfo.validatorJailEpochLength}
+      
+      <br/>
+
+      <b>undelegatePeriod</b>: 
+      
+      {blockInfo.undelegatePeriod}
+      
+      <br/>
+
+      <b>minValidatorStakeAmount</b>: 
+      
+      {blockInfo.minValidatorStakeAmount}
+      
+      <br/>
+
+      <b>minStakingAmount</b>: 
+      
+      {blockInfo.minStakingAmount}
+      
+      <br/>
+
       <br/>
       P.S: MetaMask caches responses for 12 seconds
+
       <Divider/>
     </div>
   );

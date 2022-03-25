@@ -1,10 +1,11 @@
-import {Button, Table, Descriptions, Tag} from "antd";
-import {observer} from "mobx-react";
-import {useChilizStore} from "../stores";
-import {BasStore} from "../stores/BasStore";
-import {useLocalGridStore} from "../stores/LocalGridStore";
-import {ReactElement} from "react";
 import {IGovernanceProposal, TProposalStatus} from "@ankr.com/bas-javascript-sdk";
+import {Table, Descriptions, Tag} from "antd";
+import {observer} from "mobx-react";
+import {ReactElement} from "react";
+
+import {useChilizStore} from "../stores";
+// import {BasStore} from "../stores/BasStore";
+import {useLocalGridStore} from "../stores/LocalGridStore";
 
 const renderStatus = (status: TProposalStatus): ReactElement => {
   const colors: Record<string, string> = {
@@ -17,7 +18,7 @@ const renderStatus = (status: TProposalStatus): ReactElement => {
     Expired: 'red',
     Executed: 'green'
   };
-  return <Tag color={colors[status.toString()] || 'grey'} key={status}>{status}</Tag>
+  return <Tag key={status} color={colors[status.toString()] || 'grey'}>{status}</Tag>
 };
 
 // const renderType = (type: EProposalType): ReactElement => {
@@ -31,13 +32,13 @@ const renderStatus = (status: TProposalStatus): ReactElement => {
 //   return <Tag color={colors[type.toString()] || 'grey'} key={type}>{type}</Tag>
 // };
 
-const createTableColumns = (store: BasStore) => {
+const createTableColumns = () => {
   return [
     {
       title: 'Id',
       dataIndex: 'proposalId',
       key: 'proposalId',
-      render: (value: string) => value.substr(0, 20) + '...',
+      render: (value: string) => `${value.substr(0, 20)  }...`,
     },
     {
       title: 'Status',
@@ -69,7 +70,7 @@ const createTableColumns = (store: BasStore) => {
       title: 'Description',
       dataIndex: 'description',
       key: 'description',
-      render: (description: string) => description.length > 30 ? description.substr(0, 30) + '...' : description,
+      render: (description: string) => description.length > 30 ? `${description.substr(0, 30)  }...` : description,
     },
     // {
     //   render: (event: IProposal) => {
@@ -115,54 +116,63 @@ const ProposalExplainer = ({event}: { event: IGovernanceProposal }) => {
   return (
     <div>
       <Descriptions
-        title={`Proposal: #${event.id}`}
-        layout={'horizontal'}
-        size={'small'}
-        column={1}
         bordered
+        column={1}
+        layout="horizontal"
+        size="small"
+        title={`Proposal: #${event.id}`}
       >
         <Descriptions.Item key="id" label="ID">{event.id}</Descriptions.Item>
+
         <Descriptions.Item key="status" label="Status">{renderStatus(event.status)}</Descriptions.Item>
+
         <Descriptions.Item key="governanceAddress" label="Governance Address">{event.proposer}</Descriptions.Item>
+
         <Descriptions.Item key="startBlock" label="Start Block">{event.startBlock}</Descriptions.Item>
+
         <Descriptions.Item key="endBlock" label="End Block">{event.endBlock}</Descriptions.Item>
+
         <Descriptions.Item key="proposer" label="Proposer Address">{event.proposer}</Descriptions.Item>
+
         <Descriptions.Item key="description" label="Description">{event.desc}</Descriptions.Item>
       </Descriptions>
+
       <br/>
+
       <Descriptions
-        title={`Actions`}
-        layout={'horizontal'}
-        size={'small'}
-        column={2}
         bordered
+        column={2}
+        layout="horizontal"
+        size="small"
+        title="Actions"
       >
         {event.targets.map((value, index) => (
           <Descriptions.Item key={value}
                              label={`${value} (${event.values[index]} wei)`}>{event.inputs[index]}</Descriptions.Item>
         ))}
       </Descriptions>
+
       <br/>
     </div>
   )
 }
 
-const ProposalTable = observer((props: IProposalTableProps) => {
+const ProposalTable = observer(() => {
   const store = useChilizStore()
-  const grid = useLocalGridStore<IGovernanceProposal>(async (offset: number, limit: number): Promise<[IGovernanceProposal[], boolean]> => {
+  const grid = useLocalGridStore<IGovernanceProposal>(async (): Promise<[IGovernanceProposal[], boolean]> => {
     const proposals = await store.getBasSdk().getGovernance().getProposals({fromBlock: 'earliest', toBlock: 'latest'})
     return [proposals, false]
   })
   return (
     <Table
-      loading={grid.isLoading} pagination={grid.paginationConfig} dataSource={grid.items}
-      expandable={{
+      columns={createTableColumns()} dataSource={grid.items} expandable={{
         expandedRowRender: (event: IGovernanceProposal) => {
           return <ProposalExplainer event={event}/>
         },
       }}
-      rowKey={'proposalId'}
-      columns={createTableColumns(store)}
+      loading={grid.isLoading}
+      pagination={grid.paginationConfig}
+      rowKey="proposalId"
     />
   );
 });
