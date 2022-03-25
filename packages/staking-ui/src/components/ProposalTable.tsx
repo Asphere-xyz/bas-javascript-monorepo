@@ -3,7 +3,7 @@ import {Table, Descriptions, Tag, Button} from "antd";
 import {observer} from "mobx-react";
 import {ReactElement} from "react";
 
-import {useChilizStore} from "../stores";
+import {useBasStore} from "../stores";
 import {BasStore} from "../stores/BasStore";
 import {useLocalGridStore} from "../stores/LocalGridStore";
 
@@ -161,7 +161,7 @@ const ProposalExplainer = ({event}: { event: IGovernanceProposal }) => {
 }
 
 const ProposalTable = observer(() => {
-  const store = useChilizStore()
+  const store = useBasStore()
   const grid = useLocalGridStore<IGovernanceProposal>(async (): Promise<[IGovernanceProposal[], boolean]> => {
     const proposals = await store.getBasSdk().getGovernance().getProposals({fromBlock: 'earliest', toBlock: 'latest'})
     return [proposals, false]

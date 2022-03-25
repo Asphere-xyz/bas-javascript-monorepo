@@ -4,7 +4,7 @@ import {Button, Table} from "antd";
 import {BigNumber} from "bignumber.js"
 import {observer} from "mobx-react";
 
-import {useChilizStore} from "../stores";
+import {useBasStore} from "../stores";
 import {BasStore} from "../stores/BasStore";
 import {useLocalGridStore} from "../stores/LocalGridStore";
 
@@ -97,7 +97,7 @@ interface IValidatorWithAmounts extends IValidator {
 }
 
 const ValidatorTableProps = observer((props: IValidatorTableProps) => {
-  const store = useChilizStore()
+  const store = useBasStore()
   const grid = useLocalGridStore<IValidator>(async (offset: number, limit: number): Promise<[IValidatorWithAmounts[], boolean]> => {
     const validators = await store.getBasSdk().getStaking().getValidators();
       const result: IValidatorWithAmounts[] = []

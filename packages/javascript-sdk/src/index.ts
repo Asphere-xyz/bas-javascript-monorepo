@@ -4,6 +4,7 @@ import {KeyProvider} from "./provider";
 import {Staking} from "./staking";
 import {IChainConfig, IChainParams, Web3Address} from "./types";
 import {PastEventOptions} from "web3-eth-contract";
+import {RuntimeUpgrade} from "./runtime";
 
 export * from './config'
 export * from './governance'
@@ -16,6 +17,7 @@ export class BasSdk {
 
   private keyProvider?: KeyProvider;
   private staking?: Staking;
+  private runtimeUpgrade?: RuntimeUpgrade;
   private governance?: Governance;
 
   constructor(
@@ -44,6 +46,10 @@ export class BasSdk {
 
   public getStaking(): Staking {
     return this.staking!;
+  }
+
+  public getRuntimeUpgrade(): RuntimeUpgrade {
+    return this.runtimeUpgrade!;
   }
 
   public getGovernance(): Governance {

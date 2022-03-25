@@ -15,7 +15,9 @@ export const waitForExpectedNetworkOrThrow = async (web3: Web3, config: IConfig)
   } catch (error) {
     // This error code indicates that the chain has not been added to MetaMask.
     if ((error as any).code === 4902) {
-      await tryAddMetaMaskNetwork(web3, config);
+      if (await tryAddMetaMaskNetwork(web3, config)) {
+        return;
+      }
       throw new Error(`Network for ${config.chainName} is not configured in your MetaMask`);
     }
     throw new Error(`Unable to switch network to ${config.chainName}`);

@@ -1,5 +1,4 @@
 import {MobXProviderContext} from 'mobx-react'
-import { IValueMap } from 'mobx-react/dist/types/IValueMap';
 import React from "react";
 
 import {BasStore, DEVNET_CONFIG, TESTNET_CONFIG} from "./BasStore";
@@ -25,4 +24,4 @@ export const useStores: any = () => {
   return React.useContext(MobXProviderContext)
 }
 
-export const useChilizStore = (): BasStore => basStore
+export const useBasStore = (): BasStore => basStore

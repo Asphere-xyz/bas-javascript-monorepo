@@ -9,7 +9,7 @@ import {ReactElement, useEffect, useState} from "react";
 import CreateProposalForm from "../components/CreateProposalForm";
 import ProposalTable from "../components/ProposalTable";
 import ValidatorTable from "../components/ValidatorTable";
-import {useChilizStore} from "../stores";
+import {useBasStore} from "../stores";
 
 const ProposalNav = observer((props: any): ReactElement => {
   const [drawerVisible, setDrawerVisible] = useState(false)
@@ -39,7 +39,7 @@ const ProposalNav = observer((props: any): ReactElement => {
 })
 
 const ValidatorNav = observer((props: any): ReactElement => {
-  const store = useChilizStore()
+  const store = useBasStore()
   const [stakingRewards, setStakingRewards] = useState('0')
   useEffect(() => {
 
@@ -55,7 +55,7 @@ interface IHomePageProps {
 }
 
 const HomePage = observer((props: IHomePageProps): ReactElement => {
-  const store = useChilizStore()
+  const store = useBasStore()
   const [currentTab, setCurrentTab] = useState('governance')
   const [blockInfo, setBlockInfo] = useState({} as any)
   useEffect(() => {

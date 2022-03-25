@@ -19,8 +19,8 @@ const makeDefaultConfig = (chainId: number, chainName: string, rpcUrl: string): 
   }
 }
 
-export const DEVNET_CONFIG: IConfig = makeDefaultConfig(1337, 'BAS devnet', '')
-export const TESTNET_CONFIG: IConfig = makeDefaultConfig(17242, 'BAS testnet', '')
+export const DEVNET_CONFIG: IConfig = makeDefaultConfig(1337, 'BAS devnet', 'http://localhost:8545/')
+export const TESTNET_CONFIG: IConfig = makeDefaultConfig(17242, 'BAS testnet', 'https://rpc-dev.ccv2.ankr.com/')
 
 export class BasStore {
 
