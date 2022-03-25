@@ -48,8 +48,8 @@
   },
   "scripts": {
     "start": "env-cmd -f .env.testnet react-app-rewired start",
-    "start:testnet": "env-cmd -f ./.env.testnet react-scripts start",
-    "start:devnet": "env-cmd -f ./.env.devnet react-scripts start",
+    "start:testnet": "env-cmd -f ./.env.testnet react-app-rewired start",
+    "start:devnet": "env-cmd -f ./.env.devnet react-app-rewired start",
     "build": "react-scripts build",
     "build:testnet": "env-cmd -f ./.env.testnet react-scripts build",
     "build:devnet": "env-cmd -f ./.env.devnet react-scripts build"

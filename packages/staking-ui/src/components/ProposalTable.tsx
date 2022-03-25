@@ -36,8 +36,8 @@ const createTableColumns = () => {
   return [
     {
       title: 'Id',
-      dataIndex: 'proposalId',
-      key: 'proposalId',
+      dataIndex: 'id',
+      key: 'id',
       render: (value: string) => `${value.substr(0, 20)  }...`,
     },
     {
@@ -68,8 +68,8 @@ const createTableColumns = () => {
     },
     {
       title: 'Description',
-      dataIndex: 'description',
-      key: 'description',
+      dataIndex: 'desc',
+      key: 'desc',
       render: (description: string) => description.length > 30 ? `${description.substr(0, 30)  }...` : description,
     },
     // {
