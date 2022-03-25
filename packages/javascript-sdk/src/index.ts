@@ -37,6 +37,7 @@ export class BasSdk {
     // init providers
     this.keyProvider = keyProvider
     this.staking = new Staking(keyProvider)
+    this.runtimeUpgrade = new RuntimeUpgrade(keyProvider)
     this.governance = new Governance(keyProvider)
   }
 

@@ -60,7 +60,9 @@ const RuntimeUpgradeNav = observer((props: any): ReactElement => {
         if (!systemContract) return;
         const byteCode = prompt('Input byte code to set:')
         if (!byteCode) return;
-        store.getBasSdk();
+        const tx = await store.getBasSdk().getRuntimeUpgrade().upgradeRuntime(systemContract, byteCode)
+        console.log(tx.transactionHash)
+        console.log(await tx.receipt)
       }}>Upgrade Runtime</Button>
     </div>
   );

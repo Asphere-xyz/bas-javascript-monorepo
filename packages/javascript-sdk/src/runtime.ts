@@ -1,5 +1,5 @@
 import {KeyProvider} from "./provider";
-import {Web3Address} from "./types";
+import {IPendingTx, Web3Address} from "./types";
 
 export class RuntimeUpgrade {
 
@@ -8,10 +8,13 @@ export class RuntimeUpgrade {
   ) {
   }
 
-  public async upgradeRuntime(contract: Web3Address, byteCode: string, inputData: string = '0x') {
-    console.log(contract);
-    console.log(byteCode);
-    console.log(inputData);
-    this.keyProvider.isConnected();
+  public async upgradeRuntime(contract: Web3Address, byteCode: string, applyFunction: string = '0x'): Promise<IPendingTx> {
+    const data = this.keyProvider.runtimeUpgradeContract?.methods
+      .upgradeSystemSmartContract(contract, byteCode, applyFunction)
+      .encodeABI()
+    return this.keyProvider.sendTx({
+      to: this.keyProvider.runtimeUpgradeAddress!,
+      data: data,
+    })
   }
 }
