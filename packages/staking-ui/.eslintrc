@@ -74,6 +74,7 @@
             "functions": false
           }
         ],
+        "consistent-return": "warn",
         "no-nested-ternary": "error",
         "no-underscore-dangle": "error",
         "jsx-a11y/no-noninteractive-element-interactions": "error",
