@@ -1,15 +1,8 @@
 {
-  "include": [
-    "src",
-    "src/**/*.json"
-  ],
+  "include": ["src"],
   "extends": "../../tsconfig.json",
   "compilerOptions": {
-    "jsx": "preserve",
     "outDir": "lib",
-    "rootDir": "src",
-    "baseUrl": ".",
-    "useDefineForClassFields": true
-  },
-  "references": []
+    "rootDir": "src"
+  }
 }
