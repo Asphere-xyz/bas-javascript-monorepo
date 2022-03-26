@@ -1,4 +1,4 @@
-import {Contract} from "web3-eth-contract";
+import {Contract, EventData} from "web3-eth-contract";
 import {PromiEvent, TransactionReceipt} from "web3-core";
 
 export type Web3Address = string;
@@ -58,6 +58,8 @@ export interface IValidator {
   changedAt: number;
   jailedBefore: number;
   claimedAt: number;
+  commissionRate: Web3Uint256;
+  totalRewards: Web3Uint256;
 }
 
 export interface IVotingPower {
@@ -65,7 +67,7 @@ export interface IVotingPower {
   votingPower: number;
 }
 
-export enum TProposalStatus {
+export enum TGovernanceProposalStatus {
   Pending,
   Active,
   Cancelled,
@@ -79,7 +81,7 @@ export enum TProposalStatus {
 export interface IGovernanceProposal {
   id: string;
   proposer: string;
-  status: TProposalStatus;
+  status: TGovernanceProposalStatus;
   targets: string[];
   values: string[];
   signatures: string[];
@@ -87,4 +89,34 @@ export interface IGovernanceProposal {
   startBlock: string;
   endBlock: string;
   desc: string;
+}
+
+export interface IDelegatorDelegation {
+  event?: EventData;
+  validator: Web3Address;
+  staker: Web3Address;
+  amount: Web3Uint256;
+  epoch: number;
+}
+
+export interface IDelegatorUnDelegation {
+  event?: EventData;
+  validator: Web3Address;
+  staker: Web3Address;
+  amount: Web3Uint256;
+  epoch: number;
+}
+
+export interface IDelegatorClaim {
+  event?: EventData;
+  validator: Web3Address;
+  staker: Web3Address;
+  amount: Web3Uint256;
+  epoch: number;
+}
+
+export interface IDelegatorOneOfEvent {
+  delegation?: IDelegatorDelegation;
+  undelegation?: IDelegatorUnDelegation;
+  claim?: IDelegatorClaim;
 }

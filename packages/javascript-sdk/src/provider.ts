@@ -1,5 +1,5 @@
 import {IConfig} from "./config";
-import {IKeyProvider, IPendingTx, Web3Address} from "./types";
+import {IChainConfig, IChainParams, IKeyProvider, IPendingTx, Web3Address, Web3Uint256} from "./types";
 import Web3 from "web3";
 import {sendTransactionAsync, waitForExpectedNetworkOrThrow} from "./metamask";
 import {Contract} from "web3-eth-contract";
@@ -113,8 +113,69 @@ export class KeyProvider implements IKeyProvider {
     return this.accounts || []
   }
 
+  public getMyAddress(): Web3Address {
+    const [account] = this.accounts || []
+    return account
+  }
+
+  public async getMyBalance(): Promise<Web3Uint256> {
+    const myAddress = this.getMyAddress()
+    return this.web3!.eth.getBalance(myAddress)
+  }
+
   public async getBlockNumber(): Promise<number> {
     return this.web3!.eth.getBlockNumber()
+  }
+
+  public async getChainConfig(): Promise<IChainConfig> {
+    const [
+      activeValidatorsLength,
+      epochBlockInterval,
+      misdemeanorThreshold,
+      felonyThreshold,
+      validatorJailEpochLength,
+      undelegatePeriod,
+      minValidatorStakeAmount,
+      minStakingAmount,
+    ] = await Promise.all([
+      this.chainConfigContract!.methods.getActiveValidatorsLength().call(),
+      this.chainConfigContract!.methods.getEpochBlockInterval().call(),
+      this.chainConfigContract!.methods.getMisdemeanorThreshold().call(),
+      this.chainConfigContract!.methods.getFelonyThreshold().call(),
+      this.chainConfigContract!.methods.getValidatorJailEpochLength().call(),
+      this.chainConfigContract!.methods.getUndelegatePeriod().call(),
+      this.chainConfigContract!.methods.getMinValidatorStakeAmount().call(),
+      this.chainConfigContract!.methods.getMinStakingAmount().call(),
+    ])
+    return {
+      activeValidatorsLength,
+      epochBlockInterval,
+      misdemeanorThreshold,
+      felonyThreshold,
+      validatorJailEpochLength,
+      undelegatePeriod,
+      minValidatorStakeAmount,
+      minStakingAmount,
+    };
+  }
+
+  public async getChainParams(): Promise<IChainParams> {
+    const blockNumber = await this.getBlockNumber(),
+      epochBlockInterval = await this.chainConfigContract!.methods.getEpochBlockInterval().call()
+    let startBlock = ((blockNumber / epochBlockInterval) | 0) * epochBlockInterval,
+      endBlock = startBlock + Number(epochBlockInterval)
+    return {
+      blockNumber: blockNumber,
+      epoch: (blockNumber / epochBlockInterval) | 0,
+      nextEpochInSec: (endBlock - blockNumber) * 3,
+      nextEpochBlock: endBlock,
+      blockTime: 3,
+    };
+  }
+
+  public async getCurrentEpoch(): Promise<number> {
+    const chainParams = await this.getChainParams()
+    return chainParams.epoch
   }
 
   public async sendTx(sendOptions: { to: string; data?: string; value?: string; }): Promise<IPendingTx> {

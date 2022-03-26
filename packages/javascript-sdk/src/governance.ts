@@ -4,7 +4,7 @@ import {
   IPendingTx,
   Web3Address,
   IVotingPower,
-  TProposalStatus
+  TGovernanceProposalStatus
 } from "./types";
 import {KeyProvider} from "./provider";
 import {PastEventOptions} from "web3-eth-contract";
@@ -93,7 +93,7 @@ export class Governance {
       result.push({
         id: returnValues.proposalId,
         // @ts-ignore
-        status: TProposalStatus[Number(state)],
+        status: TGovernanceProposalStatus[Number(state)],
         proposer: returnValues.proposer,
         targets: returnValues.targets,
         values: returnValues.values,

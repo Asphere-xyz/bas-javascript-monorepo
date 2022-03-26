@@ -99,7 +99,7 @@ interface IValidatorWithAmounts extends IValidator {
 const ValidatorTableProps = observer((props: IValidatorTableProps) => {
   const store = useBasStore()
   const grid = useLocalGridStore<IValidator>(async (offset: number, limit: number): Promise<[IValidatorWithAmounts[], boolean]> => {
-    const validators = await store.getBasSdk().getStaking().getValidators();
+    const validators = await store.getBasSdk().getStaking().getActiveValidators();
       const result: IValidatorWithAmounts[] = []
     // eslint-disable-next-line no-restricted-syntax
     for (const validator of validators) {

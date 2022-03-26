@@ -1,4 +1,4 @@
-import {IGovernanceProposal, TProposalStatus} from "@ankr.com/bas-javascript-sdk";
+import {IGovernanceProposal, TGovernanceProposalStatus} from "@ankr.com/bas-javascript-sdk";
 import {Table, Descriptions, Tag, Button} from "antd";
 import {observer} from "mobx-react";
 import {ReactElement} from "react";
@@ -7,7 +7,7 @@ import {useBasStore} from "../stores";
 import {BasStore} from "../stores/BasStore";
 import {useLocalGridStore} from "../stores/LocalGridStore";
 
-const renderStatus = (status: TProposalStatus): ReactElement => {
+const renderStatus = (status: TGovernanceProposalStatus): ReactElement => {
   const colors: Record<string, string> = {
     Pending: 'grey',
     Active: 'blue',

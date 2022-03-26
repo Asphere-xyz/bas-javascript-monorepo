@@ -58,49 +58,11 @@ export class BasSdk {
   }
 
   public async getChainConfig(): Promise<IChainConfig> {
-    const [
-      activeValidatorsLength,
-      epochBlockInterval,
-      misdemeanorThreshold,
-      felonyThreshold,
-      validatorJailEpochLength,
-      undelegatePeriod,
-      minValidatorStakeAmount,
-      minStakingAmount,
-    ] = await Promise.all([
-      this.keyProvider!.chainConfigContract!.methods.getActiveValidatorsLength().call(),
-      this.keyProvider!.chainConfigContract!.methods.getEpochBlockInterval().call(),
-      this.keyProvider!.chainConfigContract!.methods.getMisdemeanorThreshold().call(),
-      this.keyProvider!.chainConfigContract!.methods.getFelonyThreshold().call(),
-      this.keyProvider!.chainConfigContract!.methods.getValidatorJailEpochLength().call(),
-      this.keyProvider!.chainConfigContract!.methods.getUndelegatePeriod().call(),
-      this.keyProvider!.chainConfigContract!.methods.getMinValidatorStakeAmount().call(),
-      this.keyProvider!.chainConfigContract!.methods.getMinStakingAmount().call(),
-    ])
-    return {
-      activeValidatorsLength,
-      epochBlockInterval,
-      misdemeanorThreshold,
-      felonyThreshold,
-      validatorJailEpochLength,
-      undelegatePeriod,
-      minValidatorStakeAmount,
-      minStakingAmount,
-    };
+    return this.keyProvider!.getChainConfig()
   }
 
   public async getChainParams(): Promise<IChainParams> {
-    const blockNumber = await this.keyProvider!.getBlockNumber(),
-      epochBlockInterval = await this.keyProvider!.chainConfigContract!.methods.getEpochBlockInterval().call()
-    let startBlock = ((blockNumber / epochBlockInterval) | 0) * epochBlockInterval,
-      endBlock = startBlock + Number(epochBlockInterval)
-    return {
-      blockNumber: blockNumber,
-      epoch: (blockNumber / epochBlockInterval) | 0,
-      nextEpochInSec: (endBlock - blockNumber) * 3,
-      nextEpochBlock: endBlock,
-      blockTime: 3,
-    };
+    return this.keyProvider!.getChainParams()
   }
 
   public async getDeployers(options: PastEventOptions = {}): Promise<any[]> {
