@@ -3,7 +3,7 @@ WORKDIR /build
 COPY . /build
 RUN yarn
 RUN cd packages/staking-ui
-RUN yarn build
+RUN yarn build:testnet
 
 FROM nginx AS run
 COPY --from=build /build/packages/staking-ui/build /usr/share/nginx/html
