@@ -6,8 +6,7 @@ jobs:
    steps:
      - checkout
      - run: echo "$DOCKER_PASS" | docker login --username $DOCKER_USER --password-stdin
-     - run: docker build -t ankrnetwork/bas-staking-ui:$CIRCLE_BRANCH .
-     - run: docker push ankrnetwork/bas-staking-ui:$CIRCLE_BRANCH
+     - run: docker build --push -t ankrnetwork/bas-staking-ui:$CIRCLE_BRANCH .
 
 workflows:
   build-deploy:
