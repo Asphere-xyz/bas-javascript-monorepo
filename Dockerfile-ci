@@ -1,0 +1,2 @@
+FROM nginx AS run
+COPY ./packages/staking-ui/build /usr/share/nginx/html
