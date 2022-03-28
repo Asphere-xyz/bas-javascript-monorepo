@@ -1,4 +1,4 @@
-import { Typography } from "antd";
+import { Spin, Typography } from "antd";
 import { observer } from "mobx-react";
 import { useBasStore } from "src/stores";
 import { useLocalFetchDataStore } from "src/stores/FetchDataStore";
@@ -36,17 +36,29 @@ export const AccountData = observer(() => {
         <Title level={5} type='secondary'>
           Available 
         </Title>
-        <Text strong className="cardBody">
-          {availableAmount.item} BAS
-        </Text>
+        {
+          availableAmount.isLoading
+          ? <Spin size="default" />
+          : (
+            <Text strong className="cardBody">
+              {availableAmount.item} BAS
+            </Text>
+          )
+        }
       </div>
       <div>
         <Title level={5} type='secondary'>
           Total Delegated
         </Title>
-        <Text strong  className="cardBody">
-          {delegatedAmount.item} BAS
-        </Text>
+        {
+          delegatedAmount.isLoading
+          ? <Spin size="default" />
+          : (
+            <Text strong  className="cardBody">
+              {delegatedAmount.item} BAS
+            </Text>
+          )
+        }
       </div>
     </div>
   )
