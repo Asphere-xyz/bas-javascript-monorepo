@@ -1,5 +1,5 @@
 import { LockOutlined, WalletOutlined } from "@ant-design/icons";
-import { Menu} from "antd";
+import { Menu, Typography} from "antd";
 import {observer} from "mobx-react";
 import {ReactElement, useState} from "react";
 
@@ -14,7 +14,13 @@ const HomePage = observer((): ReactElement => {
   const [currentTab, setCurrentTab] = useState('validator');
 
   if (!store.isConnected) {
-    return <h1>Connecting...</h1>
+    return (
+      <div className="centred">
+        <Typography.Title level={1}>
+          Connecting...
+        </Typography.Title>
+      </div>
+    )
   }
 
   return (

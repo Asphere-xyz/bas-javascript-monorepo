@@ -13,6 +13,28 @@
 /*  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',*/
 /*    monospace;*/
 /*}*/
+
+.centred {
+  display: flex;
+  height: 100%;
+  width: 100%;
+  align-items: center;
+  justify-content: center;
+}
+
+.accountDataCArd {
+  display: flex;
+  flex-direction: row;
+  flex: 1;
+  height: 200px;
+  justify-content: space-around;
+  align-items: center;
+  margin: 5px;
+  padding: 20px;
+  background-color: #f5f4f4;
+  border-radius: 20px;
+}
+
 .card {
   display: flex;
   flex-direction: column;
@@ -61,4 +83,10 @@
 .blockInfoItem {
   display: flex;
   flex-direction: column;
+}
+
+.flexSpaceAround {
+  display: flex;
+  justify-content: space-around;
+  flex: 0.4;
 }

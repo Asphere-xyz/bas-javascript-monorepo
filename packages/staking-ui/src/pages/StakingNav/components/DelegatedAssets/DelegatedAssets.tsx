@@ -1,33 +1,29 @@
-/* eslint-disable no-await-in-loop */
-import { Web3Uint256, IValidator } from "@ankr.com/bas-javascript-sdk";
 import { Table, Typography } from "antd";
+import BigNumber from "bignumber.js";
 import { observer } from "mobx-react";
 
 import { useBasStore } from "../../../../stores";
 import { useLocalGridStore } from "../../../../stores/LocalGridStore";
 
 import { createTableColumns } from "./columns";
-
-interface IValidatorWithAmounts extends IValidator {
-  myDelegatedAmount: Web3Uint256;
-  validatorFee: Web3Uint256;
-  myStakingRewards: Web3Uint256;
-  key: string;
-}
+import { IDelegatedAssetsData } from "./interface";
 
 const DelegatedAssets = observer(() => {
   const store = useBasStore()
-  const grid = useLocalGridStore<IValidator>(async (offset: number, limit: number): Promise<[IValidatorWithAmounts[], boolean]> => {
-    const validators = await store.getBasSdk().getStaking().getAllValidators();
-      const result: IValidatorWithAmounts[] = []
+  const grid = useLocalGridStore<IDelegatedAssetsData>(async (offset: number, limit: number): Promise<[IDelegatedAssetsData[], boolean]> => {
+    const activeDelagations = await store.getBasSdk().getStaking().getMyActiveDelegations();
+    const result: IDelegatedAssetsData[] = [];
+
     // eslint-disable-next-line no-restricted-syntax
-    for (const validator of validators) {
-      result.push({ ...validator, myDelegatedAmount: await store.getBasSdk().getStaking().getMyDelegatedAmount(validator.validator),
-        validatorFee: await store.getBasSdk().getStaking().getValidatorRewards(validator.validator),
-        myStakingRewards: await store.getBasSdk().getStaking().getMyStakingRewards(validator.validator),
-        key: validator.validator,
+    for (const record of activeDelagations) {
+      result.push({
+        amount: new BigNumber(record.amount).dividedBy(10 ** 18).toFixed(),
+        validator: record.validator,
+        staker: record.staker,
+        transactionHash: record.event?.transactionHash ?? '',
       });
     }
+    
     return [result, false]
   });
 
@@ -35,9 +31,9 @@ const DelegatedAssets = observer(() => {
     <>
       <Typography.Title>Delegated Assets</Typography.Title>
       <Table
-        columns={createTableColumns()}
-        dataSource={[]}
-        loading={false}
+        columns={createTableColumns(store)}
+        dataSource={grid.items}
+        loading={grid.isLoading}
         pagination={grid.paginationConfig}
       />
     </>

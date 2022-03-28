@@ -1,7 +1,9 @@
-import { Typography } from "antd";
 import { ColumnProps } from "antd/lib/table";
+// import { EXPLORER_URL } from "src/utils/const";
 
-const { Link } = Typography;
+// import { IHistoryData } from "./interface";
+
+// const { Link } = Typography;
 
 export const createTableColumns = (): ColumnProps<any>[]  => {
   return [
@@ -16,29 +18,20 @@ export const createTableColumns = (): ColumnProps<any>[]  => {
       key: 'amount',
     },
     {
-      title: 'Validator name',
+      title: 'Validator',
       dataIndex: 'validator',
       key: 'validator',
     },
-    {
-      title: 'Status',
-      dataIndex: 'status',
-      key: 'status',
-    },
-    {
-      title: 'Datetime',
-      dataIndex: 'datetime',
-      key: 'datetime',
-    },
-    {
-      title: 'Action',
-      render: () => {
-        return (
-          <Link href="https://ant.design" target="_blank">
-            test link
-          </Link>
-        )
-      }
-    }
+    // {
+    //   title: 'Action',
+    //   render: (record: IHistoryData) => {
+    //     const url = `${EXPLORER_URL}${record.transactionHash}`
+    //     return (
+    //       <Link href="https://ant.design" target="_blank">
+    //         {record.transactionHash}
+    //       </Link>
+    //     )
+    //   }
+    // }
   ];
 }

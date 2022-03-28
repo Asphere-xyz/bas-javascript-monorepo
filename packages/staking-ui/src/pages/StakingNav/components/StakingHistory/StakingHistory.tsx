@@ -1,36 +1,56 @@
-/* eslint-disable no-await-in-loop */
-import { IValidator, Web3Uint256 } from "@ankr.com/bas-javascript-sdk";
 import { Table, Typography } from "antd";
+import BigNumber from "bignumber.js";
 import { observer } from "mobx-react";
 
 import { useBasStore } from "../../../../stores";
 import { useLocalGridStore } from "../../../../stores/LocalGridStore";
 
 import { createTableColumns } from "./columns";
-
-interface IHistoryData {
-  type: string;
-  amount: Web3Uint256;
-  validator: string;
-  status: string;
-  datetime: string;
-}
+import { IHistoryData } from "./interface";
 
 const StakingHistory = observer(() => {
   const store = useBasStore()
   const grid = useLocalGridStore<IHistoryData>(async (offset: number, limit: number): Promise<[IHistoryData[], boolean]> => {
-    const delegationHistory = await store.getBasSdk().getStaking().getDelegationHistory();
-    const undelegationHistory = await store.getBasSdk().getStaking().getUnDelegationHistory();
-
-    const result: IHistoryData[] = []
+    const history = await store.getBasSdk().getStaking().getAllEventsHistory();
+    const result: IHistoryData[] = [];
+    
     // eslint-disable-next-line no-restricted-syntax
-    // for (const validator of delegationHistory) {
-    //   result.push({ ...validator, myDelegatedAmount: await store.getBasSdk().getStaking().getMyDelegatedAmount(validator.validator),
-    //     validatorFee: await store.getBasSdk().getStaking().getValidatorRewards(validator.validator),
-    //     myStakingRewards: await store.getBasSdk().getStaking().getMyStakingRewards(validator.validator),
-    //     key: validator.validator,
-    //   });
-    // }
+    for (const record of history) {
+      let type = 'undefined';
+      let amount = '0';
+      let validator;
+      let staker;
+      let transactionHash;
+      if ('delegation' in record) {
+        type = 'Delegation';
+        amount = new BigNumber(record.delegation?.amount ?? '0').dividedBy(10 ** 18).toFixed();
+        validator = record.delegation?.validator;
+        staker = record.delegation?.staker;
+        transactionHash = record.delegation?.event?.transactionHash;
+      }
+      if ('undelegation' in record) {
+        type = 'Undelegation';
+        amount = new BigNumber(record.undelegation?.amount ?? '0').dividedBy(10 ** 18).toFixed();
+        validator = record.undelegation?.validator;
+        staker = record.undelegation?.staker;
+        transactionHash = record.undelegation?.event?.transactionHash;
+      }
+      if ('claim' in record) {
+        type = 'Claim';
+        amount = new BigNumber(record.claim?.amount ?? '0').dividedBy(10 ** 18).toFixed();
+        validator = record.claim?.validator;
+        staker = record.claim?.staker;
+        transactionHash = record.claim?.event?.transactionHash;
+      }
+
+      result.push({
+        type,
+        amount,
+        validator: validator ?? '',
+        staker: staker ?? '',
+        transactionHash: transactionHash ?? '',
+      });
+    }
     return [result, false]
   });
 
@@ -39,8 +59,8 @@ const StakingHistory = observer(() => {
       <Typography.Title>History</Typography.Title>
       <Table
         columns={createTableColumns()}
-        dataSource={[]}
-        loading={false}
+        dataSource={grid.items}
+        loading={grid.isLoading}
         pagination={grid.paginationConfig}
       />
     </>

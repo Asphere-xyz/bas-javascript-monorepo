@@ -1,59 +1,51 @@
 import { Button } from "antd";
 import { ColumnProps } from "antd/lib/table";
+import { BasStore } from "src/stores/BasStore";
+import { undelegate, delegate } from "src/utils/helpers";
 
-export const createTableColumns = (): ColumnProps<any>[]  => {
+import { IDelegatedAssetsData } from "./interface";
+
+export const createTableColumns = (store: BasStore): ColumnProps<any>[]  => {
   
-  const handleCancelDelegateClick = async () => {
-    console.log('handleCancelDelegateClick');
+  const handleCancelDelegateClick = async (record: IDelegatedAssetsData) => {
+    await undelegate(store, record.validator);
   }
 
-  const handleRepeatDelegateClick = async () => {
-    console.log('handleRepeatDelegateClick');
+  const handleRepeatDelegateClick = async (record: IDelegatedAssetsData) => {
+    await delegate(store, record.validator);
   }
-
   
   return [
-    {
-      title: 'Status',
-      dataIndex: 'status',
-      key: 'status',
-    },
-    {
-      title: 'Validator name',
-      dataIndex: 'validator',
-      key: 'validator',
-    },
     {
       title: 'Amount',
       dataIndex: 'amount',
       key: 'amount',
     },
     {
-      title: 'The rate from',
-      dataIndex: 'rateDatetime',
-      key: 'rateDatetime',
+      title: 'Validator',
+      dataIndex: 'validator',
+      key: 'validator',
     },
     {
       title: 'Action',
-      render: () => {
+      render: (record: IDelegatedAssetsData) => {
         return (
-          <>
+          <div className="flexSpaceAround">
             <Button
-              className="tableButton" 
+              style={{ width: '40%' }}
               type="primary" 
-              onClick={async () => handleCancelDelegateClick()}
+              onClick={async () => handleCancelDelegateClick(record)}
             >
               Cancel
             </Button>
-
             <Button
-              className="tableButton" 
-              type="default" 
-              onClick={async () => handleRepeatDelegateClick()}
+              style={{ width: '40%' }}
+              type="primary" 
+              onClick={async () => handleRepeatDelegateClick(record)}
             >
               Repeat
             </Button>
-          </>
+          </div>
         )
       }
     }

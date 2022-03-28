@@ -1,8 +1,7 @@
 import { IValidator } from "@ankr.com/bas-javascript-sdk";
-import { Button, message, Typography } from "antd";
-import prompt from "antd-prompt";
+import { Button,  Typography } from "antd";
 import { ColumnProps } from "antd/lib/table";
-import BigNumber from "bignumber.js";
+import { delegate, undelegate } from "src/utils/helpers";
 
 import {BasStore} from "../../../../stores/BasStore";
 
@@ -11,58 +10,11 @@ const { Text } = Typography;
 export const createTableColumns = (store: BasStore): ColumnProps<any>[]  => {
 
   const handleDelegateClick = async (validator: IValidator) => {
-    const amount = await prompt({
-      title: 'Enter delegation amount (in ether): ',
-      rules: [
-        {
-          required: true,
-          message: "You must enter number of tokens"
-        }
-      ],
-      modalProps: {
-        width: '400px',
-      }
-    });
-
-    if (!amount) return;
-    const bigAmount = new BigNumber(amount).multipliedBy(10**18).toString(10)
-    
-    try {
-      const result = await store.getBasSdk().getStaking().delegateTo(validator.validator, `${bigAmount}`);
-      const receipt = await result.receipt;
-      console.log(`Receipt: ${JSON.stringify(receipt, null, 2)}`);
-
-      message.success('Delegating was done!');
-    } catch {
-      message.error('Delegating was failed...try again!');
-    }
+    await delegate(store, validator.validator);
   }
 
   const handleUndelegateClick = async (validator: IValidator) => {
-    const amount = await prompt({
-      title: 'Enter undelegation amount (in ether): ',
-      rules: [
-        {
-          required: true,
-          message: "You must enter number of tokens"
-        }
-      ]
-    })
-    
-    if (!amount) return;
-    const bigAmount = new BigNumber(amount).multipliedBy(10**18).toString(10)
-
-    try {
-      const result = await store.getBasSdk().getStaking().undelegateFrom(validator.validator, `${bigAmount}`);
-      
-      const receipt = await result.receipt;
-      console.log(`Receipt: ${JSON.stringify(receipt, null, 2)}`);
-
-      message.success('Undelegating was done!');
-    } catch (e) {
-      console.log(e)
-      message.error('Undelegating was failed...try again!')
-    }
+    await undelegate(store, validator.validator);
   }
 
   return [
