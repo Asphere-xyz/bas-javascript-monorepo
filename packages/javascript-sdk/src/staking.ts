@@ -211,7 +211,7 @@ export class Staking {
       delegator: address,
     })
     const lastDelegations = delegationHistory.reduce((result: Record<number, IDelegatorDelegation>, item: IDelegatorDelegation) => {
-      return {...result, [item.epoch]: item}
+      return {...result, [`${item.validator + '/' + item.epoch}`]: item}
     }, {});
     return Object.values(lastDelegations)
   }
@@ -221,7 +221,7 @@ export class Staking {
   }
 
   public async getAvailableReDelegateAmount(address: Web3Address): Promise<BigNumber> {
-    throw new Error(`Not Implemented`);
+    return new BigNumber('0')
   }
 
   public async getValidatorRewards(validator: Web3Address): Promise<Web3Uint256> {
