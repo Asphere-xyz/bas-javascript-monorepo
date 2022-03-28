@@ -210,8 +210,21 @@ export class Staking {
     const delegationHistory = await this.getDelegationHistory({
       delegator: address,
     })
-    const lastDelegations = delegationHistory.reduce((result: Record<number, IDelegatorDelegation>, item: IDelegatorDelegation) => {
-      return {...result, [`${item.validator + '/' + item.epoch}`]: item}
+    const unDelegationHistory = await this.getDelegationHistory({
+      delegator: address,
+    })
+    const lastDelegations = sortHasEventData(delegationHistory, unDelegationHistory).reduce((result: Record<string, IDelegatorDelegation>, item: IDelegatorDelegation) => {
+      const key = `${item.validator}/${item.epoch}`
+      return { ...result, [key]: item }
+      // if (!result[key]) {
+      //   return { ...result, [key]: item }
+      // }
+      // if (item.event!.event === 'Delegated') {
+      //   result[key].amount = new BigNumber(result[key].amount).plus(item.amount).toString(10)
+      // } else if (item.event!.event === 'Undelegated') {
+      //   result[key].amount = new BigNumber(result[key].amount).minus(item.amount).toString(10)
+      // }
+      // return result
     }, {});
     return Object.values(lastDelegations)
   }
