@@ -79,12 +79,6 @@
         "no-underscore-dangle": "error",
         "jsx-a11y/no-noninteractive-element-interactions": "error",
         "react/prop-types": "error",
-        "react/jsx-newline": [
-          "error",
-          {
-            "prevent": false
-          }
-        ],
         "react/no-array-index-key": "error",
         "react/jsx-sort-props": [
           "error",

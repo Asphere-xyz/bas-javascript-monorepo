@@ -87,5 +87,5 @@ export const useLocalGridStore = <T>(dataHandler: LocalGridStoreDataHandler<T>, 
     store.fetchItems()
     return () => store.removeItems()
   }, [store])
-  return store
+  return store;
 }
