@@ -202,6 +202,28 @@ export class Staking {
     return this.keyProvider.stakingContract!.methods.getDelegatorFee(validator, delegator).call()
   }
 
+  public async getMyActiveDelegations(): Promise<IDelegatorDelegation[]> {
+    return this.getActiveDelegations(this.keyProvider.getMyAddress());
+  }
+
+  public async getActiveDelegations(address: Web3Address): Promise<IDelegatorDelegation[]> {
+    const delegationHistory = await this.getDelegationHistory({
+      delegator: address,
+    })
+    const lastDelegations = delegationHistory.reduce((result: Record<number, IDelegatorDelegation>, item: IDelegatorDelegation) => {
+      return {...result, [item.epoch]: item}
+    }, {});
+    return Object.values(lastDelegations)
+  }
+
+  public async getMyAvailableReDelegateAmount(): Promise<BigNumber> {
+    return this.getAvailableReDelegateAmount(this.keyProvider.getMyAddress());
+  }
+
+  public async getAvailableReDelegateAmount(address: Web3Address): Promise<BigNumber> {
+    throw new Error(`Not Implemented`);
+  }
+
   public async getValidatorRewards(validator: Web3Address): Promise<Web3Uint256> {
     return this.keyProvider.stakingContract!.methods.getValidatorFee(validator).call()
   }
