@@ -19,8 +19,14 @@ export class Staking {
   }
 
   public async getAllValidatorsAddresses(): Promise<Web3Address[]> {
-    const validatorAddedEvents = await this.keyProvider.stakingContract!.getPastEvents('ValidatorAdded'),
-      validatorRemovedEvents = await this.keyProvider.stakingContract!.getPastEvents('ValidatorRemoved')
+    const validatorAddedEvents = await this.keyProvider.stakingContract!.getPastEvents('ValidatorAdded', {
+        fromBlock: 'earliest',
+        toBlock: 'latest',
+      }),
+      validatorRemovedEvents = await this.keyProvider.stakingContract!.getPastEvents('ValidatorRemoved', {
+        fromBlock: 'earliest',
+        toBlock: 'latest',
+      })
     const validators = new Set<Web3Address>()
     for (const log of sortEventData(validatorAddedEvents, validatorRemovedEvents)) {
       const {validator} = log.returnValues
@@ -124,6 +130,8 @@ export class Staking {
 
   public async getDelegationHistory(filter: { validator?: Web3Address; delegator?: Web3Address } = {}): Promise<IDelegatorDelegation[]> {
     const events = await this.keyProvider.stakingContract!.getPastEvents('Delegated', {
+      fromBlock: 'earliest',
+      toBlock: 'latest',
       filter: filter,
     })
     return events.map((event: EventData): IDelegatorDelegation => {
@@ -134,6 +142,8 @@ export class Staking {
 
   public async getUnDelegationHistory(filter: { validator?: Web3Address; delegator?: Web3Address } = {}): Promise<IDelegatorDelegation[]> {
     const events = await this.keyProvider.stakingContract!.getPastEvents('Undelegated', {
+      fromBlock: 'earliest',
+      toBlock: 'latest',
       filter: filter,
     })
     return events.map((event: EventData): IDelegatorDelegation => {
@@ -144,6 +154,8 @@ export class Staking {
 
   public async getClaimHistory(filter: { validator?: Web3Address; delegator?: Web3Address } = {}): Promise<IDelegatorDelegation[]> {
     const events = await this.keyProvider.stakingContract!.getPastEvents('Claimed', {
+      fromBlock: 'earliest',
+      toBlock: 'latest',
       filter: filter,
     })
     return events.map((event: EventData): IDelegatorDelegation => {
