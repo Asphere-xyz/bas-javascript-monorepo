@@ -3486,6 +3486,11 @@ ansi-styles@^5.0.0:
   resolved "https://registry.npmjs.org/ansi-styles/-/ansi-styles-5.2.0.tgz"
   integrity sha512-Cxwpt2SfTzTtXcfOlzGEee8O+c+MmUgGrNiBcXnuWxuFJHe6a5Hz7qwhwe5OgaSYI0IJvkLqWX1ASG+cJOkEiA==
 
+antd-prompt@^0.6.0:
+  version "0.6.0"
+  resolved "https://registry.yarnpkg.com/antd-prompt/-/antd-prompt-0.6.0.tgz#4b97df62782a984859671e3ffcc18aa172fe9a9a"
+  integrity sha512-ilrRvfOC9OULa7S96sNVBUz+ZGlipJ8nPyEBrBrZTOYq8wRUJThedgilm99iQUZevziyCJ1MWhrdKwPzTarvrQ==
+
 antd@^4.19.3:
   version "4.19.3"
   resolved "https://registry.npmjs.org/antd/-/antd-4.19.3.tgz"
