@@ -1,5 +1,6 @@
 import {Contract, EventData} from "web3-eth-contract";
 import {PromiEvent, TransactionReceipt} from "web3-core";
+import BigNumber from "bignumber.js";
 
 export type Web3Address = string;
 export type Web3Uint256 = string;
@@ -119,4 +120,9 @@ export interface IDelegatorOneOfEvent {
   delegation?: IDelegatorDelegation;
   undelegation?: IDelegatorUnDelegation;
   claim?: IDelegatorClaim;
+}
+
+export interface IStakingRewards {
+  validator: IValidator;
+  amount: BigNumber;
 }

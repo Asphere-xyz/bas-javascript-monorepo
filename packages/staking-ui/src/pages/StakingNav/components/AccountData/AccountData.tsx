@@ -12,7 +12,7 @@ export const AccountData = observer(() => {
     let availableAmountTemp = '0';
     try {
       const avail = await store.getBasSdk().getStaking().getMyAvailableReDelegateAmount();
-      availableAmountTemp = avail.dividedBy(10 ** 18).toFixed();
+      availableAmountTemp = avail.toString(10);
     } catch (e) {
       console.error(e);
     }
@@ -22,7 +22,9 @@ export const AccountData = observer(() => {
   const delegatedAmount = useLocalFetchDataStore<string>(async () => {
     let delegatedAmountTemp = '0';
     try {
-      const avail = await store.getBasSdk().getStaking().getTotalDelegatedAmount();
+      const avail = await store.getBasSdk().getStaking().getDelegatorDelegatedAmount(
+        store.getBasSdk().getKeyProvider().getMyAddress(),
+      );
       delegatedAmountTemp = avail.toFixed();
     } catch (e) {
       console.error(e);
@@ -34,7 +36,7 @@ export const AccountData = observer(() => {
     <div className="accountDataCArd">
       <div className="">
         <Title level={5} type='secondary'>
-          Available 
+          Re-Delegate Amount
         </Title>
         {
           availableAmount.isLoading

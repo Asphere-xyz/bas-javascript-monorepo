@@ -57,3 +57,17 @@ export const undelegate = async (store:BasStore, validator: string): Promise<voi
     message.error('Undelegating was failed...try again!')
   }
 }
+
+export const claimRewards = async (store:BasStore, validator: string): Promise<void> => {
+  try {
+    const result = await store.getBasSdk().getStaking().claimDelegatorFee(validator);
+
+    const receipt = await result.receipt;
+    console.log(`Receipt: ${JSON.stringify(receipt, null, 2)}`);
+
+    message.success('Claim was done!');
+  } catch (e) {
+    console.log(e)
+    message.error('Claim was failed...try again!')
+  }
+}

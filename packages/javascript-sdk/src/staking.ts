@@ -2,7 +2,7 @@ import {KeyProvider} from "./provider";
 import {
   IDelegatorDelegation,
   IDelegatorOneOfEvent,
-  IPendingTx,
+  IPendingTx, IStakingRewards,
   IValidator,
   Web3Address,
   Web3Uint256
@@ -197,6 +197,36 @@ export class Staking {
     return this.keyProvider.stakingContract!.methods.getDelegatorFee(validator, delegator).call()
   }
 
+  public async getMyClaimableStakingRewards(): Promise<IStakingRewards[]> {
+    return this.getClaimableStakingRewards(this.keyProvider.getMyAddress())
+  }
+
+  public async claimDelegatorFee(validator: Web3Address): Promise<IPendingTx> {
+    const data = this.keyProvider.stakingContract!.methods
+      .claimDelegatorFee(validator)
+      .encodeABI()
+    return this.keyProvider.sendTx({
+      to: this.keyProvider.stakingAddress!,
+      data: data,
+    })
+  }
+
+  public async getClaimableStakingRewards(delegator: Web3Address): Promise<IStakingRewards[]> {
+    const delegationHistory = await this.getDelegationHistory({ delegator })
+    const result: IStakingRewards[] = []
+    for (const delegation of delegationHistory) {
+      const stakingRewards = new BigNumber(await this.getStakingRewards(delegation.validator, delegator)).dividedBy(1e18);
+      if (stakingRewards.isZero()) {
+        continue;
+      }
+      const validator = await this.loadValidatorInfo(delegation.validator)
+      result.push({
+        validator, amount: stakingRewards,
+      })
+    }
+    return result
+  }
+
   public async getMyStakingRewards(validator: Web3Address): Promise<Web3Uint256> {
     const [delegator] = this.keyProvider.accounts!
     return this.keyProvider.stakingContract!.methods.getDelegatorFee(validator, delegator).call()
@@ -210,21 +240,21 @@ export class Staking {
     const delegationHistory = await this.getDelegationHistory({
       delegator: address,
     })
-    const unDelegationHistory = await this.getDelegationHistory({
+    const unDelegationHistory = await this.getUnDelegationHistory({
       delegator: address,
     })
     const lastDelegations = sortHasEventData(delegationHistory, unDelegationHistory).reduce((result: Record<string, IDelegatorDelegation>, item: IDelegatorDelegation) => {
       const key = `${item.validator}/${item.epoch}`
-      return { ...result, [key]: item }
-      // if (!result[key]) {
-      //   return { ...result, [key]: item }
-      // }
-      // if (item.event!.event === 'Delegated') {
-      //   result[key].amount = new BigNumber(result[key].amount).plus(item.amount).toString(10)
-      // } else if (item.event!.event === 'Undelegated') {
-      //   result[key].amount = new BigNumber(result[key].amount).minus(item.amount).toString(10)
-      // }
-      // return result
+      if (!result[key]) {
+        result[key] = item
+        return result
+      }
+      if (item.event!.event === 'Delegated') {
+        result[key].amount = new BigNumber(result[key].amount).plus(item.amount).toString(10)
+      } else if (item.event!.event === 'Undelegated') {
+        result[key].amount = new BigNumber(result[key].amount).minus(item.amount).toString(10)
+      }
+      return result
     }, {});
     return Object.values(lastDelegations)
   }
