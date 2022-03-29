@@ -39,10 +39,11 @@ const HomePage = observer((): ReactElement => {
           Staking
         </Menu.Item>
       </Menu>
+      <br/>
 
       {currentTab === 'validator' && <ValidatorsNav />}
       {currentTab === 'staking' && <StakingNav />}
-      
+
     </div>
   );
 });
