@@ -45,7 +45,8 @@ export class BasStore {
     }
     this.isConnected = true
     try {
-      await this.getBlockNumber()
+      const block = await this.getBlockNumber()
+      console.log(block)
     } catch (e) {
       console.error(e);
     }

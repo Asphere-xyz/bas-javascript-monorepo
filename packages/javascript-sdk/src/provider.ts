@@ -182,6 +182,7 @@ export class KeyProvider implements IKeyProvider {
     return await sendTransactionAsync(this.web3!, {
       from: this.accounts![0],
       to: sendOptions.to,
+      value: sendOptions.value,
       data: sendOptions.data,
     })
   }

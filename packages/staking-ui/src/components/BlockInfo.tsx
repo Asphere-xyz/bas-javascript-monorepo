@@ -1,5 +1,6 @@
 import { RightOutlined, DownOutlined } from "@ant-design/icons";
 import { Button, Col, Row, Typography } from "antd";
+import {BigNumber} from "bignumber.js";
 import { observer } from "mobx-react";
 import { useCallback, useEffect, useState } from "react";
 import { useBasStore } from "src/stores";
@@ -108,11 +109,11 @@ const BlockInfo = observer(() => {
               </Row>
               <Row>
                 <Text strong style={{ marginRight: '2px'}}>Min Validator Stake Amount:</Text>
-                <Text>{blockInfo?.minValidatorStakeAmount}</Text>
+                <Text>{new BigNumber(`${blockInfo?.minValidatorStakeAmount}`).dividedBy(1e18).toString(10)}</Text>
               </Row>
               <Row>
                 <Text strong style={{ marginRight: '2px'}}>Min Staking Amount:</Text>
-                <Text>{blockInfo?.minStakingAmount}</Text>
+                <Text>{new BigNumber(`${blockInfo?.minStakingAmount}`).dividedBy(1e18).toString(10)}</Text>
               </Row>
               <Row>
                 <Text type="secondary">
