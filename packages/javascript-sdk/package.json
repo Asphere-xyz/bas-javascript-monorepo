@@ -15,7 +15,9 @@
   ],
   "dependencies": {
     "@metamask/detect-provider": "^1.2.0",
+    "@types/pretty-time": "^1.1.2",
     "bignumber.js": "^9.0.2",
+    "pretty-time": "^1.1.0",
     "web3": "^1.7.1",
     "web3-eth-contract": "^1.7.1",
     "web3-utils": "^1.7.1"

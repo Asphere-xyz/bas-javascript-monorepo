@@ -4,6 +4,7 @@ import Web3 from "web3";
 import {sendTransactionAsync, waitForExpectedNetworkOrThrow} from "./metamask";
 import {Contract} from "web3-eth-contract";
 import detectEthereumProvider from "@metamask/detect-provider";
+import prettyTime from 'pretty-time'
 
 const STAKING_ABI = require('../src/abi/Staking.json')
 const SLASHING_INDICATOR_ABI = require('../src/abi/SlashingIndicator.json')
@@ -164,12 +165,13 @@ export class KeyProvider implements IKeyProvider {
       epochBlockInterval = await this.chainConfigContract!.methods.getEpochBlockInterval().call()
     let startBlock = ((blockNumber / epochBlockInterval) | 0) * epochBlockInterval,
       endBlock = startBlock + Number(epochBlockInterval)
+    const blockTime = 3;
     return {
       blockNumber: blockNumber,
       epoch: (blockNumber / epochBlockInterval) | 0,
-      nextEpochInSec: (endBlock - blockNumber) * 3,
+      nextEpochIn: prettyTime((endBlock - blockNumber) * blockTime * 1000 * 1000 * 1000),
       nextEpochBlock: endBlock,
-      blockTime: 3,
+      blockTime: blockTime,
     };
   }
 

@@ -67,7 +67,9 @@ export class Staking {
   }
 
   public async getActiveValidatorsAddresses(): Promise<Web3Address[]> {
-    return await this.keyProvider.stakingContract!.methods.getValidators().call()
+    const result = await this.keyProvider.stakingContract!.methods.getValidators().call()
+    console.log(`Active Validator Set: ${result}`);
+    return result
   }
 
   public async getActiveValidators(epoch?: number): Promise<IValidator[]> {
@@ -93,7 +95,10 @@ export class Staking {
   }
 
   private async loadValidatorsInfo(validators: Web3Address[], epoch?: number): Promise<IValidator[]> {
-    return await Promise.all(validators.map(v => this.loadValidatorInfo(v, epoch)))
+    const result = await Promise.all(validators.map(v => this.loadValidatorInfo(v, epoch)))
+    return result.sort((a, b) => {
+      return new BigNumber(b.totalDelegated).comparedTo(new BigNumber(a.totalDelegated))
+    })
   }
 
   private async loadValidatorInfo(validator: Web3Address, epoch?: number): Promise<IValidator> {

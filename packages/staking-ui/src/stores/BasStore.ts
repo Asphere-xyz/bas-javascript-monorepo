@@ -56,7 +56,7 @@ export class BasStore {
     blockNumber: number;
     epoch: number;
     nextEpochBlock: number;
-    nextEpochInSec: number;
+    nextEpochIn: string;
     blockTime: number;
     activeValidatorsLength: number;
     epochBlockInterval: number;

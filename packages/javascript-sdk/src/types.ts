@@ -20,7 +20,7 @@ export interface IChainParams {
   blockNumber: number;
   epoch: number;
   nextEpochBlock: number;
-  nextEpochInSec: number;
+  nextEpochIn: string;
   blockTime: number;
 }
 
