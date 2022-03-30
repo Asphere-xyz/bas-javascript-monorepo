@@ -92,8 +92,10 @@ export interface IGovernanceProposal {
   desc: string;
 }
 
+export type IEventData = EventData
+
 export interface IDelegatorDelegation {
-  event?: EventData;
+  event?: IEventData;
   validator: Web3Address;
   staker: Web3Address;
   amount: Web3Uint256;
@@ -101,7 +103,7 @@ export interface IDelegatorDelegation {
 }
 
 export interface IDelegatorUnDelegation {
-  event?: EventData;
+  event?: IEventData;
   validator: Web3Address;
   staker: Web3Address;
   amount: Web3Uint256;
@@ -109,7 +111,7 @@ export interface IDelegatorUnDelegation {
 }
 
 export interface IDelegatorClaim {
-  event?: EventData;
+  event?: IEventData;
   validator: Web3Address;
   staker: Web3Address;
   amount: Web3Uint256;

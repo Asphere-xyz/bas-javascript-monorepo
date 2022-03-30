@@ -30,11 +30,37 @@
     "type": "event"
   },
   {
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "evmHookAddress",
+        "type": "address"
+      }
+    ],
+    "name": "ctor",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
     "inputs": [],
     "name": "getChainConfig",
     "outputs": [
       {
         "internalType": "contract IChainConfig",
+        "name": "",
+        "type": "address"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "getEvmHookAddress",
+    "outputs": [
+      {
+        "internalType": "address",
         "name": "",
         "type": "address"
       }
@@ -192,19 +218,6 @@
     "inputs": [
       {
         "internalType": "address",
-        "name": "evmHookAddress",
-        "type": "address"
-      }
-    ],
-    "name": "ctor",
-    "outputs": [],
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "address",
         "name": "systemContractAddress",
         "type": "address"
       },
@@ -222,19 +235,6 @@
     "name": "upgradeSystemSmartContract",
     "outputs": [],
     "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "inputs": [],
-    "name": "getEvmHookAddress",
-    "outputs": [
-      {
-        "internalType": "address",
-        "name": "",
-        "type": "address"
-      }
-    ],
-    "stateMutability": "view",
     "type": "function"
   }
 ]

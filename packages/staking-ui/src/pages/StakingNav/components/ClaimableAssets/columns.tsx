@@ -4,6 +4,8 @@ import { BasStore } from "src/stores/BasStore";
 import { undelegate, delegate } from "src/utils/helpers";
 
 import { IDelegatedAssetsData } from "./interface";
+import {BigNumber} from "bignumber.js";
+import {IValidator} from "@ankr.com/bas-javascript-sdk";
 
 export const createTableColumns = (store: BasStore): ColumnProps<any>[]  => {
   
@@ -16,11 +18,17 @@ export const createTableColumns = (store: BasStore): ColumnProps<any>[]  => {
       title: 'Amount',
       dataIndex: 'amount',
       key: 'amount',
+      render: (value: BigNumber) => {
+        return value.toString(10)
+      }
     },
     {
       title: 'Validator',
       dataIndex: 'validator',
       key: 'validator',
+      render: (value: IValidator) => {
+        return value.validator
+      }
     },
     {
       title: 'Action',
@@ -32,7 +40,7 @@ export const createTableColumns = (store: BasStore): ColumnProps<any>[]  => {
               type="primary" 
               onClick={async () => handleClaimRewards(record)}
             >
-              Claim Rewards
+              Claim
             </Button>
           </div>
         )

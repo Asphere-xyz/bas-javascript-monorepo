@@ -3,7 +3,7 @@
     "inputs": [
       {
         "internalType": "bytes",
-        "name": "ctor",
+        "name": "constructorParams",
         "type": "bytes"
       }
     ],
@@ -414,14 +414,14 @@
         "type": "address[]"
       },
       {
+        "internalType": "uint256[]",
+        "name": "initialStakes",
+        "type": "uint256[]"
+      },
+      {
         "internalType": "uint16",
         "name": "commissionRate",
         "type": "uint16"
-      },
-      {
-        "internalType": "uint256",
-        "name": "initialStake",
-        "type": "uint256"
       }
     ],
     "name": "ctor",
@@ -502,6 +502,16 @@
         "internalType": "uint64",
         "name": "claimedAt",
         "type": "uint64"
+      },
+      {
+        "internalType": "uint16",
+        "name": "commissionRate",
+        "type": "uint16"
+      },
+      {
+        "internalType": "uint96",
+        "name": "totalRewards",
+        "type": "uint96"
       }
     ],
     "stateMutability": "view",
@@ -556,6 +566,16 @@
         "internalType": "uint64",
         "name": "claimedAt",
         "type": "uint64"
+      },
+      {
+        "internalType": "uint16",
+        "name": "commissionRate",
+        "type": "uint16"
+      },
+      {
+        "internalType": "uint96",
+        "name": "totalRewards",
+        "type": "uint96"
       }
     ],
     "stateMutability": "view",

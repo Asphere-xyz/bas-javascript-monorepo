@@ -7,6 +7,7 @@ import { useLocalGridStore } from "../../../../stores/LocalGridStore";
 
 import { createTableColumns } from "./columns";
 import { IHistoryData } from "./interface";
+import {IEventData} from "@ankr.com/bas-javascript-sdk";
 
 const StakingHistory = observer(() => {
   const store = useBasStore()
@@ -21,12 +22,14 @@ const StakingHistory = observer(() => {
       let validator;
       let staker;
       let transactionHash;
+      let event: IEventData | undefined;
       if ('delegation' in record) {
         type = 'Delegation';
         amount = new BigNumber(record.delegation?.amount ?? '0').dividedBy(10 ** 18).toFixed();
         validator = record.delegation?.validator;
         staker = record.delegation?.staker;
         transactionHash = record.delegation?.event?.transactionHash;
+        event = record.delegation?.event
       }
       if ('undelegation' in record) {
         type = 'Undelegation';
@@ -34,6 +37,7 @@ const StakingHistory = observer(() => {
         validator = record.undelegation?.validator;
         staker = record.undelegation?.staker;
         transactionHash = record.undelegation?.event?.transactionHash;
+        event = record.undelegation?.event
       }
       if ('claim' in record) {
         type = 'Claim';
@@ -41,6 +45,7 @@ const StakingHistory = observer(() => {
         validator = record.claim?.validator;
         staker = record.claim?.staker;
         transactionHash = record.claim?.event?.transactionHash;
+        event = record.claim?.event
       }
 
       result.push({
@@ -49,6 +54,7 @@ const StakingHistory = observer(() => {
         validator: validator ?? '',
         staker: staker ?? '',
         transactionHash: transactionHash ?? '',
+        event,
       });
     }
     return [result, false]
@@ -58,7 +64,7 @@ const StakingHistory = observer(() => {
     <>
       <Typography.Title>History</Typography.Title>
       <Table
-        columns={createTableColumns()}
+        columns={createTableColumns(store)}
         dataSource={grid.items}
         loading={grid.isLoading}
         pagination={grid.paginationConfig}

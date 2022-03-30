@@ -1,11 +1,12 @@
-import {BasSdk, IConfig} from "@ankr.com/bas-javascript-sdk";
+import {BasSdk, IConfig, IExplorerConfig} from "@ankr.com/bas-javascript-sdk";
 import {action, makeAutoObservable} from "mobx";
 
-const makeDefaultConfig = (chainId: number, chainName: string, rpcUrl: string): IConfig => {
+const makeDefaultConfig = (chainId: number, chainName: string, rpcUrl: string, explorerConfig?: IExplorerConfig): IConfig => {
   return {
     chainId,
     chainName,
     rpcUrl,
+    explorerConfig,
     // BSC-compatible contracts
     stakingAddress: '0x0000000000000000000000000000000000001000',
     slashingIndicatorAddress: '0x0000000000000000000000000000000000001001',
@@ -19,8 +20,13 @@ const makeDefaultConfig = (chainId: number, chainName: string, rpcUrl: string): 
   }
 }
 
-export const DEVNET_CONFIG: IConfig = makeDefaultConfig(1337, 'BAS devnet', 'http://localhost:8545/')
-export const TESTNET_CONFIG: IConfig = makeDefaultConfig(14000, 'BAS testnet', 'https://rpc.dev-01.bas.ankr.com/')
+export const LOCAL_CONFIG: IConfig = makeDefaultConfig(1337, 'BAS devnet', 'http://localhost:8545/')
+export const DEV_CONFIG: IConfig = makeDefaultConfig(14000, 'BAS testnet', 'https://rpc.dev-01.bas.ankr.com/', {
+  homePage: 'https://explorer.dev-01.bas.ankr.com/',
+  txUrl: 'https://explorer.dev-01.bas.ankr.com/tx/{tx}',
+  addressUrl: 'https://explorer.dev-01.bas.ankr.com/address/{address}',
+  blockUrl: 'https://explorer.dev-01.bas.ankr.com/block/{block}',
+})
 
 export class BasStore {
 
@@ -28,7 +34,7 @@ export class BasStore {
 
   private readonly sdk: BasSdk
 
-  public constructor(private readonly config: IConfig) {
+  public constructor(public readonly config: IConfig) {
     this.sdk = new BasSdk(config)
     makeAutoObservable(this)
   }

@@ -68,6 +68,7 @@ export const ValidatorsNav = observer((): ReactElement => {
           tokenSymbol="BAS"
         />
       </div>
+      <br/>
 
       <ValidatorTable gridData={grid} store={store} />
     </div>

@@ -217,7 +217,7 @@ export class Staking {
   }
 
   public async getClaimableStakingRewards(delegator: Web3Address): Promise<IStakingRewards[]> {
-    const delegationHistory = await this.getDelegationHistory({ delegator })
+    const delegationHistory = await this.getDelegationHistory({delegator})
     const result: IStakingRewards[] = []
     for (const delegation of delegationHistory) {
       const stakingRewards = new BigNumber(await this.getStakingRewards(delegation.validator, delegator)).dividedBy(1e18);

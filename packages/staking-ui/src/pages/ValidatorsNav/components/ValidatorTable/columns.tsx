@@ -4,6 +4,7 @@ import { ColumnProps } from "antd/lib/table";
 import { delegate, undelegate } from "src/utils/helpers";
 
 import {BasStore} from "../../../../stores/BasStore";
+import {BigNumber} from "bignumber.js";
 
 const { Text } = Typography;
 
@@ -51,19 +52,23 @@ export const createTableColumns = (store: BasStore): ColumnProps<any>[]  => {
       title: 'Total Delegated',
       dataIndex: 'totalDelegated',
       key: 'totalDelegated',
-      render: (value: string) => (Number(value) / 1e18).toFixed(0)
+      render: (value: string) => (Number(value) / 1e18).toFixed(2)
     },
     {
-      title: 'Delegated Amount',
-      dataIndex: 'myDelegatedAmount',
-      key: 'myDelegatedAmount',
-      render: (value: string) => (Number(value) / 1e18).toFixed(0)
+      title: 'Commission',
+      dataIndex: 'commissionRate',
+      key: 'commissionRate',
+      render: (value: string) => `${(Number(value) / 1e2).toFixed(0)}%`
     },
     {
-      title: 'Validator Fee (committed)',
-      dataIndex: 'validatorFee',
-      key: 'validatorFee',
-      render: (value: string) => (Number(value) / 1e18)
+      title: 'APR',
+      key: 'apr',
+      render: (value: IValidator) => {
+        const apr = (100 * new BigNumber(value.totalRewards).dividedBy(value.totalDelegated).toNumber())
+        if (apr === 0) return `0%`
+        if (apr.toFixed(2) === '0.00') return `~0%`
+        return `${apr.toFixed(2)}%`
+      }
     },
     {
       render: (validator: IValidator) => {

@@ -1,17 +1,17 @@
 import {MobXProviderContext} from 'mobx-react'
 import React from "react";
 
-import {BasStore, DEVNET_CONFIG, TESTNET_CONFIG} from "./BasStore";
+import {BasStore, LOCAL_CONFIG, DEV_CONFIG} from "./BasStore";
 
 const currentEnvironment = process.env.REACT_APP_ENVIRONMENT || 'devnet';
 
 console.log(`Current env is: ${currentEnvironment}`)
 
-let config = DEVNET_CONFIG
+let config = LOCAL_CONFIG
 if (currentEnvironment === 'devnet') {
-  config = DEVNET_CONFIG
+  config = LOCAL_CONFIG
 } else if (currentEnvironment === 'testnet') {
-  config = TESTNET_CONFIG
+  config = DEV_CONFIG
 }
 
 const basStore = new BasStore(config)
