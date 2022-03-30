@@ -13,6 +13,8 @@ export const waitForExpectedNetworkOrThrow = async (web3: Web3, config: IConfig)
       params: [{chainId: numberToHex(config.chainId)}],
     });
   } catch (error) {
+    console.error('FAILED TO ADD')
+    console.error(error)
     // This error code indicates that the chain has not been added to MetaMask.
     if ((error as any).code === 4902) {
       if (await tryAddMetaMaskNetwork(web3, config)) {
@@ -26,6 +28,7 @@ export const waitForExpectedNetworkOrThrow = async (web3: Web3, config: IConfig)
 
 export const tryAddMetaMaskNetwork = async (web3: Web3, config: IConfig): Promise<boolean> => {
   try {
+    console.log(`Trying to switch MetaMask network to: ${config.chainId}`);
     await web3.givenProvider.request({
       method: 'wallet_switchEthereumChain',
       params: [{chainId: numberToHex(config.chainId)}],
@@ -38,6 +41,7 @@ export const tryAddMetaMaskNetwork = async (web3: Web3, config: IConfig): Promis
     }
   }
   try {
+    console.log(`Trying to add MetaMask network to: ${config.chainId}`);
     await web3.givenProvider.request({
       method: 'wallet_addEthereumChain',
       params: [

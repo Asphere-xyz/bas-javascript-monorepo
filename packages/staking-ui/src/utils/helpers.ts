@@ -19,7 +19,7 @@ export const delegate = async (store: BasStore, validator: string): Promise<void
 
   if (!amount) return;
   const bigAmount = new BigNumber(amount).multipliedBy(10**18).toString(10)
-  
+
   try {
     const result = await store.getBasSdk().getStaking().delegateTo(validator, `${bigAmount}`);
     const receipt = await result.receipt;
@@ -55,5 +55,19 @@ export const undelegate = async (store:BasStore, validator: string): Promise<voi
   } catch (e) {
     console.log(e)
     message.error('Undelegating was failed...try again!')
+  }
+}
+
+export const claimRewards = async (store:BasStore, validator: string): Promise<void> => {
+  try {
+    const result = await store.getBasSdk().getStaking().claimDelegatorFee(validator);
+
+    const receipt = await result.receipt;
+    console.log(`Receipt: ${JSON.stringify(receipt, null, 2)}`);
+
+    message.success('Claim was done!');
+  } catch (e) {
+    console.log(e)
+    message.error('Claim was failed...try again!')
   }
 }

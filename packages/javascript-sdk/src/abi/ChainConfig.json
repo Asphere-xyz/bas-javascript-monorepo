@@ -72,15 +72,15 @@
     "inputs": [
       {
         "indexed": false,
-        "internalType": "uint64",
+        "internalType": "uint256",
         "name": "prevValue",
-        "type": "uint64"
+        "type": "uint256"
       },
       {
         "indexed": false,
-        "internalType": "uint64",
+        "internalType": "uint256",
         "name": "newValue",
-        "type": "uint64"
+        "type": "uint256"
       }
     ],
     "name": "MinStakingAmountChanged",
@@ -91,15 +91,15 @@
     "inputs": [
       {
         "indexed": false,
-        "internalType": "uint64",
+        "internalType": "uint256",
         "name": "prevValue",
-        "type": "uint64"
+        "type": "uint256"
       },
       {
         "indexed": false,
-        "internalType": "uint64",
+        "internalType": "uint256",
         "name": "newValue",
-        "type": "uint64"
+        "type": "uint256"
       }
     ],
     "name": "MinValidatorStakeAmountChanged",
@@ -354,14 +354,14 @@
         "type": "uint32"
       },
       {
-        "internalType": "uint64",
+        "internalType": "uint256",
         "name": "minValidatorStakeAmount",
-        "type": "uint64"
+        "type": "uint256"
       },
       {
-        "internalType": "uint64",
+        "internalType": "uint256",
         "name": "minStakingAmount",
-        "type": "uint64"
+        "type": "uint256"
       }
     ],
     "name": "ctor",
@@ -530,9 +530,9 @@
     "name": "getMinValidatorStakeAmount",
     "outputs": [
       {
-        "internalType": "uint64",
+        "internalType": "uint256",
         "name": "",
-        "type": "uint64"
+        "type": "uint256"
       }
     ],
     "stateMutability": "view",
@@ -541,9 +541,9 @@
   {
     "inputs": [
       {
-        "internalType": "uint64",
+        "internalType": "uint256",
         "name": "newValue",
-        "type": "uint64"
+        "type": "uint256"
       }
     ],
     "name": "setMinValidatorStakeAmount",
@@ -556,9 +556,9 @@
     "name": "getMinStakingAmount",
     "outputs": [
       {
-        "internalType": "uint64",
+        "internalType": "uint256",
         "name": "",
-        "type": "uint64"
+        "type": "uint256"
       }
     ],
     "stateMutability": "view",
@@ -567,9 +567,9 @@
   {
     "inputs": [
       {
-        "internalType": "uint64",
+        "internalType": "uint256",
         "name": "newValue",
-        "type": "uint64"
+        "type": "uint256"
       }
     ],
     "name": "setMinStakingAmount",

@@ -36,28 +36,6 @@
         "react/no-did-update-set-state": "off",
         "react/no-children-prop": "off",
         "import/no-unresolved": "off",
-        //
-        "import/order": [
-          "error",
-          {
-            "groups": [
-              "external",
-              "builtin",
-              "internal",
-              "type",
-              "parent",
-              "sibling",
-              "index",
-              "object"
-            ],
-            "alphabetize": {
-              "order": "asc",
-              "caseInsensitive": true
-            },
-            "warnOnUnassignedImports": true,
-            "newlines-between": "always"
-          }
-        ],
         "no-plusplus": "error",
         "no-return-assign": "error",
         "no-unreachable": "error",
@@ -99,7 +77,7 @@
           }
         ],
         "@typescript-eslint/ban-ts-comment": "error",
-        "@typescript-eslint/no-non-null-assertion": "error",
+        "@typescript-eslint/no-non-null-assertion": "warn",
         "@typescript-eslint/ban-types": [
           "error",
           {

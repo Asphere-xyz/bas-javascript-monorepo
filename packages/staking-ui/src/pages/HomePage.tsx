@@ -43,11 +43,12 @@ const HomePage = observer((): ReactElement => {
           Staking
         </Menu.Item>
       </Menu>
+      <br/>
 
       {currentTab === 'validator' && <ValidatorsNav />}
       {currentTab === 'governance' && <GovernanceNav />}
       {currentTab === 'staking' && <StakingNav />}
-      
+
     </div>
   );
 });

@@ -1,5 +1,6 @@
 import { RightOutlined, DownOutlined } from "@ant-design/icons";
 import { Button, Col, Row, Typography } from "antd";
+import {BigNumber} from "bignumber.js";
 import { observer } from "mobx-react";
 import { useCallback, useEffect, useState } from "react";
 import { useBasStore } from "src/stores";
@@ -8,7 +9,7 @@ interface IBlockInfoData {
   blockNumber: number;
   epoch: number;
   nextEpochBlock: number;
-  nextEpochInSec: number;
+  nextEpochIn: string;
   blockTime: number;
   activeValidatorsLength: number;
   epochBlockInterval: number;
@@ -67,8 +68,7 @@ const BlockInfo = observer(() => {
                 <Text strong style={{ marginRight: '2px'}}>Next Epoch Block:</Text>
                 <Text>
                   {blockInfo?.nextEpochBlock}
-                  &nbsp;(in {blockInfo?.nextEpochInSec} sec
-                  or {(blockInfo?.nextEpochInSec ?? 0 / 60).toFixed(1)} min)
+                  &nbsp;(in {blockInfo?.nextEpochIn})
                 </Text>
               </Row>
               <Row>
@@ -108,11 +108,11 @@ const BlockInfo = observer(() => {
               </Row>
               <Row>
                 <Text strong style={{ marginRight: '2px'}}>Min Validator Stake Amount:</Text>
-                <Text>{blockInfo?.minValidatorStakeAmount}</Text>
+                <Text>{new BigNumber(`${blockInfo?.minValidatorStakeAmount}`).dividedBy(1e18).toString(10)}</Text>
               </Row>
               <Row>
                 <Text strong style={{ marginRight: '2px'}}>Min Staking Amount:</Text>
-                <Text>{blockInfo?.minStakingAmount}</Text>
+                <Text>{new BigNumber(`${blockInfo?.minStakingAmount}`).dividedBy(1e18).toString(10)}</Text>
               </Row>
               <Row>
                 <Text type="secondary">

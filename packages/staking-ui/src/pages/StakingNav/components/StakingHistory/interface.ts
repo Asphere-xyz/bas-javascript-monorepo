@@ -1,4 +1,4 @@
-import { Web3Uint256, Web3Address } from "@ankr.com/bas-javascript-sdk";
+import {Web3Uint256, Web3Address, IEventData} from "@ankr.com/bas-javascript-sdk";
 
 export interface IHistoryData {
   type: string;
@@ -6,4 +6,5 @@ export interface IHistoryData {
   validator: Web3Address;
   staker: Web3Address;
   transactionHash: string;
+  event?: IEventData;
 }

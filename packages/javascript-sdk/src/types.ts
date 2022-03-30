@@ -1,5 +1,6 @@
 import {Contract, EventData} from "web3-eth-contract";
 import {PromiEvent, TransactionReceipt} from "web3-core";
+import BigNumber from "bignumber.js";
 
 export type Web3Address = string;
 export type Web3Uint256 = string;
@@ -19,7 +20,7 @@ export interface IChainParams {
   blockNumber: number;
   epoch: number;
   nextEpochBlock: number;
-  nextEpochInSec: number;
+  nextEpochIn: string;
   blockTime: number;
 }
 
@@ -91,8 +92,10 @@ export interface IGovernanceProposal {
   desc: string;
 }
 
+export type IEventData = EventData
+
 export interface IDelegatorDelegation {
-  event?: EventData;
+  event?: IEventData;
   validator: Web3Address;
   staker: Web3Address;
   amount: Web3Uint256;
@@ -100,7 +103,7 @@ export interface IDelegatorDelegation {
 }
 
 export interface IDelegatorUnDelegation {
-  event?: EventData;
+  event?: IEventData;
   validator: Web3Address;
   staker: Web3Address;
   amount: Web3Uint256;
@@ -108,7 +111,7 @@ export interface IDelegatorUnDelegation {
 }
 
 export interface IDelegatorClaim {
-  event?: EventData;
+  event?: IEventData;
   validator: Web3Address;
   staker: Web3Address;
   amount: Web3Uint256;
@@ -119,4 +122,9 @@ export interface IDelegatorOneOfEvent {
   delegation?: IDelegatorDelegation;
   undelegation?: IDelegatorUnDelegation;
   claim?: IDelegatorClaim;
+}
+
+export interface IStakingRewards {
+  validator: IValidator;
+  amount: BigNumber;
 }
