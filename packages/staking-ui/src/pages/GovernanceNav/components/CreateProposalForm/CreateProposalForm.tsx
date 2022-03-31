@@ -1,7 +1,7 @@
-import {PlusOutlined} from "@ant-design/icons";
-import {Button, Col, Form, Input, Row, Select, Typography} from "antd";
-import {observer} from "mobx-react";
-import {useState} from "react";
+import { PlusOutlined } from "@ant-design/icons";
+import { Button, Col, Form, Input, Row, Select, Typography, message } from "antd";
+import { observer } from "mobx-react";
+import { useState } from "react";
 import { useBasStore } from "src/stores";
 
 export interface IGenerateThresholdKeyFormProps {
@@ -127,32 +127,46 @@ const CreateProposalForm = observer((props: IGenerateThresholdKeyFormProps) => {
   const [proposalType, setProposalType] = useState('add_deployer');
   const store = useBasStore();
 
-  const handleAddProposal = async () => {
-    // if (proposalType === 'add_deployer') {
+  const handleAddProposal = async (values: {type: string; deployer: string; description: string;}) => {
+    if (values.type === 'add_deployer') {
+      try {
+        await store.getBasSdk().getGovernance()
+          .createProposal(values.description)
+          .addDeployer(values.deployer);
+          message.success('Proposal was successfully added!');
+      } catch (e: any) {
+        message.error(e.message);
+      }
+    }
+    
+    if (values.type === 'remove_deployer') {
+      try {
+        const a = await store.getBasSdk().getGovernance()
+          .createProposal(values.description)
+          .removeDeployer(values.deployer);
+        message.success('Proposal was successfully added!');
+      } catch (e: any) {
+        message.error(e.message);
+      }
+    }
+    
+    // if (values.type === 'add_validator') {
+      
+    // }
+    
+    // if (values.type === 'activate_validator') {
+      
+    // }
+    
+    // if (values.type === 'remove_validator') {
+      
+    // }
+    
+    // if (values.type === 'disable_contract') {
+      
+    // }
 
-    // }
-    
-    // if (proposalType === 'remove_deployer') {
-      
-    // }
-    
-    // if (proposalType === 'add_validator') {
-      
-    // }
-    
-    // if (proposalType === 'activate_validator') {
-      
-    // }
-    
-    // if (proposalType === 'remove_validator') {
-      
-    // }
-    
-    // if (proposalType === 'disable_contract') {
-      
-    // }
-
-    // if (proposalType === 'enable_contract') {
+    // if (values.type === 'enable_contract') {
       
     // }
   }
@@ -160,8 +174,8 @@ const CreateProposalForm = observer((props: IGenerateThresholdKeyFormProps) => {
   return (
     <Form
       layout="vertical"
-      onFinish={async () => {
-        await handleAddProposal();
+      onFinish={async (values) => {
+        await handleAddProposal(values);
       }}
     >
       <Row gutter={24}>
@@ -188,7 +202,7 @@ const CreateProposalForm = observer((props: IGenerateThresholdKeyFormProps) => {
                 Remove Deployer
               </Select.Option>
 
-              <Select.Option value="add_validator">
+              {/* <Select.Option value="add_validator">
                 Add Validator
               </Select.Option>
 
@@ -206,25 +220,25 @@ const CreateProposalForm = observer((props: IGenerateThresholdKeyFormProps) => {
 
               <Select.Option value="enable_contract">
                 Enable Contract
-              </Select.Option>
+              </Select.Option> */}
             </Select>
           </Form.Item>
         </Col>
       </Row>
 
-      {proposalType === 'add_deployer' && <AddDeployerForm/>}
+      {proposalType === 'add_deployer' && <AddDeployerForm />}
 
-      {proposalType === 'remove_deployer' && <RemoveDeployerForm/>}
+      {proposalType === 'remove_deployer' && <RemoveDeployerForm />}
 
-      {proposalType === 'add_validator' && <AddValidatorForm/>}
+      {proposalType === 'add_validator' && <AddValidatorForm />}
 
       {proposalType === 'activate_validator' && <ActivateValidatorForm/>}
 
-      {proposalType === 'remove_validator' && <RemoveValidatorForm/>}
+      {proposalType === 'remove_validator' && <RemoveValidatorForm />}
 
-      {proposalType === 'disable_contract' && <DisableContractForm/>}
+      {proposalType === 'disable_contract' && <DisableContractForm />}
 
-      {proposalType === 'enable_contract' && <DisableContractForm/>}
+      {proposalType === 'enable_contract' && <DisableContractForm />}
 
       <Row gutter={24}>
         <Col offset={2} span={20}>

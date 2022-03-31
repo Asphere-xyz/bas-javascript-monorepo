@@ -45,7 +45,7 @@ export const createTableColumns = (store: BasStore): ColumnProps<any>[] => {
     {
       title: 'Voting Period',
       key: 'votingPeriod',
-      render: ({startBlock, endBlock}: any) => {
+      render: ({ startBlock, endBlock }: any) => {
         return `${startBlock} -> ${endBlock}`
       }
     },
