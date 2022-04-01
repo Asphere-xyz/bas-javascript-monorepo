@@ -1,7 +1,8 @@
 import { IValidator } from "@ankr.com/bas-javascript-sdk";
-import { Button,  Typography } from "antd";
+import {Button, Tooltip, Typography} from "antd";
 import { ColumnProps } from "antd/lib/table";
 import { delegate, undelegate } from "src/utils/helpers";
+import React from 'react';
 
 import {BasStore} from "../../../../stores/BasStore";
 import {BigNumber} from "bignumber.js";
@@ -64,10 +65,21 @@ export const createTableColumns = (store: BasStore): ColumnProps<any>[]  => {
       title: 'APR',
       key: 'apr',
       render: (value: IValidator) => {
-        const apr = (100 * new BigNumber(value.totalRewards).dividedBy(value.totalDelegated).toNumber())
-        if (apr === 0) return `0%`
-        if (apr.toFixed(2) === '0.00') return `~0%`
-        return `${apr.toFixed(2)}%`
+        const apr = 365 * (100 * new BigNumber(value.totalRewards).dividedBy(value.totalDelegated).toNumber())
+        let prettyApr = '';
+        if (apr === 0) {
+          prettyApr = `0%`
+        } else if (apr.toFixed(2) === '0.00') {
+          prettyApr = `~0%`
+        } else {
+          prettyApr = `${apr.toFixed(2)}%`
+        }
+        const MyComponent = React.forwardRef(function MyComponent(props, ref) {
+          return <div>{prettyApr}</div>
+        });
+        return <Tooltip title={apr} placement={"left"}>
+          <MyComponent/>
+        </Tooltip>
       }
     },
     {
