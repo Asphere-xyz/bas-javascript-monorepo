@@ -1,8 +1,9 @@
-import {ColumnProps} from "antd/lib/table";
-import {IHistoryData} from "./interface";
-import {EXPLORER_URL} from "../../../../utils/const";
-import {BasStore} from "../../../../stores/BasStore";
-import {Typography} from "antd";
+import { Typography } from "antd";
+import { ColumnProps } from "antd/lib/table";
+
+import { BasStore } from "../../../../stores/BasStore";
+
+import { IHistoryData } from "./interface";
 
 const {Link} = Typography;
 
@@ -28,7 +29,7 @@ export const createTableColumns = (store: BasStore): ColumnProps<any>[] => {
     columns.push({
       title: 'Block',
       render: (record: IHistoryData) => {
-        const url = store.config.explorerConfig!.blockUrl.replace('{block}', `${record.event?.blockNumber || 0}`)
+        const url = store.config.explorerConfig?.blockUrl.replace('{block}', `${record.event?.blockNumber || 0}`)
         return (
           <Link href={url} target="_blank">
             {record.event?.blockNumber || 0}
@@ -39,7 +40,7 @@ export const createTableColumns = (store: BasStore): ColumnProps<any>[] => {
     columns.push({
       title: 'Transaction Hash',
       render: (record: IHistoryData) => {
-        const url = store.config.explorerConfig!.txUrl.replace('{tx}', record.transactionHash)
+        const url = store.config.explorerConfig?.txUrl.replace('{tx}', record.transactionHash)
         return (
           <Link href={url} target="_blank">
             {record.transactionHash.substring(0, 10)}...{record.transactionHash.substring(58)}

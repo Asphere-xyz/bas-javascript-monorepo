@@ -1,9 +1,10 @@
-import {IStakingRewards} from "@ankr.com/bas-javascript-sdk";
+import { IStakingRewards } from "@ankr.com/bas-javascript-sdk";
 import {Table, Typography} from "antd";
 import {observer} from "mobx-react";
 
 import {useBasStore} from "../../../../stores";
 import {useLocalGridStore} from "../../../../stores/LocalGridStore";
+
 import {createTableColumns} from "./columns";
 
 const ClaimableAssets = observer(() => {

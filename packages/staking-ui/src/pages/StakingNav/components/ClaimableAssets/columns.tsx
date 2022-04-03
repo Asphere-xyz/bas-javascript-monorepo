@@ -1,11 +1,11 @@
+import {IValidator} from "@ankr.com/bas-javascript-sdk";
 import { Button } from "antd";
 import { ColumnProps } from "antd/lib/table";
+import {BigNumber} from "bignumber.js";
 import { BasStore } from "src/stores/BasStore";
 import { undelegate, delegate } from "src/utils/helpers";
 
 import { IDelegatedAssetsData } from "./interface";
-import {BigNumber} from "bignumber.js";
-import {IValidator} from "@ankr.com/bas-javascript-sdk";
 
 export const createTableColumns = (store: BasStore): ColumnProps<any>[]  => {
   

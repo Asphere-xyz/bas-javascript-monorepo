@@ -1,3 +1,4 @@
+import {IEventData} from "@ankr.com/bas-javascript-sdk";
 import { Table, Typography } from "antd";
 import BigNumber from "bignumber.js";
 import { observer } from "mobx-react";
@@ -7,7 +8,6 @@ import { useLocalGridStore } from "../../../../stores/LocalGridStore";
 
 import { createTableColumns } from "./columns";
 import { IHistoryData } from "./interface";
-import {IEventData} from "@ankr.com/bas-javascript-sdk";
 
 const StakingHistory = observer(() => {
   const store = useBasStore()

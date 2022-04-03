@@ -1,11 +1,11 @@
 import { IValidator } from "@ankr.com/bas-javascript-sdk";
 import {Button, Tooltip, Typography} from "antd";
 import { ColumnProps } from "antd/lib/table";
+import {BigNumber} from "bignumber.js";
 import { delegate, undelegate } from "src/utils/helpers";
 import React from 'react';
 
 import {BasStore} from "../../../../stores/BasStore";
-import {BigNumber} from "bignumber.js";
 
 const { Text } = Typography;
 
