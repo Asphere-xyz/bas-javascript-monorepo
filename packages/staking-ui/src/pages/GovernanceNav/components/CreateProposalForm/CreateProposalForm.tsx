@@ -66,6 +66,35 @@ const AddValidatorForm = () => {
   )
 }
 
+const UpgradeRuntimeForm = () => {
+  return (
+    <Row gutter={24}>
+      <Col offset={2} span={20}>
+        <Form.Item
+          extra={<Typography.Text type="secondary">System smart contract to upgrade.</Typography.Text>}
+          label="Address"
+          name="address"
+          rules={[
+            {required: true, message: 'Required field'},
+          ]}
+        >
+          <Input type="text"/>
+        </Form.Item>
+        <Form.Item
+          extra={<Typography.Text type="secondary">New bytecode to set.</Typography.Text>}
+          label="Bytecode"
+          name="bytecode"
+          rules={[
+            {required: true, message: 'Required field'},
+          ]}
+        >
+          <Input.TextArea/>
+        </Form.Item>
+      </Col>
+    </Row>
+  )
+}
+
 const ActivateValidatorForm = () => {
   return (
     <Row gutter={24}>
@@ -194,51 +223,39 @@ const CreateProposalForm = observer((props: IGenerateThresholdKeyFormProps) => {
                 setProposalType(`${value}`)
               }}
             >
-              <Select.Option value="add_deployer">
-                Add Deployer
-              </Select.Option>
-
-              <Select.Option value="remove_deployer">
-                Remove Deployer
-              </Select.Option>
-
-              {/* <Select.Option value="add_validator">
-                Add Validator
+              <Select.Option value="upgrade_runtime">
+                Upgrade Runtime
               </Select.Option>
 
               <Select.Option value="activate_validator">
                 Activate Validator
               </Select.Option>
 
+              <Select.Option value="disable_validator">
+                Disable Validator
+              </Select.Option>
+
+              <Select.Option value="add_validator">
+                Add Validator
+              </Select.Option>
+
               <Select.Option value="remove_validator">
                 Remove Validator
               </Select.Option>
-
-              <Select.Option value="disable_contract">
-                Disable Contract
-              </Select.Option>
-
-              <Select.Option value="enable_contract">
-                Enable Contract
-              </Select.Option> */}
             </Select>
           </Form.Item>
         </Col>
       </Row>
 
-      {proposalType === 'add_deployer' && <AddDeployerForm />}
-
-      {proposalType === 'remove_deployer' && <RemoveDeployerForm />}
-
-      {proposalType === 'add_validator' && <AddValidatorForm />}
+      {proposalType === 'upgrade_runtime' && <UpgradeRuntimeForm />}
 
       {proposalType === 'activate_validator' && <ActivateValidatorForm/>}
 
+      {proposalType === 'disable_validator' && <ActivateValidatorForm/>}
+
+      {proposalType === 'add_validator' && <AddValidatorForm />}
+
       {proposalType === 'remove_validator' && <RemoveValidatorForm />}
-
-      {proposalType === 'disable_contract' && <DisableContractForm />}
-
-      {proposalType === 'enable_contract' && <DisableContractForm />}
 
       <Row gutter={24}>
         <Col offset={2} span={20}>
