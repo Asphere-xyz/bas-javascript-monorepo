@@ -9,8 +9,8 @@ import { IDelegatedAssetsData } from "./interface";
 
 export const createTableColumns = (store: BasStore): ColumnProps<any>[]  => {
   
-  const handleClaimRewards = async (record: IDelegatedAssetsData) => {
-    await undelegate(store, record.validator);
+  const handleClaimRewards = async (record: IDelegatedAssetsData, defaultAmount: string) => {
+    await undelegate(store, record.validator, defaultAmount);
   }
   
   return [
@@ -38,7 +38,7 @@ export const createTableColumns = (store: BasStore): ColumnProps<any>[]  => {
             <Button
               style={{ width: '40%' }}
               type="primary" 
-              onClick={async () => handleClaimRewards(record)}
+              onClick={async () => handleClaimRewards(record, record.amount)}
             >
               Claim
             </Button>

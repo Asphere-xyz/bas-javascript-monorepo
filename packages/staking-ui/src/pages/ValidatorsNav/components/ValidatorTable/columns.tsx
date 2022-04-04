@@ -1,15 +1,15 @@
-import { IValidator } from "@ankr.com/bas-javascript-sdk";
+import {IValidator} from "@ankr.com/bas-javascript-sdk";
 import {Button, Tooltip, Typography} from "antd";
-import { ColumnProps } from "antd/lib/table";
+import {ColumnProps} from "antd/lib/table";
 import {BigNumber} from "bignumber.js";
-import { delegate, undelegate } from "src/utils/helpers";
+import {delegate, undelegate} from "src/utils/helpers";
 import React from 'react';
 
 import {BasStore} from "../../../../stores/BasStore";
 
-const { Text } = Typography;
+const {Text} = Typography;
 
-export const createTableColumns = (store: BasStore): ColumnProps<any>[]  => {
+export const createTableColumns = (store: BasStore): ColumnProps<any>[] => {
 
   const handleDelegateClick = async (validator: IValidator) => {
     await delegate(store, validator.validator);
@@ -66,6 +66,7 @@ export const createTableColumns = (store: BasStore): ColumnProps<any>[]  => {
       key: 'apr',
       render: (value: IValidator) => {
         const apr = 365 * (100 * new BigNumber(value.totalRewards).dividedBy(value.totalDelegated).toNumber())
+        console.log(`Validator APR (${value.validator}): ${apr}`);
         let prettyApr = '';
         if (apr === 0) {
           prettyApr = `0%`
@@ -74,12 +75,14 @@ export const createTableColumns = (store: BasStore): ColumnProps<any>[]  => {
         } else {
           prettyApr = `${apr.toFixed(2)}%`
         }
-        const MyComponent = React.forwardRef(function MyComponent(props, ref) {
+        const MyComponent = React.forwardRef((props, ref) => {
           return <div>{prettyApr}</div>
         });
-        return <Tooltip title={apr} placement={"left"}>
-          <MyComponent/>
-        </Tooltip>
+        return (
+          <Tooltip placement="left" title={apr}>
+            <MyComponent/>
+          </Tooltip>
+        )
       }
     },
     {
@@ -87,16 +90,16 @@ export const createTableColumns = (store: BasStore): ColumnProps<any>[]  => {
         return (
           <>
             <Button
-              className="tableButton" 
-              type="primary" 
+              className="tableButton"
+              type="primary"
               onClick={async () => handleDelegateClick(validator)}
             >
               Delegate
             </Button>
 
             <Button
-              className="tableButton" 
-              type="default" 
+              className="tableButton"
+              type="default"
               onClick={async () => handleUndelegateClick(validator)}
             >
               Undelegate

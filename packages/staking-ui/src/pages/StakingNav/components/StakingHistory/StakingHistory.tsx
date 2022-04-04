@@ -12,7 +12,8 @@ import { IHistoryData } from "./interface";
 const StakingHistory = observer(() => {
   const store = useBasStore()
   const grid = useLocalGridStore<IHistoryData>(async (offset: number, limit: number): Promise<[IHistoryData[], boolean]> => {
-    const history = await store.getBasSdk().getStaking().getAllEventsHistory();
+    const myAddress = store.getBasSdk().getKeyProvider().getMyAddress()
+    const history = await store.getBasSdk().getStaking().getAllEventsHistory({staker: myAddress});
     const result: IHistoryData[] = [];
     
     // eslint-disable-next-line no-restricted-syntax

@@ -53,8 +53,8 @@ export class Staking {
   }
 
   public async getDelegatorDelegatedAmount(delegator: Web3Address): Promise<BigNumber> {
-    const delegations = await this.getDelegationHistory({delegator}),
-      unDelegations = await this.getUnDelegationHistory({delegator})
+    const delegations = await this.getDelegationHistory({staker: delegator}),
+      unDelegations = await this.getUnDelegationHistory({staker: delegator})
     let result = new BigNumber('0')
     for (const e of sortHasEventData(delegations, unDelegations)) {
       if (e.event!.event === 'Delegated') {
@@ -133,7 +133,7 @@ export class Staking {
     })
   }
 
-  public async getDelegationHistory(filter: { validator?: Web3Address; delegator?: Web3Address } = {}): Promise<IDelegatorDelegation[]> {
+  public async getDelegationHistory(filter: { validator?: Web3Address; staker?: Web3Address } = {}): Promise<IDelegatorDelegation[]> {
     const events = await this.keyProvider.stakingContract!.getPastEvents('Delegated', {
       fromBlock: 'earliest',
       toBlock: 'latest',
@@ -145,7 +145,7 @@ export class Staking {
     })
   }
 
-  public async getUnDelegationHistory(filter: { validator?: Web3Address; delegator?: Web3Address } = {}): Promise<IDelegatorDelegation[]> {
+  public async getUnDelegationHistory(filter: { validator?: Web3Address; staker?: Web3Address } = {}): Promise<IDelegatorDelegation[]> {
     const events = await this.keyProvider.stakingContract!.getPastEvents('Undelegated', {
       fromBlock: 'earliest',
       toBlock: 'latest',
@@ -157,7 +157,7 @@ export class Staking {
     })
   }
 
-  public async getClaimHistory(filter: { validator?: Web3Address; delegator?: Web3Address } = {}): Promise<IDelegatorDelegation[]> {
+  public async getClaimHistory(filter: { validator?: Web3Address; staker?: Web3Address } = {}): Promise<IDelegatorDelegation[]> {
     const events = await this.keyProvider.stakingContract!.getPastEvents('Claimed', {
       fromBlock: 'earliest',
       toBlock: 'latest',
@@ -169,7 +169,7 @@ export class Staking {
     })
   }
 
-  public async getAllEventsHistory(filter: { validator?: Web3Address; delegator?: Web3Address } = {}): Promise<IDelegatorOneOfEvent[]> {
+  public async getAllEventsHistory(filter: { validator?: Web3Address; staker?: Web3Address } = {}): Promise<IDelegatorOneOfEvent[]> {
     const [delegation, unDelegation, claim] = await Promise.all([
       this.getDelegationHistory(filter),
       this.getUnDelegationHistory(filter),
@@ -217,19 +217,17 @@ export class Staking {
   }
 
   public async getClaimableStakingRewards(delegator: Web3Address): Promise<IStakingRewards[]> {
-    const delegationHistory = await this.getDelegationHistory({delegator})
-    const result: IStakingRewards[] = []
+    const delegationHistory = await this.getDelegationHistory({staker: delegator})
+    const result: Record<Web3Address, IStakingRewards> = {}
     for (const delegation of delegationHistory) {
       const stakingRewards = new BigNumber(await this.getStakingRewards(delegation.validator, delegator)).dividedBy(1e18);
       if (stakingRewards.isZero()) {
         continue;
       }
       const validator = await this.loadValidatorInfo(delegation.validator)
-      result.push({
-        validator, amount: stakingRewards,
-      })
+      result[validator.validator] = { validator, amount: stakingRewards }
     }
-    return result
+    return Object.values(result)
   }
 
   public async getMyStakingRewards(validator: Web3Address): Promise<Web3Uint256> {
@@ -243,13 +241,13 @@ export class Staking {
 
   public async getActiveDelegations(address: Web3Address): Promise<IDelegatorDelegation[]> {
     const delegationHistory = await this.getDelegationHistory({
-      delegator: address,
+      staker: address,
     })
     const unDelegationHistory = await this.getUnDelegationHistory({
-      delegator: address,
+      staker: address,
     })
     const lastDelegations = sortHasEventData(delegationHistory, unDelegationHistory).reduce((result: Record<string, IDelegatorDelegation>, item: IDelegatorDelegation) => {
-      const key = `${item.validator}/${item.epoch}`
+      const key = `${item.validator}`
       if (!result[key]) {
         result[key] = item
         return result

@@ -31,7 +31,7 @@ export const delegate = async (store: BasStore, validator: string): Promise<void
   }
 }
 
-export const undelegate = async (store:BasStore, validator: string): Promise<void> => {
+export const undelegate = async (store:BasStore, validator: string, defaultAmount = '0'): Promise<void> => {
   const amount = await prompt({
     title: 'Enter undelegation amount (in ether): ',
     rules: [
@@ -39,7 +39,8 @@ export const undelegate = async (store:BasStore, validator: string): Promise<voi
         required: true,
         message: "You must enter number of tokens"
       }
-    ]
+    ],
+    value: defaultAmount,
   })
   
   if (!amount) return;
