@@ -61,6 +61,7 @@ export const undelegate = async (store:BasStore, validator: string, defaultAmoun
 
 export const claimRewards = async (store:BasStore, validator: string): Promise<void> => {
   try {
+    console.log(`Claiming validator fee: ${validator}`);
     const result = await store.getBasSdk().getStaking().claimDelegatorFee(validator);
 
     const receipt = await result.receipt;

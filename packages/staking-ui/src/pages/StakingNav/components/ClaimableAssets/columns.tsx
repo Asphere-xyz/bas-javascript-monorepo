@@ -1,18 +1,17 @@
-import {IValidator} from "@ankr.com/bas-javascript-sdk";
-import { Button } from "antd";
-import { ColumnProps } from "antd/lib/table";
+import {IStakingRewards, IValidator} from "@ankr.com/bas-javascript-sdk";
+import {Button} from "antd";
+import {ColumnProps} from "antd/lib/table";
 import {BigNumber} from "bignumber.js";
-import { BasStore } from "src/stores/BasStore";
-import { undelegate, delegate } from "src/utils/helpers";
+import {BasStore} from "src/stores/BasStore";
+import {claimRewards} from "src/utils/helpers";
 
-import { IDelegatedAssetsData } from "./interface";
+export const createTableColumns = (store: BasStore): ColumnProps<any>[] => {
 
-export const createTableColumns = (store: BasStore): ColumnProps<any>[]  => {
-  
-  const handleClaimRewards = async (record: IDelegatedAssetsData, defaultAmount: string) => {
-    await undelegate(store, record.validator, defaultAmount);
+  const handleClaimRewards = async (record: IStakingRewards) => {
+    console.log(record)
+    await claimRewards(store, record.validator.validator);
   }
-  
+
   return [
     {
       title: 'Amount',
@@ -32,15 +31,15 @@ export const createTableColumns = (store: BasStore): ColumnProps<any>[]  => {
     },
     {
       title: 'Action',
-      render: (record: IDelegatedAssetsData) => {
+      render: (record: IStakingRewards) => {
         return (
           <div className="flexSpaceAround">
             <Button
-              style={{ width: '40%' }}
-              type="primary" 
-              onClick={async () => handleClaimRewards(record, record.amount)}
+              style={{width: '40%'}}
+              type="primary"
+              onClick={async () => handleClaimRewards(record)}
             >
-              Claim
+              Claim&nbsp;&nbsp;&nbsp;
             </Button>
           </div>
         )
