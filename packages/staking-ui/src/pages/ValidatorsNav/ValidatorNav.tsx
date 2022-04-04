@@ -1,20 +1,17 @@
 /* eslint-disable no-await-in-loop */
-import { IValidator, Web3Uint256 } from "@ankr.com/bas-javascript-sdk";
-import { observer } from "mobx-react";
-import { ReactElement, useState, useEffect } from "react";
+import {IValidator, Web3Uint256} from "@ankr.com/bas-javascript-sdk";
+import {observer} from "mobx-react";
+import {ReactElement, useState, useEffect} from "react";
 import ValidatorTable from "src/pages/ValidatorsNav/components/ValidatorTable/ValidatorTable";
-import { useBasStore } from "src/stores";
-import { useLocalGridStore } from "src/stores/LocalGridStore";
+import {useBasStore} from "src/stores";
+import {useLocalGridStore} from "src/stores/LocalGridStore";
 
 import '../index.css';
 
-import { BondedTokensCard } from "./components/BondedTokensCard";
-import { ValidatorsCard } from "./components/ValidatorsCard";
+import {BondedTokensCard} from "./components/BondedTokensCard";
+import {ValidatorsCard} from "./components/ValidatorsCard";
 
 interface IValidatorWithAmounts extends IValidator {
-  myDelegatedAmount: Web3Uint256;
-  validatorFee: Web3Uint256;
-  myStakingRewards: Web3Uint256;
   key: string;
 }
 
@@ -34,14 +31,14 @@ export const ValidatorsNav = observer((): ReactElement => {
     let activeCount = 0;
     // eslint-disable-next-line no-restricted-syntax
     for (const validator of validators) {
-      if (validator.status === '1') 
+      if (validator.status === '1')
         activeCount += 1;
-      result.push({ ...validator, myDelegatedAmount: await store.getBasSdk().getStaking().getMyDelegatedAmount(validator.validator),
-        validatorFee: await store.getBasSdk().getStaking().getValidatorRewards(validator.validator),
-        myStakingRewards: await store.getBasSdk().getStaking().getMyStakingRewards(validator.validator),
+      result.push({
+        ...validator,
         key: validator.validator,
       });
     }
+    console.log(result)
     setTotalValidators(totalCount);
     setActiveValidators(activeCount);
     return [result, false]
@@ -54,14 +51,14 @@ export const ValidatorsNav = observer((): ReactElement => {
   return (
     <div>
       <div className="validatorHeadWrapper">
-        <ValidatorsCard 
+        <ValidatorsCard
           active={activeValidators}
           loading={grid.isLoading}
-          title="Validators" 
-          total={totalValidators} 
+          title="Validators"
+          total={totalValidators}
         />
 
-        <BondedTokensCard 
+        <BondedTokensCard
           loading={grid.isLoading}
           title="Bonded Tokens"
           tokens={bondedTokens}
@@ -70,7 +67,7 @@ export const ValidatorsNav = observer((): ReactElement => {
       </div>
       <br/>
 
-      <ValidatorTable gridData={grid} store={store} />
+      <ValidatorTable gridData={grid} store={store}/>
     </div>
   );
 })

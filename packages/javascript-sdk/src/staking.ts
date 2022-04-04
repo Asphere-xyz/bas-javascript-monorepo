@@ -95,6 +95,9 @@ export class Staking {
   }
 
   private async loadValidatorsInfo(validators: Web3Address[], epoch?: number): Promise<IValidator[]> {
+    if (!epoch) {
+      epoch = await this.keyProvider.getCurrentEpoch()
+    }
     const result = await Promise.all(validators.map(v => this.loadValidatorInfo(v, epoch)))
     return result.sort((a, b) => {
       return new BigNumber(b.totalDelegated).comparedTo(new BigNumber(a.totalDelegated))
