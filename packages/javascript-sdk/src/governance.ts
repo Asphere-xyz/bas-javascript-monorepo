@@ -37,9 +37,9 @@ export class ProposalBuilder {
   }
 
   public async addDeployer(account: Web3Address): Promise<ProposalBuilder> {
-    const isDeployer = this.keyProvider.deployerProxyContract!.methods.isDeployer(account).call();
+    const isDeployer = await this.keyProvider.deployerProxyContract!.methods.isDeployer(account).call();
     if (isDeployer) {
-      throw new Error(`Account ${account} is already deployer`)
+      throw new Error(`Account ${account} is already a deployer`)
     }
     const inputData = this.keyProvider.deployerProxyContract!.methods.addDeployer(account).encodeABI()
     this.actions.push({
@@ -51,13 +51,79 @@ export class ProposalBuilder {
   }
 
   public async removeDeployer(account: Web3Address): Promise<ProposalBuilder> {
-    const isDeployer = this.keyProvider.deployerProxyContract!.methods.isDeployer(account).call();
+    const isDeployer = await this.keyProvider.deployerProxyContract!.methods.isDeployer(account).call();
     if (!isDeployer) {
       throw new Error(`Account ${account} is not a deployer`)
     }
     const inputData = this.keyProvider.deployerProxyContract!.methods.removeDeployer(account).encodeABI()
     this.actions.push({
       target: this.keyProvider.deployerProxyAddress!,
+      inputData: inputData,
+      value: '0x00',
+    });
+    return this
+  }
+
+  public async addValidator(account: Web3Address): Promise<ProposalBuilder> {
+    const isValidator = await this.keyProvider.stakingContract!.methods.isValidator(account).call();
+    if (isValidator) {
+      throw new Error(`Account ${account} is already a validator`)
+    }
+    const inputData = this.keyProvider.stakingContract!.methods.addValidator(account).encodeABI()
+    this.actions.push({
+      target: this.keyProvider.stakingAddress!,
+      inputData: inputData,
+      value: '0x00',
+    });
+    return this
+  }
+
+  public async removeValidator(account: Web3Address): Promise<ProposalBuilder> {
+    const isValidator = await this.keyProvider.stakingContract!.methods.isValidator(account).call();
+    if (!isValidator) {
+      throw new Error(`Account ${account} is not a validator`)
+    }
+    const inputData = this.keyProvider.stakingContract!.methods.removeValidator(account).encodeABI()
+    this.actions.push({
+      target: this.keyProvider.stakingAddress!,
+      inputData: inputData,
+      value: '0x00',
+    });
+    return this
+  }
+
+  public async activateValidator(account: Web3Address): Promise<ProposalBuilder> {
+    const isValidator = await this.keyProvider.stakingContract!.methods.isValidator(account).call();
+    if (!isValidator) {
+      throw new Error(`Account ${account} is not a validator`)
+    }
+    const inputData = this.keyProvider.stakingContract!.methods.activateValidator(account).encodeABI()
+    this.actions.push({
+      target: this.keyProvider.stakingAddress!,
+      inputData: inputData,
+      value: '0x00',
+    });
+    return this
+  }
+
+  public async disableValidator(account: Web3Address): Promise<ProposalBuilder> {
+    const isValidator = await this.keyProvider.stakingContract!.methods.isValidator(account).call();
+    if (!isValidator) {
+      throw new Error(`Account ${account} is not a validator`)
+    }
+    const inputData = this.keyProvider.stakingContract!.methods.disableValidator(account).encodeABI()
+    this.actions.push({
+      target: this.keyProvider.stakingAddress!,
+      inputData: inputData,
+      value: '0x00',
+    });
+    return this
+  }
+
+  public async upgradeRuntime(systemContract: Web3Address, byteCode: string): Promise<ProposalBuilder> {
+    const inputData = this.keyProvider.runtimeUpgradeContract!.methods.upgradeSystemSmartContract(systemContract, byteCode).encodeABI()
+    this.actions.push({
+      target: this.keyProvider.runtimeUpgradeAddress!,
       inputData: inputData,
       value: '0x00',
     });
@@ -124,9 +190,9 @@ export class Governance {
       values = builder.actions.map((a) => a.value);
     let data: string
     if (builder.votingPeriod) {
-      data = this.keyProvider.governanceContract!.methods.proposeWithCustomVotingPeriod(targets, values, inputs, builder.description, builder.votingPeriod);
+      data = this.keyProvider.governanceContract!.methods.proposeWithCustomVotingPeriod(targets, values, inputs, builder.description, builder.votingPeriod).encodeABI();
     } else {
-      data = this.keyProvider.governanceContract!.methods.propose(targets, values, inputs, builder.description);
+      data = this.keyProvider.governanceContract!.methods.propose(targets, values, inputs, builder.description).encodeABI();
     }
     return this.keyProvider.sendTx({to: this.keyProvider.governanceAddress!, data: data});
   }

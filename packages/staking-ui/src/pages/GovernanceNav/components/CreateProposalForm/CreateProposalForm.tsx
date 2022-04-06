@@ -1,50 +1,12 @@
-import { PlusOutlined } from "@ant-design/icons";
-import { Button, Col, Form, Input, Row, Select, Typography, message } from "antd";
-import { observer } from "mobx-react";
-import { useState } from "react";
-import { useBasStore } from "src/stores";
+import {PlusOutlined} from "@ant-design/icons";
+import {Button, Col, Form, Input, Row, Select, Typography, message} from "antd";
+import {observer} from "mobx-react";
+import {useState} from "react";
+import {useBasStore} from "src/stores";
 
 export interface IGenerateThresholdKeyFormProps {
   isLoading?: boolean;
   isFetching?: boolean;
-}
-
-const AddDeployerForm = () => {
-  return (
-    <Row gutter={24}>
-      <Col offset={2} span={20}>
-        <Form.Item
-          extra={<Typography.Text type="secondary">Deployer address to add.</Typography.Text>}
-          label="Deployer"
-          name="deployer"
-          rules={[
-            {required: true, message: 'Required field'},
-          ]}
-        >
-          <Input type="text"/>
-        </Form.Item>
-      </Col>
-    </Row>
-  )
-}
-
-const RemoveDeployerForm = () => {
-  return (
-    <Row gutter={24}>
-      <Col offset={2} span={20}>
-        <Form.Item
-          extra={<Typography.Text type="secondary">Deployer address to remove.</Typography.Text>}
-          label="Deployer"
-          name="deployer"
-          rules={[
-            {required: true, message: 'Required field'},
-          ]}
-        >
-          <Input type="text"/>
-        </Form.Item>
-      </Col>
-    </Row>
-  )
 }
 
 const AddValidatorForm = () => {
@@ -54,7 +16,7 @@ const AddValidatorForm = () => {
         <Form.Item
           extra={<Typography.Text type="secondary">Validator address to add.</Typography.Text>}
           label="Validator"
-          name="validator"
+          name="address"
           rules={[
             {required: true, message: 'Required field'},
           ]}
@@ -102,7 +64,7 @@ const ActivateValidatorForm = () => {
         <Form.Item
           extra={<Typography.Text type="secondary">Validator address to activate.</Typography.Text>}
           label="Validator"
-          name="validator"
+          name="address"
           rules={[
             {required: true, message: 'Required field'},
           ]}
@@ -121,26 +83,7 @@ const RemoveValidatorForm = () => {
         <Form.Item
           extra={<Typography.Text type="secondary">Validator address to remove.</Typography.Text>}
           label="Validator"
-          name="validator"
-          rules={[
-            {required: true, message: 'Required field'},
-          ]}
-        >
-          <Input type="text"/>
-        </Form.Item>
-      </Col>
-    </Row>
-  )
-}
-
-const DisableContractForm = () => {
-  return (
-    <Row gutter={24}>
-      <Col offset={2} span={20}>
-        <Form.Item
-          extra={<Typography.Text type="secondary">Contract address to disable/enable.</Typography.Text>}
-          label="Contract"
-          name="contract"
+          name="address"
           rules={[
             {required: true, message: 'Required field'},
           ]}
@@ -156,50 +99,51 @@ const CreateProposalForm = observer((props: IGenerateThresholdKeyFormProps) => {
   const [proposalType, setProposalType] = useState('add_deployer');
   const store = useBasStore();
 
-  const handleAddProposal = async (values: {type: string; deployer: string; description: string;}) => {
-    if (values.type === 'add_deployer') {
-      try {
-        await store.getBasSdk().getGovernance()
-          .createProposal(values.description)
-          .addDeployer(values.deployer);
-          message.success('Proposal was successfully added!');
-      } catch (e: any) {
-        message.error(e.message);
-      }
-    }
-    
-    if (values.type === 'remove_deployer') {
+  const handleAddProposal = async (values: { type: string; deployer: string; description: string; address: string; bytecode: string; }) => {
+    if (values.type === 'upgrade_runtime') {
       try {
         const a = await store.getBasSdk().getGovernance()
           .createProposal(values.description)
-          .removeDeployer(values.deployer);
+          .upgradeRuntime(values.address, values.bytecode);
+        const tx = await store.getBasSdk().getGovernance().sendProposal(a)
+        const receipt = await tx.receipt
         message.success('Proposal was successfully added!');
       } catch (e: any) {
         message.error(e.message);
       }
+    } else if (values.type === 'add_validator') {
+      try {
+        const a = await store.getBasSdk().getGovernance()
+          .createProposal(values.description)
+          .addValidator(values.address);
+        const tx = await store.getBasSdk().getGovernance().sendProposal(a)
+        const receipt = await tx.receipt
+        message.success('Proposal was successfully added!');
+      } catch (e: any) {
+        message.error(e.message);
+      }
+    } else if (values.type === 'remove_validator') {
+      try {
+        const a = await store.getBasSdk().getGovernance()
+          .createProposal(values.description)
+          .removeDeployer(values.deployer);
+        const tx = await store.getBasSdk().getGovernance().sendProposal(a)
+        const receipt = await tx.receipt
+        message.success('Proposal was successfully added!');
+      } catch (e: any) {
+        message.error(e.message);
+      }
+    } else {
+      message.error(`Unknown proposal`);
     }
-    
-    // if (values.type === 'add_validator') {
-      
-    // }
-    
     // if (values.type === 'activate_validator') {
-      
     // }
-    
-    // if (values.type === 'remove_validator') {
-      
-    // }
-    
     // if (values.type === 'disable_contract') {
-      
     // }
-
     // if (values.type === 'enable_contract') {
-      
     // }
   }
-  
+
   return (
     <Form
       layout="vertical"
@@ -217,8 +161,8 @@ const CreateProposalForm = observer((props: IGenerateThresholdKeyFormProps) => {
               {required: true, message: 'Required field'},
             ]}
           >
-            <Select 
-              placeholder="Proposal type" 
+            <Select
+              placeholder="Proposal type"
               onChange={(value) => {
                 setProposalType(`${value}`)
               }}
@@ -247,15 +191,15 @@ const CreateProposalForm = observer((props: IGenerateThresholdKeyFormProps) => {
         </Col>
       </Row>
 
-      {proposalType === 'upgrade_runtime' && <UpgradeRuntimeForm />}
+      {proposalType === 'upgrade_runtime' && <UpgradeRuntimeForm/>}
 
       {proposalType === 'activate_validator' && <ActivateValidatorForm/>}
 
       {proposalType === 'disable_validator' && <ActivateValidatorForm/>}
 
-      {proposalType === 'add_validator' && <AddValidatorForm />}
+      {proposalType === 'add_validator' && <AddValidatorForm/>}
 
-      {proposalType === 'remove_validator' && <RemoveValidatorForm />}
+      {proposalType === 'remove_validator' && <RemoveValidatorForm/>}
 
       <Row gutter={24}>
         <Col offset={2} span={20}>
@@ -273,10 +217,10 @@ const CreateProposalForm = observer((props: IGenerateThresholdKeyFormProps) => {
       </Row>
 
       <Form.Item wrapperCol={{offset: 11}}>
-        <Button 
-          disabled={props.isLoading} 
-          htmlType="submit" 
-          icon={<PlusOutlined translate="yes" />} 
+        <Button
+          disabled={props.isLoading}
+          htmlType="submit"
+          icon={<PlusOutlined translate="yes"/>}
           loading={props.isLoading}
           type="primary"
         >
