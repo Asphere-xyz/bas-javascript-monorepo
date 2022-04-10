@@ -1,7 +1,7 @@
 import {BasSdk, IConfig, IExplorerConfig} from "@ankr.com/bas-javascript-sdk";
 import {action, makeAutoObservable} from "mobx";
 
-const makeDefaultConfig = (chainId: number, chainName: string, rpcUrl: string, explorerConfig?: IExplorerConfig): IConfig => {
+export const makeDefaultConfig = (chainId: number, chainName: string, rpcUrl: string, explorerConfig?: IExplorerConfig): IConfig => {
   return {
     chainId,
     chainName,

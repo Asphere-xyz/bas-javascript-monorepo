@@ -39,6 +39,7 @@
         "no-plusplus": "error",
         "no-return-assign": "error",
         "no-unreachable": "error",
+        "no-template-curly-in-string": "off",
         "prefer-template": "error",
         "camelcase": [
           "error"

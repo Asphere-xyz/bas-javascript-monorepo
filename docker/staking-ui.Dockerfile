@@ -3,7 +3,10 @@ WORKDIR /build
 RUN apk update && apk add python3 alpine-sdk
 COPY . /build
 RUN yarn
-RUN yarn build && cd packages/staking-ui && yarn build:testnet
+RUN yarn build && cd packages/staking-ui && yarn build
 
 FROM nginx AS run
 COPY --from=build /build/packages/staking-ui/build /usr/share/nginx/html
+COPY ./entrypoint.sh /entrypoint.sh
+RUN chmod +x /entrypoint.sh
+CMD /entrypoint.sh
