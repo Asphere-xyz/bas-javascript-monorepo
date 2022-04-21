@@ -1,7 +1,7 @@
-import { IGovernanceProposal, TGovernanceProposalStatus } from "@ankr.com/bas-javascript-sdk";
-import { Button, Tag } from "antd";
-import { ColumnProps } from "antd/lib/table";
-import { ReactElement } from "react";
+import {IGovernanceProposal, TGovernanceProposalStatus} from "@ankr.com/bas-javascript-sdk";
+import {Button, Tag} from "antd";
+import {ColumnProps} from "antd/lib/table";
+import {ReactElement} from "react";
 
 import {BasStore} from "../../../../stores/BasStore";
 
@@ -45,7 +45,7 @@ export const createTableColumns = (store: BasStore): ColumnProps<any>[] => {
     {
       title: 'Voting Period',
       key: 'votingPeriod',
-      render: ({ startBlock, endBlock }: any) => {
+      render: ({startBlock, endBlock}: any) => {
         return `${startBlock} -> ${endBlock}`
       }
     },
@@ -60,8 +60,8 @@ export const createTableColumns = (store: BasStore): ColumnProps<any>[] => {
         if (`${event.status}` === 'Active') {
           return (
             <Button.Group>
-              <Button 
-                type="primary" 
+              <Button
+                type="primary"
                 onClick={async () => {
                   const {transactionHash, receipt} = await store.getBasSdk().getGovernance().voteForProposal(event.id);
                   console.log(transactionHash);
@@ -71,7 +71,7 @@ export const createTableColumns = (store: BasStore): ColumnProps<any>[] => {
                 Vote For
               </Button>
 
-              <Button 
+              <Button
                 onClick={async () => {
                   const {
                     transactionHash,
@@ -90,11 +90,9 @@ export const createTableColumns = (store: BasStore): ColumnProps<any>[] => {
           return (
             <Button.Group>
               <Button type="primary" onClick={async () => {
-                alert("not implemented")
-                // const {transactionHash, receiptPromise} = await store.getBasSdk().getGovernance().executeProposal(event),
-                //   receipt = await receiptPromise
-                // console.log(transactionHash)
-                // console.log(receipt)
+                const {transactionHash, receipt} = await store.getBasSdk().getGovernance().executeProposal(event)
+                console.log(transactionHash)
+                console.log(await receipt)
               }}>Execute</Button>
             </Button.Group>
           )

@@ -9,6 +9,7 @@ import {
 import {KeyProvider} from "./provider";
 import {PastEventOptions} from "web3-eth-contract";
 import BigNumber from "bignumber.js";
+import {keccak256} from "web3-utils";
 
 export class ProposalBuilder {
 
@@ -217,7 +218,14 @@ export class Governance {
     })
   }
 
-  public async executeProposal(): Promise<IPendingTx> {
-    throw new Error(`not implemented`);
+  public async executeProposal(proposal: IGovernanceProposal): Promise<IPendingTx> {
+    // noinspection JSVoidFunctionReturnValueUsed,TypeScriptValidateJSTypes
+    const data = this.keyProvider.governanceContract!.methods
+      .execute(proposal.targets, proposal.values, proposal.inputs, keccak256(proposal.desc))
+      .encodeABI();
+    return await this.keyProvider.sendTx({
+      to: this.keyProvider.governanceAddress!,
+      data: data,
+    })
   }
 }

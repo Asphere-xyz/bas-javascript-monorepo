@@ -21,11 +21,11 @@ export const makeDefaultConfig = (chainId: number, chainName: string, rpcUrl: st
 }
 
 export const LOCAL_CONFIG: IConfig = makeDefaultConfig(1337, 'BAS devnet', 'http://localhost:8545/')
-export const DEV_CONFIG: IConfig = makeDefaultConfig(14000, 'BAS testnet', 'https://rpc.dev-01.bas.ankr.com/', {
-  homePage: 'https://explorer.dev-01.bas.ankr.com/',
-  txUrl: 'https://explorer.dev-01.bas.ankr.com/tx/{tx}',
-  addressUrl: 'https://explorer.dev-01.bas.ankr.com/address/{address}',
-  blockUrl: 'https://explorer.dev-01.bas.ankr.com/block/{block}',
+export const DEV_CONFIG: IConfig = makeDefaultConfig(14001, 'BAS testnet', 'https://rpc.dev-02.bas.ankr.com/', {
+  homePage: 'https://explorer.dev-02.bas.ankr.com/',
+  txUrl: 'https://explorer.dev-02.bas.ankr.com/tx/{tx}',
+  addressUrl: 'https://explorer.dev-02.bas.ankr.com/address/{address}',
+  blockUrl: 'https://explorer.dev-02.bas.ankr.com/block/{block}',
 })
 
 export class BasStore {

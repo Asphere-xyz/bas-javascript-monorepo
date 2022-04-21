@@ -216,7 +216,7 @@ const CreateProposalForm = observer((props: IGenerateThresholdKeyFormProps) => {
         </Col>
       </Row>
 
-      <Form.Item wrapperCol={{offset: 11}}>
+      <Form.Item wrapperCol={{offset: 16}}>
         <Button
           disabled={props.isLoading}
           htmlType="submit"
@@ -224,7 +224,7 @@ const CreateProposalForm = observer((props: IGenerateThresholdKeyFormProps) => {
           loading={props.isLoading}
           type="primary"
         >
-          Propose, Vote & Execute
+          Propose
         </Button>
       </Form.Item>
     </Form>

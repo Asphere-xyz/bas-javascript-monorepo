@@ -30,7 +30,7 @@ const ProposalTable = observer(() => {
       }}
       loading={grid.isLoading}
       pagination={grid.paginationConfig}
-      rowKey="proposalId"
+      rowKey="id"
     />
   );
 });

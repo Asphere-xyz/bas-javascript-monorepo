@@ -4,16 +4,12 @@ import React from "react";
 import {BasStore, LOCAL_CONFIG, DEV_CONFIG, makeDefaultConfig} from "./BasStore";
 
 const currentEnvironment = process.env.REACT_APP_ENVIRONMENT || '${REACT_APP_ENVIRONMENT}';
-// if (currentEnvironment === '${REACT_APP_ENVIRONMENT}') {
-//   currentEnvironment = `${process.env.REACT_APP_ENVIRONMENT}` || 'devnet'
-// }
-
 console.log(`Current env is: ${currentEnvironment}`)
 
 let config = LOCAL_CONFIG
-if (currentEnvironment === 'devnet') {
+if (currentEnvironment === 'local') {
   config = LOCAL_CONFIG
-} else if (currentEnvironment === 'testnet') {
+} else if (currentEnvironment === 'devnet') {
   config = DEV_CONFIG
 }
 

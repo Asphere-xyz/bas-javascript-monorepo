@@ -49,12 +49,10 @@
     "react-app-rewired": "^2.1.8"
   },
   "scripts": {
-    "start": "env-cmd -f .env.testnet react-app-rewired start",
-    "start:testnet": "env-cmd -f ./.env.testnet react-app-rewired start",
-    "start:devnet": "env-cmd -f ./.env.devnet react-app-rewired start",
-    "build": "react-scripts build",
-    "build:testnet": "env-cmd -f ./.env.testnet react-scripts build",
-    "build:devnet": "env-cmd -f ./.env.devnet react-scripts build"
+    "start:local": "env-cmd -f .env.local react-app-rewired start",
+    "start:devnet": "env-cmd -f .env.devnet react-app-rewired start",
+    "build:local": "env-cmd -f .env.local react-scripts build",
+    "build:devnet": "env-cmd -f .env.devnet react-scripts build"
   },
   "browserslist": {
     "production": [
