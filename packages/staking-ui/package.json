@@ -49,8 +49,10 @@
     "react-app-rewired": "^2.1.8"
   },
   "scripts": {
+    "start": "react-app-rewired start",
     "start:local": "env-cmd -f .env.local react-app-rewired start",
     "start:devnet": "env-cmd -f .env.devnet react-app-rewired start",
+    "build": "react-scripts build",
     "build:local": "env-cmd -f .env.local react-scripts build",
     "build:devnet": "env-cmd -f .env.devnet react-scripts build"
   },
