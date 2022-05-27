@@ -27,19 +27,8 @@ export class LocalGridStore<T> {
     const config: TablePaginationConfig = {
       current: this.currentPage + 1,
       onChange(page: number, pageSize?: number) {
-        that.currentPage = page - 1
-        if (pageSize) that.pageSize = pageSize
-        // if we have enough data then just open this page
-        if (that.items.length > that.pageSize) {
-          return
-        }
         // noinspection JSIgnoredPromiseFromCall
-        that.fetchItems().then(() => {
-          that.isLoading = false
-        }).catch(() => {
-          that.isLoading = false
-        })
-        that.isLoading = true
+        that.changePage(page, pageSize);
       },
       pageSize: this.pageSize,
       pageSizeOptions: [
@@ -55,6 +44,20 @@ export class LocalGridStore<T> {
       config.total = this.hasMore ? this.pageSize + 1 : this.items.length
     }
     return config
+  }
+
+  @action
+  async changePage(page: number, pageSize?: number): Promise<void> {
+    this.currentPage = page - 1
+    if (pageSize) this.pageSize = pageSize
+    // if we have enough data then just open this page
+    if (this.items.length > this.pageSize) {
+      return
+    }
+    // noinspection JSIgnoredPromiseFromCall
+    this.isLoading = true
+    await this.fetchItems();
+    this.isLoading = false;
   }
 
   @action

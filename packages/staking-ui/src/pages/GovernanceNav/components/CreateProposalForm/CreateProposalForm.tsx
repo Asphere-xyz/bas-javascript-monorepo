@@ -76,6 +76,25 @@ const ActivateValidatorForm = () => {
   )
 }
 
+const DisableValidatorForm = () => {
+  return (
+    <Row gutter={24}>
+      <Col offset={2} span={20}>
+        <Form.Item
+          extra={<Typography.Text type="secondary">Validator address to disable.</Typography.Text>}
+          label="Validator"
+          name="address"
+          rules={[
+            {required: true, message: 'Required field'},
+          ]}
+        >
+          <Input type="text"/>
+        </Form.Item>
+      </Col>
+    </Row>
+  )
+}
+
 const RemoveValidatorForm = () => {
   return (
     <Row gutter={24}>
@@ -99,7 +118,7 @@ const CreateProposalForm = observer((props: IGenerateThresholdKeyFormProps) => {
   const [proposalType, setProposalType] = useState('add_deployer');
   const store = useBasStore();
 
-  const handleAddProposal = async (values: { type: string; deployer: string; description: string; address: string; bytecode: string; }) => {
+  const handleAddProposal = async (values: { type: string; description: string; address: string; bytecode: string; }) => {
     if (values.type === 'upgrade_runtime') {
       try {
         const a = await store.getBasSdk().getGovernance()
@@ -126,7 +145,29 @@ const CreateProposalForm = observer((props: IGenerateThresholdKeyFormProps) => {
       try {
         const a = await store.getBasSdk().getGovernance()
           .createProposal(values.description)
-          .removeDeployer(values.deployer);
+          .removeDeployer(values.address);
+        const tx = await store.getBasSdk().getGovernance().sendProposal(a)
+        const receipt = await tx.receipt
+        message.success('Proposal was successfully added!');
+      } catch (e: any) {
+        message.error(e.message);
+      }
+    } else if (values.type === 'activate_validator') {
+      try {
+        const a = await store.getBasSdk().getGovernance()
+          .createProposal(values.description)
+          .activateValidator(values.address);
+        const tx = await store.getBasSdk().getGovernance().sendProposal(a)
+        const receipt = await tx.receipt
+        message.success('Proposal was successfully added!');
+      } catch (e: any) {
+        message.error(e.message);
+      }
+    } else if (values.type === 'disable_validator') {
+      try {
+        const a = await store.getBasSdk().getGovernance()
+          .createProposal(values.description)
+          .disableValidator(values.address);
         const tx = await store.getBasSdk().getGovernance().sendProposal(a)
         const receipt = await tx.receipt
         message.success('Proposal was successfully added!');
@@ -136,12 +177,6 @@ const CreateProposalForm = observer((props: IGenerateThresholdKeyFormProps) => {
     } else {
       message.error(`Unknown proposal`);
     }
-    // if (values.type === 'activate_validator') {
-    // }
-    // if (values.type === 'disable_contract') {
-    // }
-    // if (values.type === 'enable_contract') {
-    // }
   }
 
   return (
@@ -195,7 +230,7 @@ const CreateProposalForm = observer((props: IGenerateThresholdKeyFormProps) => {
 
       {proposalType === 'activate_validator' && <ActivateValidatorForm/>}
 
-      {proposalType === 'disable_validator' && <ActivateValidatorForm/>}
+      {proposalType === 'disable_validator' && <DisableValidatorForm/>}
 
       {proposalType === 'add_validator' && <AddValidatorForm/>}
 

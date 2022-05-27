@@ -169,7 +169,7 @@ export class KeyProvider implements IKeyProvider {
     return {
       blockNumber: blockNumber,
       epoch: (blockNumber / epochBlockInterval) | 0,
-      nextEpochIn: prettyTime((endBlock - blockNumber) * blockTime * 1000 * 1000 * 1000),
+      nextEpochIn: prettyTime((endBlock - blockNumber) * blockTime * 1000 * 1000 * 1000, 's'),
       nextEpochBlock: endBlock,
       blockTime: blockTime,
     };

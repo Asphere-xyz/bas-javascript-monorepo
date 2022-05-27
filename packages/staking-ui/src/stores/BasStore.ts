@@ -1,7 +1,21 @@
-import {BasSdk, IConfig, IExplorerConfig} from "@ankr.com/bas-javascript-sdk";
-import {action, makeAutoObservable} from "mobx";
+import {BasSdk, IConfig, IExplorerConfig, IValidator} from "@ankr.com/bas-javascript-sdk";
+import {action, makeAutoObservable, reaction} from "mobx";
+import prettyTime from "pretty-time";
 
-export const makeDefaultConfig = (chainId: number, chainName: string, rpcUrl: string, explorerConfig?: IExplorerConfig): IConfig => {
+const makeExplorerConfig = (explorerUrl: string): IExplorerConfig => {
+  if (!explorerUrl.endsWith('/')) explorerUrl += '/';
+  return {
+    homePage: `${explorerUrl}`,
+    txUrl: `${explorerUrl}tx/{tx}`,
+    addressUrl: `${explorerUrl}address/{address}`,
+    blockUrl: `${explorerUrl}block/{block}`,
+  };
+}
+
+export const makeDefaultConfig = (chainId: number, chainName: string, rpcUrl: string, explorerConfig?: IExplorerConfig | string): IConfig => {
+  if (typeof explorerConfig === 'string') {
+    explorerConfig = makeExplorerConfig(explorerConfig);
+  }
   return {
     chainId,
     chainName,
@@ -21,12 +35,14 @@ export const makeDefaultConfig = (chainId: number, chainName: string, rpcUrl: st
 }
 
 export const LOCAL_CONFIG: IConfig = makeDefaultConfig(1337, 'BAS devnet', 'http://localhost:8545/')
-export const DEV_CONFIG: IConfig = makeDefaultConfig(14001, 'BAS testnet', 'https://rpc.dev-02.bas.ankr.com/', {
-  homePage: 'https://explorer.dev-02.bas.ankr.com/',
-  txUrl: 'https://explorer.dev-02.bas.ankr.com/tx/{tx}',
-  addressUrl: 'https://explorer.dev-02.bas.ankr.com/address/{address}',
-  blockUrl: 'https://explorer.dev-02.bas.ankr.com/block/{block}',
-})
+export const DEV_CONFIG: IConfig = makeDefaultConfig(16350, 'MetaApes', 'https://bas.metaapesgame.com/bas_mainnet_full_rpc', 'https://explorer.dev-02.bas.ankr.com/')
+
+export const CONFIGS: Record<string, IConfig> = {
+  "localhost": makeDefaultConfig(1337, 'localhost', 'http://localhost:8545/'),
+  "devnet-1": makeDefaultConfig(14001, 'BAS devnet #1', 'https://rpc.dev-01.bas.ankr.com/', 'https://explorer.dev-01.bas.ankr.com/'),
+  "devnet-2": makeDefaultConfig(14001, 'BAS devnet #2', 'https://rpc.dev-02.bas.ankr.com/', 'https://explorer.dev-02.bas.ankr.com/'),
+  "metaapes-mainnet": makeDefaultConfig(16350, 'MetaApes', 'https://bas.metaapesgame.com/bas_mainnet_full_rpc', 'https://explorer.bas.metaapesgame.com/'),
+};
 
 export class BasStore {
 
@@ -43,6 +59,10 @@ export class BasStore {
     return this.sdk
   }
 
+  public getConfigs(): Record<string, IConfig> {
+    return CONFIGS;
+  }
+
   @action
   public async connectFromInjected(): Promise<void> {
     this.isConnected = false
@@ -52,7 +72,7 @@ export class BasStore {
     this.isConnected = true
     try {
       const block = await this.getBlockNumber()
-      console.log(block)
+      console.log(`Block Info: ${JSON.stringify(block, null, 2)}`)
     } catch (e) {
       console.error(e);
     }
@@ -74,7 +94,23 @@ export class BasStore {
     minStakingAmount: number;
   }> {
     const chainConfig = await this.sdk.getChainConfig();
-      const chainParams = await this.sdk.getChainParams();
-    return { ...chainConfig, ...chainParams}
+    const chainParams = await this.sdk.getChainParams();
+    return {...chainConfig, ...chainParams}
+  }
+
+  public async getReleaseInterval(validator: IValidator): Promise<{
+    remainingBlocks: number;
+    prettyTime: string;
+  }> {
+    const {blockNumber, blockTime, epochBlockInterval, nextEpochBlock, epoch} = await this.getBlockNumber();
+    if (validator.jailedBefore === 0) {
+      return {remainingBlocks: 0, prettyTime: 'not in jail'};
+    }
+    if (epoch < validator.jailedBefore) {
+      return {remainingBlocks: 0, prettyTime: 'can be released'};
+    }
+    const remainingBlocks = (Number(validator.jailedBefore) - epoch) * epochBlockInterval + (nextEpochBlock - blockNumber);
+    const remainingTime = prettyTime(remainingBlocks * blockTime * 1000 * 1000 * 1000, 'm')
+    return {remainingBlocks, prettyTime: remainingTime}
   }
 }
