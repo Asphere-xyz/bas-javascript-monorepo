@@ -46,15 +46,16 @@
     "@types/react-dom": "^17.0.14",
     "env-cmd": "^10.1.0",
     "eslint-webpack-plugin": "^2.5.2",
-    "react-app-rewired": "^2.1.8"
+    "react-app-rewired": "^2.1.8",
+    "serve": "^13.0.2"
   },
   "scripts": {
-    "start": "react-app-rewired start",
-    "start:local": "env-cmd -f .env.local react-app-rewired start",
-    "start:devnet": "env-cmd -f .env.devnet react-app-rewired start",
-    "build": "react-scripts build",
-    "build:local": "env-cmd -f .env.local react-scripts build",
-    "build:devnet": "env-cmd -f .env.devnet react-scripts build"
+    "start": "REACT_APP_ENVIRONMENT=env react-app-rewired start",
+    "start:local": "REACT_APP_ENVIRONMENT=local react-app-rewired start",
+    "start:devnet": "REACT_APP_ENVIRONMENT=devnet react-app-rewired start",
+    "build": "REACT_APP_ENVIRONMENT=env react-scripts build",
+    "build:local": "REACT_APP_ENVIRONMENT=local react-scripts build",
+    "build:devnet": "REACT_APP_ENVIRONMENT=devnet react-scripts build"
   },
   "browserslist": {
     "production": [
