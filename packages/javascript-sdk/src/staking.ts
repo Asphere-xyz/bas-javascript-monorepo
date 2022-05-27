@@ -3,7 +3,7 @@ import {
   IDelegatorDelegation,
   IDelegatorOneOfEvent,
   IPendingTx, IStakingRewards,
-  IValidator,
+  IValidator, VALIDATOR_STATUS_MAPPING,
   Web3Address,
   Web3Uint256
 } from "./types";
@@ -120,6 +120,7 @@ export class Staking {
       owner: status.ownerAddress,
       slashesCount: status.slashesCount,
       status: status.status,
+      prettyStatus: VALIDATOR_STATUS_MAPPING[status.status] || 'UNKNOWN',
       commissionRate: status.commissionRate,
       totalRewards: status.totalRewards,
     };

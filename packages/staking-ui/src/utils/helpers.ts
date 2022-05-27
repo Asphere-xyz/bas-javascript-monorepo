@@ -70,6 +70,21 @@ export const claimRewards = async (store:BasStore, validator: string): Promise<v
     message.success('Claim was done!');
   } catch (e) {
     console.log(e)
-    message.error('Claim was failed...try again!')
+    message.error('Claim has failed...try again!')
+  }
+}
+
+export const releaseFromJail = async (store:BasStore, validator: string): Promise<void> => {
+  try {
+    console.log(`Releasing validator from jail: ${validator}`);
+    const result = await store.getBasSdk().getStaking().releaseValidatorFromJail(validator);
+
+    const receipt = await result.receipt;
+    console.log(`Receipt: ${JSON.stringify(receipt, null, 2)}`);
+
+    message.success('Release is done!');
+  } catch (e) {
+    console.log(e)
+    message.error('Release has failed...try again!')
   }
 }

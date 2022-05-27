@@ -2,10 +2,11 @@ import {IValidator} from "@ankr.com/bas-javascript-sdk";
 import {Button, Tooltip, Typography} from "antd";
 import {ColumnProps} from "antd/lib/table";
 import {BigNumber} from "bignumber.js";
-import {delegate, undelegate} from "src/utils/helpers";
+import {delegate, undelegate, releaseFromJail} from "src/utils/helpers";
 import React from 'react';
 
 import {BasStore} from "../../../../stores/BasStore";
+import prettyTime from "pretty-time";
 
 const {Text} = Typography;
 
@@ -19,6 +20,17 @@ export const createTableColumns = (store: BasStore): ColumnProps<any>[] => {
     await undelegate(store, validator.validator);
   }
 
+  const handleReleaseClick = async (validator: IValidator) => {
+    const {blockNumber, blockTime, epochBlockInterval, nextEpochBlock, epoch} = await store.getBlockNumber();
+    if (epoch < Number(validator.jailedBefore)) {
+      const remainingBlocks = (Number(validator.jailedBefore) - epoch) * epochBlockInterval + (nextEpochBlock - blockNumber);
+      console.log(remainingBlocks)
+      const remainingTime = prettyTime(remainingBlocks * blockTime * 1000 * 1000 * 1000, 'm')
+      return alert(`This validator can't be released right now, epoch ${validator.jailedBefore} is not reached. Current epoch is ${epoch}, you should wait for ${remainingTime}.`);
+    }
+    await releaseFromJail(store, validator.validator);
+  }
+
   return [
     {
       title: 'Validator',
@@ -27,10 +39,9 @@ export const createTableColumns = (store: BasStore): ColumnProps<any>[] => {
     },
     {
       title: 'Status',
-      dataIndex: 'status',
       key: 'status',
-      render: (status: string) => {
-        switch (status) {
+      render: (validator: IValidator) => {
+        switch (validator.status) {
           case '0':
             return <Text type="secondary">Not Found</Text>
           case '1':
@@ -38,9 +49,9 @@ export const createTableColumns = (store: BasStore): ColumnProps<any>[] => {
           case '2':
             return <Text type="warning">Pending</Text>
           case '3':
-            return <Text type="danger">Jail</Text>
+            return <Text type="danger">Jailed (e. {validator.jailedBefore})</Text>
           default:
-            return <Text type="secondary">Unknown (${status})</Text>
+            return <Text type="secondary">Unknown (${validator.status})</Text>
         }
       }
     },
@@ -66,14 +77,13 @@ export const createTableColumns = (store: BasStore): ColumnProps<any>[] => {
       key: 'apr',
       render: (value: IValidator) => {
         const apr = 365 * (100 * new BigNumber(value.totalRewards).dividedBy(value.totalDelegated).toNumber())
-        console.log(`Validator APR (${value.validator}): ${apr}`);
         let prettyApr = '';
         if (apr === 0) {
           prettyApr = `0%`
-        } else if (apr.toFixed(2) === '0.00') {
-          prettyApr = `~0%`
+        } else if (apr.toFixed(3) === '0.000') {
+          prettyApr = `>0%`
         } else {
-          prettyApr = `${apr.toFixed(2)}%`
+          prettyApr = `${apr.toFixed(3)}%`
         }
         const MyComponent = React.forwardRef((props, ref) => {
           return <div>{prettyApr}</div>
@@ -87,6 +97,7 @@ export const createTableColumns = (store: BasStore): ColumnProps<any>[] => {
     },
     {
       render: (validator: IValidator) => {
+        const isJailed = validator.prettyStatus === 'JAILED';
         return (
           <>
             <Button
@@ -104,6 +115,17 @@ export const createTableColumns = (store: BasStore): ColumnProps<any>[] => {
             >
               Undelegate
             </Button>
+
+            {isJailed && (
+              <Button
+                className="tableButton"
+                type="default"
+                onClick={async () => handleReleaseClick(validator)}
+                danger
+              >
+                Release
+              </Button>
+            )}
           </>
         )
       }

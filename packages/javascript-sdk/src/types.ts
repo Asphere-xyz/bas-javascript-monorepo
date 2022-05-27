@@ -50,9 +50,19 @@ export interface IPendingTx {
   receipt: PromiEvent<TransactionReceipt>;
 }
 
+export type TValidatorStatus = 'NOT_FOUND' | 'ACTIVE' | 'PENDING' | 'JAILED' | 'UNKNOWN';
+
+export const VALIDATOR_STATUS_MAPPING: Record<any, TValidatorStatus> = {
+  '0': 'NOT_FOUND',
+  '1': 'ACTIVE',
+  '2': 'PENDING',
+  '3': 'JAILED',
+};
+
 export interface IValidator {
   validator: Web3Address;
   owner: Web3Address;
+  prettyStatus: TValidatorStatus;
   status: Web3Uint256;
   slashesCount: number;
   totalDelegated: Web3Uint256;

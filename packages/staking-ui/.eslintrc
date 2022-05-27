@@ -60,9 +60,9 @@
         "react/prop-types": "error",
         "react/no-array-index-key": "error",
         "react/jsx-sort-props": [
-          "error",
+          "warn",
           {
-            "callbacksLast": true,
+            "callbacksLast": false,
             "shorthandFirst": true,
             "ignoreCase": true,
             "reservedFirst": true
