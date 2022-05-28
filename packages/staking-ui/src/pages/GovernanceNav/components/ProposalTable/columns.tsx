@@ -4,6 +4,7 @@ import {ColumnProps} from "antd/lib/table";
 import {ReactElement} from "react";
 
 import {BasStore} from "../../../../stores/BasStore";
+import {BigNumber} from "bignumber.js";
 
 export const renderStatus = (status: TGovernanceProposalStatus): ReactElement => {
   const colors: Record<string, string> = {
@@ -34,13 +35,25 @@ export const createTableColumns = (store: BasStore): ColumnProps<any>[] => {
       render: renderStatus,
     },
     {
-      title: 'Type',
-      key: 'type',
+      title: 'Quorum Required',
+      key: 'quorumRequired',
+      dataIndex: 'quorumRequired',
+      render: (value: BigNumber) => value.toFixed(0),
     },
     {
-      title: 'Block Number',
-      dataIndex: 'blockNumber',
+      title: 'Voting Result',
       key: 'blockNumber',
+      render: (value: IGovernanceProposal) => {
+        return (
+          <div>
+            <span style={{color: 'green', fontWeight: 500}}>{value.voteDistribution.FOR.dividedBy(value.totalPower).multipliedBy(100).toFixed(2)}%</span>
+            &nbsp;
+            /
+            &nbsp;
+            <span style={{color: 'red', fontWeight: 500}}>{value.voteDistribution.AGAINST.dividedBy(value.totalPower).multipliedBy(100).toFixed(2)}%</span>
+          </div>
+        )
+      }
     },
     {
       title: 'Voting Period',

@@ -90,6 +90,17 @@ export enum TGovernanceProposalStatus {
   Executed
 }
 
+export type TGovernanceVoteType = 'AGAINST' | 'FOR' | 'ABSTAIN';
+
+export interface IGovernanceVote {
+  type: TGovernanceVoteType,
+  blockNumber: number;
+  reason: string;
+  voterAddress: Web3Address;
+  weight: BigNumber;
+  transactionHash: string;
+}
+
 export interface IGovernanceProposal {
   id: string;
   proposer: string;
@@ -101,6 +112,10 @@ export interface IGovernanceProposal {
   startBlock: string;
   endBlock: string;
   desc: string;
+  votes: IGovernanceVote[];
+  quorumRequired: BigNumber;
+  totalPower: BigNumber;
+  voteDistribution: Record<TGovernanceVoteType, BigNumber>;
 }
 
 export type IEventData = EventData

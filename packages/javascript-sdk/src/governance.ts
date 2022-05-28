@@ -4,12 +4,13 @@ import {
   IPendingTx,
   Web3Address,
   IVotingPower,
-  TGovernanceProposalStatus
+  TGovernanceProposalStatus, IGovernanceVote, TGovernanceVoteType
 } from "./types";
 import {KeyProvider} from "./provider";
 import {PastEventOptions} from "web3-eth-contract";
 import BigNumber from "bignumber.js";
 import {keccak256} from "web3-utils";
+import {sortEventData} from "./utils";
 
 export class ProposalBuilder {
 
@@ -153,10 +154,49 @@ export class Governance {
   }
 
   public async getProposals(options: PastEventOptions = {}): Promise<IGovernanceProposal[]> {
-    const events = await this.keyProvider.governanceContract!.getPastEvents('ProposalCreated', options) as any[],
+    const events = await this.keyProvider.governanceContract!.getPastEvents('ProposalCreated', options),
       result: IGovernanceProposal[] = []
-    for (const {returnValues} of events) {
+    const castVotes = sortEventData(
+      await this.keyProvider.governanceContract!.getPastEvents('VoteCast', options),
+      await this.keyProvider.governanceContract!.getPastEvents('VoteCastWithParams', options)
+    )
+    const proposalVotes: Record<string, IGovernanceVote[]> = {};
+    for (const vote of castVotes) {
+      const {proposalId, reason, support, voter, weight} = vote.returnValues;
+      if (!proposalVotes[proposalId]) proposalVotes[proposalId] = [];
+      let voteType: TGovernanceVoteType = 'ABSTAIN'
+      if (support === '0') {
+        voteType = 'AGAINST'
+      } else if (support === '1') {
+        voteType = 'FOR'
+      }
+      proposalVotes[proposalId].push({
+        type: voteType,
+        blockNumber: vote.blockNumber,
+        reason,
+        voterAddress: voter,
+        weight: new BigNumber(weight).dividedBy(10 ** 18),
+        transactionHash: vote.transactionHash,
+      });
+    }
+    for (const {blockNumber, returnValues} of events) {
       const state = await this.keyProvider.governanceContract!.methods.state(returnValues.proposalId).call()
+      const quorumRequired = await this.keyProvider.governanceContract!.methods
+        .quorum(blockNumber)
+        .call();
+      const bigQuorum = new BigNumber(quorumRequired).dividedBy(10 ** 18);
+      const bigPower = bigQuorum.multipliedBy(3).dividedBy(2);
+      const voteDistribution: Record<TGovernanceVoteType, BigNumber> = {
+        'AGAINST': new BigNumber('0'),
+        'FOR': new BigNumber('0'),
+        'ABSTAIN': new BigNumber('0'),
+      };
+      for (const vote of proposalVotes[returnValues.proposalId] || []) {
+        if (!voteDistribution[vote.type]) {
+          continue;
+        }
+        voteDistribution[vote.type] = voteDistribution[vote.type].plus(vote.weight);
+      }
       result.push({
         id: returnValues.proposalId,
         // @ts-ignore
@@ -169,8 +209,13 @@ export class Governance {
         startBlock: returnValues.startBlock,
         endBlock: returnValues.endBlock,
         desc: returnValues.description,
+        votes: proposalVotes[returnValues.proposalId] || [],
+        quorumRequired: bigQuorum,
+        totalPower: bigPower,
+        voteDistribution: voteDistribution,
       });
     }
+    console.log(JSON.stringify(result, null, 2))
     return result
   }
 
