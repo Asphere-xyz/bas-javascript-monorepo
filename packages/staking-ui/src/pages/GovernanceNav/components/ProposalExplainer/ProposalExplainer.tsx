@@ -28,8 +28,8 @@ export const ProposalExplainer = ({event}: { event: IGovernanceProposal }): JSX.
         </Descriptions.Item>
 
         <Descriptions.Item 
-          key="governanceAddress" 
-          label="Governance Address"
+          key="proposer"
+          label="Proposer Address"
         >
           {event.proposer}
         </Descriptions.Item>
@@ -46,13 +46,6 @@ export const ProposalExplainer = ({event}: { event: IGovernanceProposal }): JSX.
           label="End Block"
         >
           {event.endBlock}
-        </Descriptions.Item>
-
-        <Descriptions.Item 
-          key="proposer" 
-          label="Proposer Address"
-        >
-          {event.proposer}
         </Descriptions.Item>
 
         <Descriptions.Item 

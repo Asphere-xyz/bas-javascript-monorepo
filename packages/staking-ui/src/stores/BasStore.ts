@@ -1,4 +1,4 @@
-import {BasSdk, IConfig, IExplorerConfig, IValidator} from "@ankr.com/bas-javascript-sdk";
+import {BasSdk, IChainConfig, IChainParams, IConfig, IExplorerConfig, IValidator} from "@ankr.com/bas-javascript-sdk";
 import {action, makeAutoObservable, reaction} from "mobx";
 import prettyTime from "pretty-time";
 
@@ -34,12 +34,13 @@ export const makeDefaultConfig = (chainId: number, chainName: string, rpcUrl: st
   }
 }
 
-export const LOCAL_CONFIG: IConfig = makeDefaultConfig(1337, 'BAS devnet', 'http://localhost:8545/')
-export const DEV_CONFIG: IConfig = makeDefaultConfig(16350, 'MetaApes', 'https://bas.metaapesgame.com/bas_mainnet_full_rpc', 'https://explorer.dev-02.bas.ankr.com/')
+export const LOCAL_CONFIG: IConfig = makeDefaultConfig(1337, 'Localhost 8545', 'http://localhost:8545/')
+export const DEV_CONFIG: IConfig = makeDefaultConfig(16350, 'BAS devnet #1', 'https://rpc.dev-01.bas.ankr.com/', 'https://explorer.dev-01.bas.ankr.com/')
+export const METAAPES_CONFIG: IConfig = makeDefaultConfig(16350, 'MetaApes', 'https://bas.metaapesgame.com/bas_mainnet_full_rpc', 'https://explorer.dev-02.bas.ankr.com/')
 
 export const CONFIGS: Record<string, IConfig> = {
   "localhost": makeDefaultConfig(1337, 'localhost', 'http://localhost:8545/'),
-  "devnet-1": makeDefaultConfig(14001, 'BAS devnet #1', 'https://rpc.dev-01.bas.ankr.com/', 'https://explorer.dev-01.bas.ankr.com/'),
+  "devnet-1": makeDefaultConfig(14000, 'BAS devnet #1', 'https://rpc.dev-01.bas.ankr.com/', 'https://explorer.dev-01.bas.ankr.com/'),
   "devnet-2": makeDefaultConfig(14001, 'BAS devnet #2', 'https://rpc.dev-02.bas.ankr.com/', 'https://explorer.dev-02.bas.ankr.com/'),
   "metaapes-mainnet": makeDefaultConfig(16350, 'MetaApes', 'https://bas.metaapesgame.com/bas_mainnet_full_rpc', 'https://explorer.bas.metaapesgame.com/'),
 };
@@ -71,38 +72,33 @@ export class BasStore {
     }
     this.isConnected = true
     try {
-      const block = await this.getBlockNumber()
+      const block = await this.getChainConfig()
       console.log(`Block Info: ${JSON.stringify(block, null, 2)}`)
     } catch (e) {
       console.error(e);
     }
   }
 
-  public async getBlockNumber(): Promise<{
-    blockNumber: number;
-    epoch: number;
-    nextEpochBlock: number;
-    nextEpochIn: string;
-    blockTime: number;
-    activeValidatorsLength: number;
-    epochBlockInterval: number;
-    misdemeanorThreshold: number;
-    felonyThreshold: number;
-    validatorJailEpochLength: number;
-    undelegatePeriod: number;
-    minValidatorStakeAmount: number;
-    minStakingAmount: number;
-  }> {
+  public async getChainConfig(): Promise<IChainConfig & IChainParams> {
     const chainConfig = await this.sdk.getChainConfig();
     const chainParams = await this.sdk.getChainParams();
-    return {...chainConfig, ...chainParams}
+    const result = {...chainConfig, ...chainParams}
+    this.cachedChainConfig = result;
+    return result;
+  }
+
+  private cachedChainConfig?: IChainConfig & IChainParams;
+
+  public async getLatestChainConfig(): Promise<IChainConfig & IChainParams> {
+    if (this.cachedChainConfig) return this.cachedChainConfig;
+    return this.getChainConfig();
   }
 
   public async getReleaseInterval(validator: IValidator): Promise<{
     remainingBlocks: number;
     prettyTime: string;
   }> {
-    const {blockNumber, blockTime, epochBlockInterval, nextEpochBlock, epoch} = await this.getBlockNumber();
+    const {blockNumber, blockTime, epochBlockInterval, nextEpochBlock, epoch} = await this.getChainConfig();
     if (validator.jailedBefore === 0) {
       return {remainingBlocks: 0, prettyTime: 'not in jail'};
     }

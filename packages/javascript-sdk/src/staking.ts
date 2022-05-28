@@ -52,6 +52,14 @@ export class Staking {
     return result.dividedBy(10 ** 18);
   }
 
+  public async getActiveDelegatedAmount(): Promise<BigNumber> {
+    let result = new BigNumber('0')
+    for (const validator of await this.getActiveValidators()) {
+      result = result.plus(new BigNumber(validator.totalDelegated))
+    }
+    return result.dividedBy(10 ** 18);
+  }
+
   public async getDelegatorDelegatedAmount(delegator: Web3Address): Promise<BigNumber> {
     const delegations = await this.getDelegationHistory({staker: delegator}),
       unDelegations = await this.getUnDelegationHistory({staker: delegator})
@@ -98,7 +106,11 @@ export class Staking {
     if (!epoch) {
       epoch = await this.keyProvider.getCurrentEpoch()
     }
-    const result = await Promise.all(validators.map(v => this.loadValidatorInfo(v, epoch)))
+    let result = await Promise.all(validators.map(v => this.loadValidatorInfo(v, epoch)))
+    const totalDelegatedAmount = result.reduce((result, validator) => result.plus(validator.totalDelegated), new BigNumber('0'))
+    result = result.map(validator => {
+      return { ...validator, votingPower:  new BigNumber(validator.totalDelegated).dividedBy(totalDelegatedAmount).multipliedBy(100).toNumber() }
+    })
     return result.sort((a, b) => {
       return new BigNumber(b.totalDelegated).comparedTo(new BigNumber(a.totalDelegated))
     })
@@ -116,6 +128,7 @@ export class Staking {
       changedAt: status.changedAt,
       claimedAt: status.claimedAt,
       totalDelegated: status.totalDelegated,
+      votingPower: 0,
       jailedBefore: status.jailedBefore,
       owner: status.ownerAddress,
       slashesCount: status.slashesCount,
@@ -223,13 +236,14 @@ export class Staking {
   public async getClaimableStakingRewards(delegator: Web3Address): Promise<IStakingRewards[]> {
     const delegationHistory = await this.getDelegationHistory({staker: delegator})
     const result: Record<Web3Address, IStakingRewards> = {}
+    const totalDelegatedAmount = await this.getActiveDelegatedAmount()
     for (const delegation of delegationHistory) {
       const stakingRewards = new BigNumber(await this.getStakingRewards(delegation.validator, delegator)).dividedBy(1e18);
       if (stakingRewards.isZero()) {
         continue;
       }
       const validator = await this.loadValidatorInfo(delegation.validator)
-      result[validator.validator] = { validator, amount: stakingRewards }
+      result[validator.validator] = {validator, amount: stakingRewards}
     }
     return Object.values(result)
   }
@@ -292,6 +306,17 @@ export class Staking {
       .encodeABI()
     return this.keyProvider.sendTx({
       to: this.keyProvider.stakingAddress!,
+      data: data,
+    })
+  }
+
+  public async registerValidator(validator: Web3Address, commissionRate: number, initialStake: BigNumber | BigNumber.Value): Promise<IPendingTx> {
+    const data = this.keyProvider.stakingContract!.methods
+      .registerValidator(validator, commissionRate * 100)
+      .encodeABI()
+    return this.keyProvider.sendTx({
+      to: this.keyProvider.stakingAddress!,
+      value: new BigNumber(initialStake).multipliedBy(10 ** 18).toString(10),
       data: data,
     })
   }

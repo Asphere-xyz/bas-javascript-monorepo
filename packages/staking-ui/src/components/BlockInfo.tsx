@@ -3,22 +3,10 @@ import {BigNumber} from "bignumber.js";
 import {observer} from "mobx-react";
 import {useEffect, useState} from "react";
 import {useBasStore} from "src/stores";
+import {IChainConfig, IChainParams} from "@ankr.com/bas-javascript-sdk";
+import prettyTime from "pretty-time";
 
-interface IBlockInfoData {
-  blockNumber: number;
-  epoch: number;
-  nextEpochBlock: number;
-  nextEpochIn: string;
-  blockTime: number;
-  activeValidatorsLength: number;
-  epochBlockInterval: number;
-  misdemeanorThreshold: number;
-  felonyThreshold: number;
-  validatorJailEpochLength: number;
-  undelegatePeriod: number;
-  minValidatorStakeAmount: number;
-  minStakingAmount: number;
-}
+type IBlockInfoData = IChainConfig & IChainParams;
 
 const {Text} = Typography;
 
@@ -29,10 +17,20 @@ const BlockInfo = observer(() => {
   useEffect(() => {
     setInterval(async () => {
       if (!store.isConnected) return;
-      setBlockInfo(await store.getBlockNumber());
+      setBlockInfo(await store.getChainConfig());
     }, 3_000)
   }, [store]);
   const SPAN = 6;
+  if (!blockInfo) {
+    return (
+      <div className="blockInfo">
+        <br/>
+        <div className="blockInfoData">
+          <h3 style={{marginTop: '25px', marginBottom: '25px'}}>Loading...</h3>
+        </div>
+      </div>
+    )
+  }
   return (
     <div className="blockInfo">
       <br/>
@@ -40,41 +38,45 @@ const BlockInfo = observer(() => {
         <Col className="blockInfoItem" span={SPAN}>
           <Row>
             <Text strong style={{marginRight: '2px'}}>Block Number:</Text>
-            <Text>{blockInfo?.blockNumber}</Text>
+            <Text>{blockInfo.blockNumber}</Text>
           </Row>
           <Row>
             <Text strong style={{marginRight: '2px'}}>Current Epoch:</Text>
-            <Text>{blockInfo?.epoch}</Text>
+            <Text>{blockInfo.epoch}</Text>
           </Row>
           <Row>
             <Text strong style={{marginRight: '2px'}}>Next Epoch Block:</Text>
             <Text>
-              {blockInfo?.nextEpochBlock}
-              &nbsp;(in {blockInfo?.nextEpochIn})
+              {blockInfo.nextEpochBlock}
+              &nbsp;(in {blockInfo.nextEpochIn})
             </Text>
           </Row>
           <Row>
             <Text strong style={{marginRight: '2px'}}>Block Time:</Text>
-            <Text>{blockInfo?.blockTime}</Text>
+            <Text>{blockInfo.blockTime}</Text>
+            <Text>&nbsp;sec.</Text>
           </Row>
         </Col>
 
         <Col className="blockInfoItem" span={SPAN}>
           <Row>
             <Text strong style={{marginRight: '2px'}}>Active Validators Length:</Text>
-            <Text>{blockInfo?.activeValidatorsLength}</Text>
+            <Text>{blockInfo.activeValidatorsLength}</Text>
           </Row>
           <Row>
             <Text strong style={{marginRight: '2px'}}>Epoch Block Interval:</Text>
-            <Text>{blockInfo?.epochBlockInterval}</Text>
+            <Text>{blockInfo.epochBlockInterval}</Text>
+            <Text>&nbsp;({prettyTime(blockInfo.epochBlockInterval * blockInfo.blockTime * 1e9, 'm')})</Text>
           </Row>
           <Row>
             <Text strong style={{marginRight: '2px'}}>Misdemeanor Threshold:</Text>
-            <Text>{blockInfo?.misdemeanorThreshold}</Text>
+            <Text>{blockInfo.misdemeanorThreshold}</Text>
+            <Text>&nbsp;({prettyTime(blockInfo.misdemeanorThreshold * blockInfo.activeValidatorsLength * blockInfo.blockTime * 1e9, 'm')})</Text>
           </Row>
           <Row>
             <Text strong style={{marginRight: '2px'}}>Felony Threshold:</Text>
-            <Text>{blockInfo?.felonyThreshold}</Text>
+            <Text>{blockInfo.felonyThreshold}</Text>
+            <Text>&nbsp;({prettyTime(blockInfo.felonyThreshold * blockInfo.activeValidatorsLength * blockInfo.blockTime * 1e9, 'm')})</Text>
           </Row>
 
         </Col>
@@ -82,19 +84,21 @@ const BlockInfo = observer(() => {
         <Col className="blockInfoItem" span={SPAN}>
           <Row>
             <Text strong style={{marginRight: '2px'}}>Validator Jail Epoch Length:</Text>
-            <Text>{blockInfo?.validatorJailEpochLength}</Text>
+            <Text>{blockInfo.validatorJailEpochLength}</Text>
+            <Text>&nbsp;({prettyTime(blockInfo.validatorJailEpochLength * blockInfo.epochBlockInterval * blockInfo.blockTime * 1e9, 'm')})</Text>
           </Row>
           <Row>
             <Text strong style={{marginRight: '2px'}}>Undelegate Period:</Text>
-            <Text>{blockInfo?.undelegatePeriod}</Text>
+            <Text>{blockInfo.undelegatePeriod}</Text>
+            <Text>&nbsp;({prettyTime(blockInfo.undelegatePeriod * blockInfo.epochBlockInterval * blockInfo.blockTime * 1e9, 'm')})</Text>
           </Row>
           <Row>
             <Text strong style={{marginRight: '2px'}}>Min Validator Stake Amount:</Text>
-            <Text>{new BigNumber(`${blockInfo?.minValidatorStakeAmount}`).dividedBy(1e18).toString(10)}</Text>
+            <Text>{blockInfo.minValidatorStakeAmount.toString(10)}</Text>
           </Row>
           <Row>
             <Text strong style={{marginRight: '2px'}}>Min Staking Amount:</Text>
-            <Text>{new BigNumber(`${blockInfo?.minStakingAmount}`).dividedBy(1e18).toString(10)}</Text>
+            <Text>{blockInfo.minStakingAmount.toString(10)}</Text>
           </Row>
         </Col>
       </Row>

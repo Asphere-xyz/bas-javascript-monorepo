@@ -55,9 +55,7 @@ export class LocalGridStore<T> {
       return
     }
     // noinspection JSIgnoredPromiseFromCall
-    this.isLoading = true
     await this.fetchItems();
-    this.isLoading = false;
   }
 
   @action

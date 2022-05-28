@@ -10,6 +10,10 @@ import '../index.css';
 
 import {BondedTokensCard} from "./components/BondedTokensCard";
 import {ValidatorsCard} from "./components/ValidatorsCard";
+import {Button, Divider, Drawer} from "antd";
+import CreateProposalForm from "../GovernanceNav/components/CreateProposalForm/CreateProposalForm";
+import RegisterValidatorForm from "./components/RegisterValidatorForm/RegisterValidatorForm";
+import {PlusOutlined} from "@ant-design/icons";
 
 interface IValidatorWithAmounts extends IValidator {
   key: string;
@@ -19,6 +23,7 @@ export const ValidatorsNav = observer((): ReactElement => {
   const [activeValidators, setActiveValidators] = useState(0);
   const [totalValidators, setTotalValidators] = useState(0);
   const [bondedTokens, setBondedTokens] = useState('');
+  const [registerValidatorVisible, setRegisterValidatorVisible] = useState(false)
 
   const store = useBasStore();
   const grid = useLocalGridStore<IValidator>(async (offset: number, limit: number): Promise<[IValidatorWithAmounts[], boolean]> => {
@@ -68,6 +73,23 @@ export const ValidatorsNav = observer((): ReactElement => {
       <br/>
 
       <ValidatorTable gridData={grid} store={store}/>
+      <Divider/>
+      <Drawer
+        bodyStyle={{paddingBottom: 80}}
+        title="Register new validator"
+        visible={registerValidatorVisible}
+        width={500}
+        onClose={() => {
+          setRegisterValidatorVisible(false);
+        }}
+      >
+        <RegisterValidatorForm/>
+      </Drawer>
+      <Button icon={<PlusOutlined translate="yes"/>} size="large" type="primary"
+              onClick={() => setRegisterValidatorVisible(true)}>Register New Validator</Button>
+      <br/>
+      <br/>
+      <br/>
     </div>
   );
 })
