@@ -5,6 +5,7 @@ import {sendTransactionAsync, waitForExpectedNetworkOrThrow} from "./metamask";
 import {Contract} from "web3-eth-contract";
 import detectEthereumProvider from "@metamask/detect-provider";
 import prettyTime from 'pretty-time'
+import BigNumber from "bignumber.js";
 
 const STAKING_ABI = require('../src/abi/Staking.json')
 const SLASHING_INDICATOR_ABI = require('../src/abi/SlashingIndicator.json')
@@ -155,8 +156,8 @@ export class KeyProvider implements IKeyProvider {
       felonyThreshold,
       validatorJailEpochLength,
       undelegatePeriod,
-      minValidatorStakeAmount,
-      minStakingAmount,
+      minValidatorStakeAmount: new BigNumber(minValidatorStakeAmount).dividedBy(10 ** 18),
+      minStakingAmount: new BigNumber(minStakingAmount).dividedBy(10 ** 18),
     };
   }
 

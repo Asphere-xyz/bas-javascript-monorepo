@@ -21,7 +21,7 @@ export const createTableColumns = (store: BasStore): ColumnProps<any>[] => {
   }
 
   const handleReleaseClick = async (validator: IValidator) => {
-    const {blockNumber, blockTime, epochBlockInterval, nextEpochBlock, epoch} = await store.getBlockNumber();
+    const {blockNumber, blockTime, epochBlockInterval, nextEpochBlock, epoch} = await store.getChainConfig();
     if (epoch < Number(validator.jailedBefore)) {
       const remainingBlocks = (Number(validator.jailedBefore) - epoch) * epochBlockInterval + (nextEpochBlock - blockNumber);
       console.log(remainingBlocks)
@@ -61,10 +61,9 @@ export const createTableColumns = (store: BasStore): ColumnProps<any>[] => {
       key: 'slashesCount',
     },
     {
-      title: 'Total Delegated',
-      dataIndex: 'totalDelegated',
+      title: 'Total Delegated (Power)',
       key: 'totalDelegated',
-      render: (value: string) => (Number(value) / 1e18).toFixed(2)
+      render: (validator: IValidator) => `${(Number(validator.totalDelegated) / 1e18).toFixed(2)} (${validator.votingPower.toFixed(2)}%)`
     },
     {
       title: 'Commission',

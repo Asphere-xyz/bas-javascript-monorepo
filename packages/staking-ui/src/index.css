@@ -90,3 +90,7 @@
   justify-content: space-around;
   flex: 0.4;
 }
+
+.ant-input-number {
+  width: 100%;
+}

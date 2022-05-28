@@ -1,10 +1,9 @@
 import {MobXProviderContext} from 'mobx-react'
 import React from "react";
 
-import {BasStore, LOCAL_CONFIG, DEV_CONFIG, makeDefaultConfig} from "./BasStore";
+import {BasStore, LOCAL_CONFIG, DEV_CONFIG, makeDefaultConfig, CONFIGS} from "./BasStore";
 
-const currentEnvironment = process.env.REACT_APP_ENVIRONMENT || '${REACT_APP_ENVIRONMENT}';
-console.log(`Current env is: ${currentEnvironment}`)
+let currentEnvironment = process.env.REACT_APP_ENVIRONMENT || '${REACT_APP_ENVIRONMENT}'
 
 let config = LOCAL_CONFIG
 if (currentEnvironment === 'local') {
@@ -12,6 +11,17 @@ if (currentEnvironment === 'local') {
 } else if (currentEnvironment === 'devnet') {
   config = DEV_CONFIG
 }
+
+// let force switch network using url params
+if (window.location.search.length > 0) {
+  const searchParams = Object.fromEntries(window.location.search.substring(1).split('&').map(v => v.split('=')));
+  if (searchParams.config && CONFIGS[searchParams.config.toLowerCase()]) {
+    config = CONFIGS[searchParams.config.toLowerCase()]
+    currentEnvironment = 'url';
+  }
+}
+
+console.log(`Current env is: ${currentEnvironment}`)
 
 if (currentEnvironment === 'env') {
   config = makeDefaultConfig(Number('${CHAIN_ID}'), '${CHAIN_NAME}', '${CHAIN_RPC}', {
@@ -22,6 +32,7 @@ if (currentEnvironment === 'env') {
   })
 }
 
+console.log(`Current config: ${JSON.stringify(config, null, 2)}`);
 const basStore = new BasStore(config)
 basStore.connectFromInjected().then(async () => {
   const currentAccount = basStore.getBasSdk().getKeyProvider().accounts;

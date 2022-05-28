@@ -12,8 +12,8 @@ export interface IChainConfig {
   felonyThreshold: number;
   validatorJailEpochLength: number;
   undelegatePeriod: number;
-  minValidatorStakeAmount: number;
-  minStakingAmount: number;
+  minValidatorStakeAmount: BigNumber;
+  minStakingAmount: BigNumber;
 }
 
 export interface IChainParams {
@@ -66,6 +66,7 @@ export interface IValidator {
   status: Web3Uint256;
   slashesCount: number;
   totalDelegated: Web3Uint256;
+  votingPower: number;
   changedAt: number;
   jailedBefore: number;
   claimedAt: number;
