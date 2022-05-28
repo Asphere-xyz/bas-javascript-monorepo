@@ -118,11 +118,16 @@ const CreateProposalForm = observer((props: IGenerateThresholdKeyFormProps) => {
   const [proposalType, setProposalType] = useState('add_deployer');
   const store = useBasStore();
 
-  const handleAddProposal = async (values: { type: string; description: string; address: string; bytecode: string; }) => {
+  const handleAddProposal = async (values: { type: string; description: string; address: string; bytecode: string; votingPeriod: string; }) => {
+    let votingPeriod: string | undefined;
+    if (values.votingPeriod) {
+      const {blockTime} = await store.getLatestChainConfig()
+      votingPeriod = `${Number(values.votingPeriod) / blockTime}`;
+    }
     if (values.type === 'upgrade_runtime') {
       try {
         const a = await store.getBasSdk().getGovernance()
-          .createProposal(values.description)
+          .createProposal(values.description, votingPeriod)
           .upgradeRuntime(values.address, values.bytecode);
         const tx = await store.getBasSdk().getGovernance().sendProposal(a)
         const receipt = await tx.receipt
@@ -133,7 +138,7 @@ const CreateProposalForm = observer((props: IGenerateThresholdKeyFormProps) => {
     } else if (values.type === 'add_validator') {
       try {
         const a = await store.getBasSdk().getGovernance()
-          .createProposal(values.description)
+          .createProposal(values.description, votingPeriod)
           .addValidator(values.address);
         const tx = await store.getBasSdk().getGovernance().sendProposal(a)
         const receipt = await tx.receipt
@@ -144,7 +149,7 @@ const CreateProposalForm = observer((props: IGenerateThresholdKeyFormProps) => {
     } else if (values.type === 'remove_validator') {
       try {
         const a = await store.getBasSdk().getGovernance()
-          .createProposal(values.description)
+          .createProposal(values.description, votingPeriod)
           .removeDeployer(values.address);
         const tx = await store.getBasSdk().getGovernance().sendProposal(a)
         const receipt = await tx.receipt
@@ -155,7 +160,7 @@ const CreateProposalForm = observer((props: IGenerateThresholdKeyFormProps) => {
     } else if (values.type === 'activate_validator') {
       try {
         const a = await store.getBasSdk().getGovernance()
-          .createProposal(values.description)
+          .createProposal(values.description, votingPeriod)
           .activateValidator(values.address);
         const tx = await store.getBasSdk().getGovernance().sendProposal(a)
         const receipt = await tx.receipt
@@ -166,7 +171,7 @@ const CreateProposalForm = observer((props: IGenerateThresholdKeyFormProps) => {
     } else if (values.type === 'disable_validator') {
       try {
         const a = await store.getBasSdk().getGovernance()
-          .createProposal(values.description)
+          .createProposal(values.description, votingPeriod)
           .disableValidator(values.address);
         const tx = await store.getBasSdk().getGovernance().sendProposal(a)
         const receipt = await tx.receipt
@@ -247,6 +252,39 @@ const CreateProposalForm = observer((props: IGenerateThresholdKeyFormProps) => {
             ]}
           >
             <Input.TextArea/>
+          </Form.Item>
+        </Col>
+      </Row>
+
+      <Row gutter={24}>
+        <Col offset={2} span={20}>
+          <Form.Item
+            extra={<Typography.Text type="secondary">Voting period.</Typography.Text>}
+            label="Voting Period"
+            name="votingPeriod"
+          >
+            <Select
+              placeholder="Voting peroid"
+            >
+              <Select.Option value={15 * 60}>
+                15 minutes
+              </Select.Option>
+              <Select.Option value={30 * 60}>
+                30 minutes
+              </Select.Option>
+              <Select.Option value={60 * 60}>
+                1 hour
+              </Select.Option>
+              <Select.Option value={3 * 60 * 60}>
+                3 hour
+              </Select.Option>
+              <Select.Option value={6 * 60 * 60}>
+                6 hour
+              </Select.Option>
+              <Select.Option value={12 * 60 * 60}>
+                12 hour
+              </Select.Option>
+            </Select>
           </Form.Item>
         </Col>
       </Row>
