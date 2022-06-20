@@ -67,7 +67,7 @@ export const ValidatorsNav = observer((): ReactElement => {
           loading={grid.isLoading}
           title="Bonded Tokens"
           tokens={bondedTokens}
-          tokenSymbol="BAS"
+          tokenSymbol=""
         />
       </div>
       <br/>

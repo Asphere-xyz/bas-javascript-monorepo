@@ -43,7 +43,7 @@ export const AccountData = observer(() => {
           ? <Spin size="default" />
           : (
             <Text strong className="cardBody">
-              {availableAmount.item} BAS
+              {availableAmount.item} 
             </Text>
           )
         }
@@ -57,7 +57,7 @@ export const AccountData = observer(() => {
           ? <Spin size="default" />
           : (
             <Text strong  className="cardBody">
-              {delegatedAmount.item} BAS
+              {delegatedAmount.item} 
             </Text>
           )
         }

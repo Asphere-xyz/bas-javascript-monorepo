@@ -1,16 +1,29 @@
 import {MobXProviderContext} from 'mobx-react'
 import React from "react";
 
-import {BasStore, LOCAL_CONFIG, DEV_CONFIG, makeDefaultConfig, CONFIGS} from "./BasStore";
+import {BasStore, LOCAL_CONFIG, DEV_CONFIG, METAAPES_CONFIG, JFIN_CONFIG, MRFOX_CONFIG, makeDefaultConfig, CONFIGS} from "./BasStore";
 
 let currentEnvironment = process.env.REACT_APP_ENVIRONMENT || '${REACT_APP_ENVIRONMENT}'
 
 let config = LOCAL_CONFIG
-if (currentEnvironment === 'local') {
-  config = LOCAL_CONFIG
-} else if (currentEnvironment === 'devnet') {
-  config = DEV_CONFIG
-}
+
+switch (currentEnvironment) {
+  case 'local': 
+        config = LOCAL_CONFIG
+        break;
+  case 'devnet': 
+        config = DEV_CONFIG
+        break;
+  case 'mrfox': 
+        config = MRFOX_CONFIG
+        break;
+  case 'jfin': 
+        config = JFIN_CONFIG
+        break;
+  default:   
+        config = LOCAL_CONFIG
+        break;
+}  
 
 // let force switch network using url params
 if (window.location.search.length > 0) {
