@@ -7,14 +7,18 @@ import BlockInfo from "./BlockInfo";
 
 const Header = observer(() => {
   return (
-    <div style={{width: '100%', padding: '0 20px 0'}}>
-      <BlockInfo />
-      <Divider />
-      <Switch>
-        <Route component={HomePage} path="/"/>
-      </Switch>
+    <div style={{ width: "100%" }}>
+      <div className="main-page">
+        <h1>Set Header</h1>
+
+        <BlockInfo />
+        <Divider />
+        <Switch>
+          <Route component={HomePage} path="/" />
+        </Switch>
+      </div>
     </div>
-  )
+  );
 });
 
 export default Header;
