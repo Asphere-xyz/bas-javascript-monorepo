@@ -201,3 +201,37 @@ h1.ant-typography {
 }
 [class*="ant-btn"] {
 }
+.header {
+  display: flex;
+  align-items: center;
+  padding: 8px 0;
+}
+.header nav {
+  margin-left: 64px;
+}
+.header nav a {
+  color: var(--SL100);
+  font-display: inline-block;
+}
+.header nav a:not(:last-child) {
+  margin-right: 24px;
+}
+.ant-pagination-disabled .ant-pagination-item-link,
+.ant-pagination-disabled .ant-pagination-item-link:hover {
+  background-color: var(--SD025);
+  border-color: var(--SD025);
+  color: var(--SL100);
+}
+.ant-pagination-item-active {
+  background-color: var(--SD010);
+  border-color: var(--SL075);
+}
+.ant-pagination-item-active:hover {
+  background-color: var(--SD025);
+  border-color: var(--SL075);
+}
+.ant-pagination-item-active a,
+.ant-pagination-item-active:hover a {
+  color: var(--SL050);
+  border-color: var(--SD010);
+}

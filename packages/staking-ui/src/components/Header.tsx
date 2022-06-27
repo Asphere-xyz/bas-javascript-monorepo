@@ -2,6 +2,7 @@ import { Divider } from "antd";
 import { observer } from "mobx-react";
 import { Switch, Route } from "react-router-dom";
 import HomePage from "src/pages/HomePage";
+import Logo from "../public/JFINChain-logo.svg";
 
 import BlockInfo from "./BlockInfo";
 
@@ -9,7 +10,18 @@ const Header = observer(() => {
   return (
     <div style={{ width: "100%" }}>
       <div className="main-page">
-        <h1>Set Header</h1>
+        <header className="header">
+          <h1>
+            <a href="https://jfinchain.com">
+              <img src="../JFINChain-logo.svg" alt="" />
+            </a>
+          </h1>
+          <nav>
+            <a href="https://exp.jfinchain.com">Explorer</a>
+            <a href="https://staking.jfinchain.com">Staking</a>
+            <a href="https://bridge.jfinchain.com">Bridge</a>
+          </nav>
+        </header>
 
         <BlockInfo />
         <Divider />
