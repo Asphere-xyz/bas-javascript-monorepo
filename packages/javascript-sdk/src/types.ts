@@ -43,6 +43,8 @@ export interface IKeyProvider {
   chainConfigContract?: Contract;
   runtimeUpgradeContract?: Contract;
   deployerProxyContract?: Contract;
+  relayHubContract?: Contract;
+  crossChainBridgeContract?: Contract;
 }
 
 export interface IPendingTx {

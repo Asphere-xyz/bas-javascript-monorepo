@@ -24,6 +24,7 @@
     "babel-loader": "8.1.0",
     "bignumber.js": "^9.0.2",
     "customize-cra": "^1.0.0",
+    "merkle-patricia-tree": "^4.2.4",
     "mobx": "^6.5.0",
     "mobx-react": "^7.3.0",
     "mobx-utils": "^6.0.4",

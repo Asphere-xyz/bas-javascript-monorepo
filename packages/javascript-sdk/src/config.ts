@@ -23,4 +23,6 @@ export interface IConfig {
   chainConfigAddress: Web3Address;
   runtimeUpgradeAddress: Web3Address;
   deployerProxyAddress: Web3Address;
+  relayHubAddress?: Web3Address;
+  crossChainBridgeAddress?: Web3Address;
 }

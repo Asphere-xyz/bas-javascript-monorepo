@@ -15,6 +15,8 @@ const GOVERNANCE_ABI = require('../src/abi/Governance.json')
 const CHAIN_CONFIG_ABI = require('../src/abi/ChainConfig.json')
 const RUNTIME_UPGRADE_ABI = require('../src/abi/RuntimeUpgrade.json')
 const DEPLOYER_PROXY_ABI = require('../src/abi/DeployerProxy.json')
+const RELAY_HUB_ABI = require('../src/abi/RelayHub.json')
+const CROSS_CHAIN_BRIDGE_ABI = require('../src/abi/CrossChainBridge.json')
 
 export class KeyProvider implements IKeyProvider {
 
@@ -39,6 +41,8 @@ export class KeyProvider implements IKeyProvider {
   public chainConfigContract?: Contract;
   public runtimeUpgradeContract?: Contract;
   public deployerProxyContract?: Contract;
+  public relayHubContract?: Contract;
+  public crossChainBridgeContract?: Contract;
 
   constructor(
     private readonly config: IConfig,
@@ -76,6 +80,8 @@ export class KeyProvider implements IKeyProvider {
     this.chainConfigContract = new web3.eth.Contract(CHAIN_CONFIG_ABI, this.config.chainConfigAddress);
     this.runtimeUpgradeContract = new web3.eth.Contract(RUNTIME_UPGRADE_ABI, this.config.runtimeUpgradeAddress);
     this.deployerProxyContract = new web3.eth.Contract(DEPLOYER_PROXY_ABI, this.config.deployerProxyAddress);
+    // this.relayHubContract = new web3.eth.Contract(RELAY_HUB_ABI, this.config.relayHubAddress);
+    // this.crossChainBridgeContract = new web3.eth.Contract(CROSS_CHAIN_BRIDGE_ABI, this.config.crossChainBridgeAddress);
   }
 
   public async connectFromInjected(): Promise<void> {

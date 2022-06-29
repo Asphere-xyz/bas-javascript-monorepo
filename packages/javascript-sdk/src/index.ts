@@ -5,6 +5,7 @@ import {Staking} from "./staking";
 import {IChainConfig, IChainParams, Web3Address} from "./types";
 import {PastEventOptions} from "web3-eth-contract";
 import {RuntimeUpgrade} from "./runtime";
+import BigNumber from "bignumber.js";
 
 export * from './config'
 export * from './governance'
@@ -65,20 +66,7 @@ export class BasSdk {
     return this.keyProvider!.getChainParams()
   }
 
-  public async getDeployers(options: PastEventOptions = {}): Promise<any[]> {
-    const deployersAdded = await this.keyProvider!.deployerProxyContract!.getPastEvents('DeployerAdded', options) as any[],
-      deployersRemoved = await this.keyProvider!.deployerProxyContract!.getPastEvents('DeployerRemoved', options) as any[]
-    const result = new Map<Web3Address, any>()
-    for (const log of deployersAdded.concat(deployersRemoved)) {
-      const {returnValues: {account}} = log
-      if (log.event === 'DeployerAdded') {
-        result.set(account, log)
-      } else if (log.event === 'DeployerRemoved') {
-        result.delete(account)
-      }
-    }
-    return Array.from(result.values()).map((log: any) => {
-      return {...log, ...log.returnValues}
-    })
+  public async transferToChapel(amount: BigNumber): Promise<void> {
+    
   }
 }
