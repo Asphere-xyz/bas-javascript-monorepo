@@ -47,6 +47,9 @@
       "path": "packages/javascript-sdk"
     },
     {
+      "path": "packages/relayhub-sdk"
+    },
+    {
       "path": "packages/staking-ui"
     },
   ]

@@ -31,6 +31,9 @@
   "references": [
     {
       "path": "../javascript-sdk"
+    },
+    {
+      "path": "../relayhub-sdk"
     }
   ]
 }

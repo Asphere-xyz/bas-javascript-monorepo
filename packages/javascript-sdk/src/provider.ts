@@ -6,6 +6,7 @@ import {Contract} from "web3-eth-contract";
 import detectEthereumProvider from "@metamask/detect-provider";
 import prettyTime from 'pretty-time'
 import BigNumber from "bignumber.js";
+import {numberToHex} from "web3-utils";
 
 const STAKING_ABI = require('../src/abi/Staking.json')
 const SLASHING_INDICATOR_ABI = require('../src/abi/SlashingIndicator.json')
@@ -82,6 +83,13 @@ export class KeyProvider implements IKeyProvider {
     this.deployerProxyContract = new web3.eth.Contract(DEPLOYER_PROXY_ABI, this.config.deployerProxyAddress);
     // this.relayHubContract = new web3.eth.Contract(RELAY_HUB_ABI, this.config.relayHubAddress);
     // this.crossChainBridgeContract = new web3.eth.Contract(CROSS_CHAIN_BRIDGE_ABI, this.config.crossChainBridgeAddress);
+  }
+
+  public async switchNetworkTo(chainId: number): Promise<void> {
+    return this.web3!.givenProvider.request({
+      method: 'wallet_switchEthereumChain',
+      params: [{chainId: numberToHex(chainId)}],
+    });
   }
 
   public async connectFromInjected(): Promise<void> {

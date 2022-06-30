@@ -37,11 +37,13 @@
   },
   "peerDependencies": {
     "@ankr.com/bas-javascript-sdk": "0.0.1",
+    "@ankr.com/bas-relayhub-sdk": "0.0.1",
     "react": "^16.8.0",
     "react-dom": "^16.8.0"
   },
   "devDependencies": {
     "@ankr.com/bas-javascript-sdk": "*",
+    "@ankr.com/bas-relayhub-sdk": "*",
     "@babel/core": "^7.17.8",
     "@babel/preset-env": "^7.16.11",
     "@types/react-dom": "^17.0.14",
