@@ -235,3 +235,19 @@ h1.ant-typography {
   color: var(--SL050);
   border-color: var(--SD010);
 }
+.testnet {
+  width: 100%;
+  position: relative;
+}
+.testnet > span {
+  color: #ffe811;
+  font-size: 50px;
+  width: 300px;
+  position: absolute;
+  left: calc(50% - 150px);
+  z-index: 100;
+  top: -20px;
+  background: rgb(51 98 227 / 80%);
+  border-radius: 30px;
+  text-align: center;
+}
