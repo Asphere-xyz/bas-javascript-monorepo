@@ -2,8 +2,11 @@ BAS JavaScript SDK
 ==================
 
 yarn 
+
 yarn build
 
+Get into Staking UI
+
 cd packages/staking-ui/
-Dom
+
 yarn start:jfin
