@@ -54,10 +54,12 @@
     "start:local": "REACT_APP_ENVIRONMENT=local react-app-rewired start",
     "start:devnet": "REACT_APP_ENVIRONMENT=devnet react-app-rewired start",
     "start:jfin": "REACT_APP_ENVIRONMENT=jfin react-app-rewired start",
+    "start:jfintest": "REACT_APP_ENVIRONMENT=jfintest react-app-rewired start",
     "build": "REACT_APP_ENVIRONMENT=env react-scripts build",
     "build:local": "REACT_APP_ENVIRONMENT=local react-scripts build",
     "build:devnet": "REACT_APP_ENVIRONMENT=devnet react-scripts build",
-    "build:jfin": "REACT_APP_ENVIRONMENT=jfin react-scripts build"
+    "build:jfin": "REACT_APP_ENVIRONMENT=jfin react-scripts build",
+    "build:jfintest": "REACT_APP_ENVIRONMENT=jfintest react-scripts build"
   },
   "browserslist": {
     "production": [

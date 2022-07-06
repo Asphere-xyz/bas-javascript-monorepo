@@ -74,19 +74,7 @@ export const ValidatorsNav = observer((): ReactElement => {
 
       <ValidatorTable gridData={grid} store={store}/>
       <Divider/>
-      <Drawer
-        bodyStyle={{paddingBottom: 80}}
-        title="Register new validator"
-        visible={registerValidatorVisible}
-        width={500}
-        onClose={() => {
-          setRegisterValidatorVisible(false);
-        }}
-      >
-        <RegisterValidatorForm/>
-      </Drawer>
-      <Button icon={<PlusOutlined translate="yes"/>} size="large" type="primary"
-              onClick={() => setRegisterValidatorVisible(true)}>Register New Validator</Button>
+
       <br/>
       <br/>
       <br/>

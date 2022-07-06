@@ -1,7 +1,7 @@
 import {MobXProviderContext} from 'mobx-react'
 import React from "react";
 
-import {BasStore, LOCAL_CONFIG, DEV_CONFIG, METAAPES_CONFIG, JFIN_CONFIG, MRFOX_CONFIG, makeDefaultConfig, CONFIGS} from "./BasStore";
+import {BasStore, LOCAL_CONFIG, DEV_CONFIG, METAAPES_CONFIG, JFIN_CONFIG, JFIN_TESTNET_CONFIG, MRFOX_CONFIG, makeDefaultConfig, CONFIGS} from "./BasStore";
 
 let currentEnvironment = process.env.REACT_APP_ENVIRONMENT || '${REACT_APP_ENVIRONMENT}'
 
@@ -20,6 +20,9 @@ switch (currentEnvironment) {
   case 'jfin': 
         config = JFIN_CONFIG
         break;
+  case 'jfintest': 
+        config = JFIN_TESTNET_CONFIG
+        break;        
   default:   
         config = LOCAL_CONFIG
         break;

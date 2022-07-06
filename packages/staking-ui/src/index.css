@@ -126,16 +126,16 @@ h1.ant-typography {
   border-radius: 16px;
 }
 .blockInfoData > div:first-child {
-  background-image: url(../../../packages/staking-ui/public/bg-40.png);
+  background-image: url(bg-40.png);
 }
 .blockInfoData > div:first-child + div {
-  background-image: url(../../../packages/staking-ui/public/53.png);
+  background-image: url(53.png);
 }
 .blockInfoData > div:first-child + div + div {
-  background-image: url(../../../packages/staking-ui/public/13.png);
+  background-image: url(13.png);
 }
 .main-page {
-  background-image: url(../../../packages/staking-ui/public/jfin-bg.png);
+  background-image: url(jfin-bg.png);
   background-size: 100%;
   background-position: 0 -40%;
   background-repeat: no-repeat;

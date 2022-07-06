@@ -17,9 +17,9 @@ const Header = observer(() => {
             </a>
           </h1>
           <nav>
-            <a href="https://exp.jfinchain.com">Explorer</a>
-            <a href="https://staking.jfinchain.com">Staking</a>
-            <a href="https://bridge.jfinchain.com">Bridge</a>
+            <a href="https://exp.testnet.jfinchain.com">Explorer</a>
+            <a href="https://staking.testnet.jfinchain.com">Staking</a>
+            <a href="https://faucet.testnet.jfinchain.com">Faucet</a>
           </nav>
         </header>
 

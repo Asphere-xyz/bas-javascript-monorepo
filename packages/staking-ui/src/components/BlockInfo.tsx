@@ -94,37 +94,9 @@ const BlockInfo = observer(() => {
           </Row>
           <Row>
             <Text strong style={{ marginRight: "2px" }}>
-              Misdemeanor Threshold:
-            </Text>
-            <Text>{blockInfo.misdemeanorThreshold}</Text>
-            <Text>
-              &nbsp;(
-              {prettyTime(
-                blockInfo.misdemeanorThreshold *
-                  blockInfo.activeValidatorsLength *
-                  blockInfo.blockTime *
-                  1e9,
-                "m"
-              )}
-              )
-            </Text>
-          </Row>
-          <Row>
-            <Text strong style={{ marginRight: "2px" }}>
-              Felony Threshold:
+            Penalty Threshold:
             </Text>
             <Text>{blockInfo.felonyThreshold}</Text>
-            <Text>
-              &nbsp;(
-              {prettyTime(
-                blockInfo.felonyThreshold *
-                  blockInfo.activeValidatorsLength *
-                  blockInfo.blockTime *
-                  1e9,
-                "m"
-              )}
-              )
-            </Text>
           </Row>
         </Col>
 
