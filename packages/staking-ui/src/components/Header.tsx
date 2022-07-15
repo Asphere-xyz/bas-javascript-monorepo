@@ -3,8 +3,10 @@ import { observer } from "mobx-react";
 import { Switch, Route } from "react-router-dom";
 import HomePage from "src/pages/HomePage";
 import Logo from "../public/JFINChain-logo.svg";
+import CookieConsent from "react-cookie-consent";
 
 import BlockInfo from "./BlockInfo";
+import Conditions from "./Conditions";
 
 const Header = observer(() => {
   return (
@@ -29,6 +31,16 @@ const Header = observer(() => {
           <Route component={HomePage} path="/" />
         </Switch>
       </div>
+      <CookieConsent
+        location="bottom"
+        buttonText="Accept"
+        cookieName="jfinstk"
+        style={{ background: "#2B373B" }}
+        buttonStyle={{ color: "#4e503b", fontSize: "13px" }}
+        expires={365}
+      >
+        <Conditions />
+      </CookieConsent>
     </div>
   );
 });
