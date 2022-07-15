@@ -2,7 +2,6 @@ import { Divider } from "antd";
 import { observer } from "mobx-react";
 import { Switch, Route } from "react-router-dom";
 import HomePage from "src/pages/HomePage";
-import Logo from "../public/JFINChain-logo.svg";
 import CookieConsent from "react-cookie-consent";
 
 import BlockInfo from "./BlockInfo";
@@ -15,7 +14,7 @@ const Header = observer(() => {
         <header className="header">
           <h1>
             <a href="https://jfinchain.com">
-              <img src="../JFINChain-logo.svg" alt="" />
+              <img alt="" src="../JFINChain-logo.svg" />
             </a>
           </h1>
           <nav>
@@ -32,12 +31,35 @@ const Header = observer(() => {
         </Switch>
       </div>
       <CookieConsent
-        location="bottom"
-        buttonText="Accept"
+        overlay
+        buttonStyle={{
+          color: "#fff",
+          backgroundColor: "#c60000",
+          fontSize: "13px",
+          borderRadius: "30px",
+          padding: "4px 16px",
+          margin: "auto",
+        }}
+        buttonText="ยอมรับข้อตกลง"
+        contentClasses="condition-page"
+        contentStyle={{
+          margin: "0",
+          display: "block",
+          flex: "none",
+          with: "auto",
+        }}
         cookieName="jfinstk"
-        style={{ background: "#2B373B" }}
-        buttonStyle={{ color: "#4e503b", fontSize: "13px" }}
         expires={365}
+        location="top"
+        style={{
+          background: "#2e3338",
+          display: "block",
+          padding: "32px",
+          maxWidth: "600px",
+          position: "relative",
+          margin: "20px auto",
+          borderRadius: "16px",
+        }}
       >
         <Conditions />
       </CookieConsent>

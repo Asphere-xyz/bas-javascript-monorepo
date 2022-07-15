@@ -251,3 +251,29 @@ h1.ant-typography {
   border-radius: 30px;
   text-align: center;
 }
+.condition-content {
+  position: relative;
+}
+.condition-content article {
+  display: block;
+  height: 500px;
+  overflow: scroll;
+}
+.jfin-cond {
+  font-size: 24px;
+  margin-bottom: 24px;
+  color: #fff;
+  text-align: center;
+}
+.condition-page + div {
+  text-align: center;
+  margin-top: 24px;
+}
+@media (min-width: 760px) {
+  .condition-content {
+    max-width: 600px;
+  }
+  .condition-content article {
+    height: 620px;
+  }
+}
