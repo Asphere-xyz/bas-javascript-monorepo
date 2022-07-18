@@ -66,16 +66,16 @@ export const createTableColumns = (store: BasStore): ColumnProps<any>[] => {
       render: (validator: IValidator) => `${(Number(validator.totalDelegated) / 1e18).toFixed(2)} (${validator.votingPower.toFixed(2)}%)`
     },
     {
-      title: 'Commission',
-      dataIndex: 'commissionRate',
-      key: 'commissionRate',
-      render: (value: string) => `${(Number(value) / 1e2).toFixed(0)}%`
-    },
-    {
       title: 'APR',
       key: 'apr',
       render: (value: IValidator) => {
-        const apr = 365 * (100 * new BigNumber(value.totalRewards).dividedBy(value.totalDelegated).toNumber())
+        // console.log(value.totalRewards)
+        // console.log(value.totalDelegated)
+        const  blockReward = new BigNumber("2097792000000000000000")
+        const  reward = new BigNumber(value.totalRewards).plus(blockReward)
+        // const  reward = new BigNumber(value.totalRewards)
+        // console.log(y)
+        const apr = 365 * (100 * reward.dividedBy(value.totalDelegated).toNumber())
         let prettyApr = '';
         if (apr === 0) {
           prettyApr = `0%`

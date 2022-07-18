@@ -69,7 +69,7 @@
           }
         ],
         "@typescript-eslint/no-explicit-any": "warn",
-        "@typescript-eslint/explicit-module-boundary-types": "error",
+        "@typescript-eslint/explicit-module-boundary-types": "off",
         "@typescript-eslint/no-inferrable-types": [
           "error",
           {

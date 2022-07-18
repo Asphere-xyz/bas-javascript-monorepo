@@ -35,9 +35,6 @@ const BlockInfo = observer(() => {
   }
   return (
     <div className="blockInfo">
-      <p className="testnet">
-        <span>TESTNET</span>
-      </p>
       <br />
       <Row className="blockInfoData">
         <Col className="blockInfoItem" span={SPAN}>

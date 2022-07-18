@@ -39,7 +39,8 @@ export const DEV_CONFIG: IConfig = makeDefaultConfig(16350, 'BAS devnet #1', 'ht
 export const METAAPES_CONFIG: IConfig = makeDefaultConfig(16350, 'MetaApes', 'https://bas.metaapesgame.com/bas_mainnet_full_rpc', 'https://explorer.dev-02.bas.ankr.com/')
 export const MRFOX_CONFIG: IConfig = makeDefaultConfig(701, 'MrFox', 'https://rpc.mrfoxchain.com', 'https://exp.mrfoxchain.com/')
 export const JFIN_CONFIG: IConfig = makeDefaultConfig(3501, 'JFIN', 'https://rpc.jfinchain.com', 'https://exp.jfinchain.com/')
-export const JFIN_TESTNET_CONFIG: IConfig = makeDefaultConfig(3502, 'JFIN', 'https://rpc.testnet.jfinchain.com', 'https://exp.testnet.jfinchain.com/')
+export const JFIN_TESTNET_CONFIG: IConfig = makeDefaultConfig(3503, 'JFIN', 'http://65.108.44.103:8005/', 'https://exp.jfinchain.com/')
+// export const JFIN_TESTNET_CONFIG: IConfig = makeDefaultConfig(3502, 'JFIN', 'https://rpc.testnet.jfinchain.com', 'https://exp.testnet.jfinchain.com/')
 
 export const CONFIGS: Record<string, IConfig> = {
   "localhost": makeDefaultConfig(1337, 'localhost', 'http://localhost:8545/'),
