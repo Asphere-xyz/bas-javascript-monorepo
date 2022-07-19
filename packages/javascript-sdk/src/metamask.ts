@@ -1,9 +1,12 @@
 import Web3 from "web3";
 import {numberToHex} from "web3-utils";
-import {IConfig} from "./config";
 import {IPendingTx} from "./types";
 
-export const waitForExpectedNetworkOrThrow = async (web3: Web3, config: IConfig): Promise<void> => {
+export const waitForExpectedNetworkOrThrow = async (web3: Web3, config: {
+  chainId: number;
+  chainName: string;
+  rpcUrl: string;
+}): Promise<void> => {
   if (!web3.givenProvider.request) {
     throw new Error(`Wallet doesn't support switching to the ${config.chainName} network, please switch it manually`);
   }
@@ -26,7 +29,11 @@ export const waitForExpectedNetworkOrThrow = async (web3: Web3, config: IConfig)
   }
 }
 
-export const tryAddMetaMaskNetwork = async (web3: Web3, config: IConfig): Promise<boolean> => {
+export const tryAddMetaMaskNetwork = async (web3: Web3, config: {
+  chainId: number;
+  chainName: string;
+  rpcUrl: string;
+}): Promise<boolean> => {
   try {
     console.log(`Trying to switch MetaMask network to: ${config.chainId}`);
     await web3.givenProvider.request({

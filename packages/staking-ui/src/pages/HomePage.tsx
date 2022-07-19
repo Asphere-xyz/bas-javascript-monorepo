@@ -44,7 +44,7 @@ const HomePage = observer((): ReactElement => {
           Staking
         </Menu.Item>
         <Menu.Item key="bridge" icon={<WalletOutlined translate="yes"/>}>
-          Bridge
+          Relay Hub
         </Menu.Item>
       </Menu>
       <br/>
