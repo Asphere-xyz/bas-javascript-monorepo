@@ -1,0 +1,75 @@
+{
+  "name": "@ankr.com/bas-staking-ui",
+  "version": "0.0.2",
+  "description": "",
+  "main": "./lib/index.js",
+  "types": "./lib/index.d.ts",
+  "repository": "",
+  "author": "Dmitry Savonin <dmitry@ankr.com>",
+  "license": "MIT",
+  "publishConfig": {
+    "access": "public"
+  },
+  "files": [
+    "lib"
+  ],
+  "dependencies": {
+    "@ant-design/icons": "^4.7.0",
+    "@types/react": "^17.0.42",
+    "@types/react-router-dom": "^5.3.3",
+    "@types/uuid": "^8.3.4",
+    "antd": "^4.19.3",
+    "antd-prompt": "^0.6.0",
+    "axios": "^0.26.1",
+    "babel-loader": "8.1.0",
+    "bignumber.js": "^9.0.2",
+    "customize-cra": "^1.0.0",
+    "merkle-patricia-tree": "^4.2.4",
+    "mobx": "^6.5.0",
+    "mobx-react": "^7.3.0",
+    "mobx-utils": "^6.0.4",
+    "pretty-time": "^1.1.0",
+    "react": "^17.0.2",
+    "react-dom": "^17.0.2",
+    "react-router-dom": "^5.3.0",
+    "react-scripts": "4.0.1",
+    "web-vitals": "^2.1.4"
+  },
+  "peerDependencies": {
+    "@ankr.com/bas-javascript-sdk": "0.0.1",
+    "@ankr.com/bas-relayhub-sdk": "0.0.1",
+    "react": "^16.8.0",
+    "react-dom": "^16.8.0"
+  },
+  "devDependencies": {
+    "@ankr.com/bas-javascript-sdk": "*",
+    "@ankr.com/bas-relayhub-sdk": "*",
+    "@babel/core": "^7.17.8",
+    "@babel/preset-env": "^7.16.11",
+    "@types/react-dom": "^17.0.14",
+    "env-cmd": "^10.1.0",
+    "eslint-webpack-plugin": "^2.5.2",
+    "react-app-rewired": "^2.1.8",
+    "serve": "^13.0.2"
+  },
+  "scripts": {
+    "start": "REACT_APP_ENVIRONMENT=env react-app-rewired start",
+    "start:local": "REACT_APP_ENVIRONMENT=local react-app-rewired start",
+    "start:devnet": "REACT_APP_ENVIRONMENT=devnet react-app-rewired start",
+    "build": "REACT_APP_ENVIRONMENT=env react-scripts build",
+    "build:local": "REACT_APP_ENVIRONMENT=local react-scripts build",
+    "build:devnet": "REACT_APP_ENVIRONMENT=devnet react-scripts build"
+  },
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
+  }
+}
