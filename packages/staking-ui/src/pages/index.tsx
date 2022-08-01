@@ -1,13 +1,20 @@
-import { observer } from "mobx-react";
+import { observer } from "mobx-react"
 
-import Header from "../components/Header";
+import Header from "../components/Header"
 
 const IndexPage = observer(() => {
   return (
-    <div style={{ display: "flex", height: "100%" }}>
+    <div
+      style={{
+        display: "flex",
+        height: "auto",
+        width: "100vw",
+        overflowX: "hidden",
+      }}
+    >
       <Header />
     </div>
-  );
-});
+  )
+})
 
-export default IndexPage;
+export default IndexPage

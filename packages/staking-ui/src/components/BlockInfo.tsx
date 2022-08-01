@@ -1,26 +1,26 @@
-import { Col, Row, Typography } from "antd";
-import { BigNumber } from "bignumber.js";
-import { observer } from "mobx-react";
-import { useEffect, useState } from "react";
-import { useBasStore } from "src/stores";
-import { IChainConfig, IChainParams } from "@ankr.com/bas-javascript-sdk";
-import prettyTime from "pretty-time";
+import { Col, Row, Typography } from "antd"
+import { BigNumber } from "bignumber.js"
+import { observer } from "mobx-react"
+import { useEffect, useState } from "react"
+import { useBasStore } from "src/stores"
+import { IChainConfig, IChainParams } from "@ankr.com/bas-javascript-sdk"
+import prettyTime from "pretty-time"
 
-type IBlockInfoData = IChainConfig & IChainParams;
+type IBlockInfoData = IChainConfig & IChainParams
 
-const { Text } = Typography;
+const { Text } = Typography
 
 const BlockInfo = observer(() => {
-  const store = useBasStore();
+  const store = useBasStore()
 
-  const [blockInfo, setBlockInfo] = useState<IBlockInfoData | null>(null);
+  const [blockInfo, setBlockInfo] = useState<IBlockInfoData | null>(null)
   useEffect(() => {
     setInterval(async () => {
-      if (!store.isConnected) return;
-      setBlockInfo(await store.getChainConfig());
-    }, 3_000);
-  }, [store]);
-  const SPAN = 6;
+      if (!store.isConnected) return
+      setBlockInfo(await store.getChainConfig())
+    }, 3_000)
+  }, [store])
+  const SPAN = 6
   if (!blockInfo) {
     return (
       <div className="blockInfo">
@@ -31,13 +31,13 @@ const BlockInfo = observer(() => {
           </h3>
         </div>
       </div>
-    );
+    )
   }
   return (
     <div className="blockInfo">
       <br />
-      <Row className="blockInfoData">
-        <Col className="blockInfoItem" span={SPAN}>
+      <Row className="blockInfoData" gutter={[16, 16]}>
+        <Col className="blockInfoItem" md={SPAN} xs={24}>
           <Row>
             <Text strong style={{ marginRight: "2px" }}>
               Block Number:
@@ -68,7 +68,7 @@ const BlockInfo = observer(() => {
           </Row>
         </Col>
 
-        <Col className="blockInfoItem" span={SPAN}>
+        <Col className="blockInfoItem" md={SPAN} xs={24}>
           <Row>
             <Text strong style={{ marginRight: "2px" }}>
               Active Validators Length:
@@ -91,13 +91,13 @@ const BlockInfo = observer(() => {
           </Row>
           <Row>
             <Text strong style={{ marginRight: "2px" }}>
-            Penalty Threshold:
+              Penalty Threshold:
             </Text>
             <Text>{blockInfo.felonyThreshold}</Text>
           </Row>
         </Col>
 
-        <Col className="blockInfoItem" span={SPAN}>
+        <Col className="blockInfoItem" md={SPAN} xs={24}>
           <Row>
             <Text strong style={{ marginRight: "2px" }}>
               Validator Jail Epoch Length:
@@ -147,7 +147,7 @@ const BlockInfo = observer(() => {
         </Col>
       </Row>
     </div>
-  );
-});
+  )
+})
 
-export default BlockInfo;
+export default BlockInfo
