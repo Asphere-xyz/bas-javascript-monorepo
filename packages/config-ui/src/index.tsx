@@ -4,22 +4,22 @@ import ReactDOM from 'react-dom';
 import {BrowserRouter} from "react-router-dom";
 
 import './index.css';
-import IndexPage from "./pages";
 import reportWebVitals from './reportWebVitals';
+import {App} from './App'
 
-const App = () => {
+const Main = () => {
   return (
     <React.StrictMode>
       <Provider>
         <BrowserRouter>
-          <IndexPage/>
+          <App/>
         </BrowserRouter>
       </Provider>
     </React.StrictMode>
   );
 }
 
-ReactDOM.render(<App/>, document.getElementById('root'));
+ReactDOM.render(<Main/>, document.getElementById('root'));
 
 // If you want to start measuring performance in your app, pass a function
 // to log results (for example: reportWebVitals(console.log))
