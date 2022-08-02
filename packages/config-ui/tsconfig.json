@@ -28,12 +28,5 @@
     "noEmit": true,
     "experimentalDecorators": true
   },
-  "references": [
-    {
-      "path": "../javascript-sdk"
-    },
-    {
-      "path": "../relayhub-sdk"
-    }
-  ]
+  "references": []
 }
