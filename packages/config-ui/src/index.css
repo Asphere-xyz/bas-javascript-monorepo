@@ -1,0 +1,96 @@
+@import '~antd/dist/antd.css';
+
+/*body {*/
+/*  margin: 0;*/
+/*  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',*/
+/*    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',*/
+/*    sans-serif;*/
+/*  -webkit-font-smoothing: antialiased;*/
+/*  -moz-osx-font-smoothing: grayscale;*/
+/*}*/
+
+/*code {*/
+/*  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',*/
+/*    monospace;*/
+/*}*/
+
+.centred {
+  display: flex;
+  height: 100%;
+  width: 100%;
+  align-items: center;
+  justify-content: center;
+}
+
+.accountDataCArd {
+  display: flex;
+  flex-direction: row;
+  flex: 1;
+  height: 200px;
+  justify-content: space-around;
+  align-items: center;
+  margin: 5px;
+  padding: 20px;
+  background-color: #f5f4f4;
+  border-radius: 20px;
+}
+
+.card {
+  display: flex;
+  flex-direction: column;
+  flex: 0.3;
+  height: 100px;
+  justify-content: center;
+  align-items: center;
+  margin: 5px;
+  padding: 20px;
+  background-color: #f5f4f4;
+  border-radius: 20px;
+}
+
+.cardBody {
+  font-size: 30px;
+}
+
+.tableButton {
+  margin: 2px;
+}
+
+.blockInfo {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: center;
+} 
+
+.blockInfoTitle {
+  display: flex;
+  flex-direction: row;
+  margin: 5px;
+} 
+
+.blockInfoData {
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-around;
+  padding: 5px;
+  background-color: #f5f4f4;
+  border-radius: 20px;
+}
+
+.blockInfoItem {
+  display: flex;
+  flex-direction: column;
+}
+
+.flexSpaceAround {
+  display: flex;
+  justify-content: space-around;
+  flex: 0.4;
+}
+
+.ant-input-number {
+  width: 100%;
+}

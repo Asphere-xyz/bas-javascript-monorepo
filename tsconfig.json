@@ -52,5 +52,8 @@
     {
       "path": "packages/staking-ui"
     },
+    {
+      "path": "packages/config-ui"
+    },
   ]
 }

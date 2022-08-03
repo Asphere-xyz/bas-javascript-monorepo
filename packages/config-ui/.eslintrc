@@ -39,7 +39,6 @@
         "no-plusplus": "error",
         "no-return-assign": "error",
         "no-unreachable": "error",
-        "react/jsx-no-undef": "off",
         "no-template-curly-in-string": "off",
         "prefer-template": "error",
         "camelcase": [
@@ -72,9 +71,8 @@
         ],
         "@typescript-eslint/no-explicit-any": "warn",
         "@typescript-eslint/explicit-module-boundary-types": "error",
-        "@typescript-eslint/lines-between-class-members": "off",
         "@typescript-eslint/no-inferrable-types": [
-          "off",
+          "error",
           {
             "ignoreParameters": false,
             "ignoreProperties": false
