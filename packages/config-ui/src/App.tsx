@@ -4,6 +4,8 @@ import {Button, Col, Divider, Form, Input, Row, TablePaginationConfig, Typograph
 import {MinusOutlined, PlusOutlined} from "@ant-design/icons";
 import {action, makeAutoObservable} from "mobx";
 import {observer} from "mobx-react";
+import BigNumber from "bignumber.js";
+import FileSaver from 'file-saver';
 
 export class FormStore {
 
@@ -27,14 +29,38 @@ export class FormStore {
 
   public votingPeriod = 60;
 
-  public genesisValidators: { address: string; stake: number; }[] = [{address: '0x', stake: 1}]
+  public genesisValidators: { address: string; stake: number; }[] = [
+    {address: "0x08fae3885e299c24ff9841478eb946f41023ac69", stake: 1000},
+    {address: "0x751aaca849b09a3e347bbfe125cf18423cc24b40", stake: 1000},
+    {address: "0xa6ff33e3250cc765052ac9d7f7dfebda183c4b9b", stake: 1000},
+    {address: "0x49c0f7c8c11a4c80dc6449efe1010bb166818da8", stake: 1000},
+    {address: "0x8e1ea6eaa09c3b40f4a51fcd056a031870a0549a", stake: 1000},
+  ]
 
-  public systemTreasury: { address: string; share: number }[] = [{address: '0x', share: 100}]
+  public systemTreasury: { address: string; share: number }[] = [
+    {address: '0x00a601f45688dba8a070722073b015277cf36725', share: 90},
+    {address: '0x100dd6c27454cb1DAdd1391214A344C6208A8C80', share: 10},
+  ]
 
-  public faucet: { address: string; amount: number }[] = [{address: '0x', amount: 0}]
+  public faucet: { address: string; amount: number }[] = [
+    {address: '0x00a601f45688dba8a070722073b015277cf36725', amount: 10_000},
+    {address: '0xb891fe7b38f857f53a7b5529204c58d5c487280b', amount: 100_000_000},
+  ]
 
   public constructor() {
+    const that = this
     makeAutoObservable(this)
+    try {
+      const result = JSON.parse(localStorage.getItem('__state__')!)
+      for (const [k, v] of Object.entries(result)) {
+        (this as any)[k] = v;
+      }
+    } catch (e) {
+      console.error(`Failed to read state from cache: ${e}`)
+    }
+    setInterval(() => {
+      localStorage.setItem('__state__', JSON.stringify(that))
+    }, 1000)
   }
 
   @action
@@ -149,7 +175,43 @@ export class FormStore {
 
   @action
   async submitForm(): Promise<void> {
-    console.log(JSON.stringify(this, null, 2))
+    const requestBody = {
+      chainId: this.chainId,
+      validators: this.genesisValidators.map(({address}) => address),
+      systemTreasury: Object.fromEntries(this.systemTreasury.map(({address, share}) => [address, share * 100])),
+      consensusParams: {
+        activeValidatorsLength: this.activeValidatorsLength,
+        epochBlockInterval: this.epochBlockInterval,
+        misdemeanorThreshold: this.misdemeanorThreshold,
+        felonyThreshold: this.felonyThreshold,
+        validatorJailEpochLength: this.validatorJailEpochLength,
+        undelegatePeriod: this.undelegatePeriod,
+        minValidatorStakeAmount: '0x' + new BigNumber(this.minValidatorStakeAmount).multipliedBy(10 ** 18).toString(16),
+        minStakingAmount: '0x' + new BigNumber(this.minStakingAmount).multipliedBy(10 ** 18).toString(16),
+      },
+      initialStakes: Object.fromEntries(this.genesisValidators.map(({
+                                                                      address,
+                                                                      stake
+                                                                    }) => [address, '0x' + new BigNumber(stake).multipliedBy(10 ** 18).toString(16)])),
+      votingPeriod: this.votingPeriod,
+      faucet: Object.fromEntries(this.faucet.map(({
+                                                    address,
+                                                    amount
+                                                  }) => [address, '0x' + new BigNumber(amount).multipliedBy(10 ** 18).toString(16)]))
+    };
+    console.log(`Request: ${JSON.stringify(requestBody, null, 2)}`);
+    const resp = await fetch(`${window.location.protocol}//${window.location.hostname}:8080`, {
+      method: 'POST',
+      body: JSON.stringify(requestBody),
+    })
+    const body = await resp.text()
+    if (resp.status !== 200) {
+      alert(body);
+      return
+    }
+    console.log(`Response: ${body}`);
+    const file = new File([body], `genesis-${this.chainId}.json`, {type: "text/plain;charset=utf-8"});
+    FileSaver.saveAs(file);
   }
 }
 
@@ -160,6 +222,7 @@ interface IFormStateProps {
 const GenesisValidatorsField = observer(({store}: IFormStateProps): ReactElement => {
   return (
     <div>
+      <input type="hidden" id="a"/>
       <Input.Group compact>
         {store.genesisValidators.map(({address, stake}, i) => (
           <>
@@ -348,7 +411,8 @@ export const App = observer((): ReactElement => {
           </Col>
           <Col offset={4} span={16}>
             <Form.Item
-              extra={<Typography.Text type="secondary">After missing this amount of blocks per day validator losses all daily rewards (penalty)
+              extra={<Typography.Text type="secondary">After missing this amount of blocks per day validator losses all
+                daily rewards (penalty)
               </Typography.Text>}
               label="Misdemeanor Threshold"
               name="misdemeanorThreshold"
@@ -364,7 +428,8 @@ export const App = observer((): ReactElement => {
           </Col>
           <Col offset={4} span={16}>
             <Form.Item
-              extra={<Typography.Text type="secondary">After missing this amount of blocks per day validator goes in jail for N epochs</Typography.Text>}
+              extra={<Typography.Text type="secondary">After missing this amount of blocks per day validator goes in
+                jail for N epochs</Typography.Text>}
               label="Felony Threshold"
               name="felonyThreshold"
               rules={[
@@ -379,7 +444,8 @@ export const App = observer((): ReactElement => {
           </Col>
           <Col offset={4} span={16}>
             <Form.Item
-              extra={<Typography.Text type="secondary">How many epochs validator should stay in jail (7 epochs = ~7 days)</Typography.Text>}
+              extra={<Typography.Text type="secondary">How many epochs validator should stay in jail (7 epochs = ~7
+                days)</Typography.Text>}
               label="Validator Jail Epoch Length"
               name="validatorJailEpochLength"
               rules={[
@@ -409,7 +475,8 @@ export const App = observer((): ReactElement => {
           </Col>
           <Col offset={4} span={16}>
             <Form.Item
-              extra={<Typography.Text type="secondary">How many tokens validator must stake to create a validator (in ether)</Typography.Text>}
+              extra={<Typography.Text type="secondary">How many tokens validator must stake to create a validator (in
+                ether)</Typography.Text>}
               label="Min Validator Stake Amount"
               name="minValidatorStakeAmount"
               rules={[
@@ -424,7 +491,8 @@ export const App = observer((): ReactElement => {
           </Col>
           <Col offset={4} span={16}>
             <Form.Item
-              extra={<Typography.Text type="secondary">Minimum staking amount for delegators (in ether)</Typography.Text>}
+              extra={<Typography.Text type="secondary">Minimum staking amount for delegators (in
+                ether)</Typography.Text>}
               label="Min Staking Amount"
               name="minStakingAmount"
               rules={[
@@ -439,7 +507,8 @@ export const App = observer((): ReactElement => {
           </Col>
           <Col offset={4} span={16}>
             <Form.Item
-              extra={<Typography.Text type="secondary">Default voting period for the governance proposals</Typography.Text>}
+              extra={<Typography.Text type="secondary">Default voting period for the governance
+                proposals</Typography.Text>}
               label="Governance Voting Period"
               name="votingPeriod"
               rules={[
@@ -465,11 +534,18 @@ export const App = observer((): ReactElement => {
               <FaucetField store={store}/>
             </Form.Item>
           </Col>
-          <Col offset={4} span={16}>
+          <Col offset={4} span={10}>
             <Divider/>
             <Button onClick={async () => {
               await store.submitForm()
             }} size="large" type="primary">Generate Genesis Config File</Button>
+          </Col>
+          <Col offset={4} span={2}>
+            <Divider/>
+            <Button onClick={async () => {
+              localStorage.removeItem('__state__')
+              window.location.reload()
+            }} size="large">Reset to default</Button>
           </Col>
         </Row>
         <br/>
