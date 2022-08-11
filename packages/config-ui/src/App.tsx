@@ -6,6 +6,8 @@ import {action, makeAutoObservable} from "mobx";
 import {observer} from "mobx-react";
 import BigNumber from "bignumber.js";
 import FileSaver from 'file-saver';
+import { Tooltip } from 'antd';
+import {QuestionCircleOutlined} from "@ant-design/icons";
 
 export class FormStore {
 
@@ -335,16 +337,24 @@ export const App = observer((): ReactElement => {
       >
         <Row gutter={24}>
           <Col offset={4} span={16}>
+           <h1>Genesis Configurator</h1>
+           Genesis configurator allows you to generate a customized genesis config file for BNB Sidechain.<br />
+           We suggest you use it while testing out a <a href="https://github.com/Ankr-network/bas-devnet-setup">demo setup</a>.<br />
+           Set up the parameters below and click <b>Generate Genesis Config File</b> at the end of the page.<br /><br />
+           <h2>Config Parameters</h2>
+          </Col>
+          <Col offset={4} span={16}>
             <Form.Item
-              extra={<Typography.Text type="secondary">Unique chain id for your project. Make sure it doesn`&apos;t
-                intersect with values from <a href="https://chainlist.org/">https://chainlist.org/</a> or <a
-                  href="https://www.bnbchainlist.org/">https://www.bnbchainlist.org/</a></Typography.Text>}
-              label="Chain ID"
+              extra={<Typography.Text type="secondary">
+                Unique Chain ID of your project</Typography.Text>}
+              label={<Tooltip placement="right" title={<span>Hand-entered unique ID of your project. <br />Check your desired Chain ID on <a href="https://chainlist.org/">ChainList</a> and <a
+                  href="https://www.bnbchainlist.org/">BNBChain list</a> and make sure it doesn't intersect with that of any other project's.</span>}>Chain ID <QuestionCircleOutlined/></Tooltip>}
               name="chainId"
               rules={[
                 {required: true, message: 'Required field'},
               ]}
             >
+
               <Input onChange={({target}) => {
                 const {value} = target as any
                 store.setChainId(value)
@@ -355,7 +365,7 @@ export const App = observer((): ReactElement => {
             <Form.Item
               extra={<Typography.Text type="secondary">List of genesis validator
                 addresses</Typography.Text>}
-              label="Genesis Validator Set"
+              label={<Tooltip placement="right" title={<span>Initial set of validators that run when your start your BNB Sidechain instance.<br /> Add, remove, or update with any validator addresses of your choice. You can set up validators in the <a href="https://github.com/Ankr-network/bas-devnet-setup/tree/devel/keystore">keystore folder</a>. </span>}>Genesis Validator Set <QuestionCircleOutlined/></Tooltip>}
               name="genesisValidators"
               rules={[
                 {required: true, message: 'Required field'},
@@ -366,8 +376,8 @@ export const App = observer((): ReactElement => {
           </Col>
           <Col offset={4} span={16}>
             <Form.Item
-              extra={<Typography.Text type="secondary">Reward distribution for system treasury</Typography.Text>}
-              label="System Treasury"
+              extra={<Typography.Text type="secondary">Reward distribution scheme for system treasury</Typography.Text>}
+              label={<Tooltip placement="right" title={<span>Treasury reward distribution scheme allows you to set up what addresses receive which % of the system treasury assets.<br /> System treasury is a fund that accumulates 1/16 from the validators rewards, which are formed from the transaction execution costs. <br />Treasury can use these assets for the system needs, such as bridging cost coverage. </span>}>System Treasury <QuestionCircleOutlined/></Tooltip>}
               name="systemTreasury"
               rules={[
                 {required: true, message: 'Required field'},
@@ -380,9 +390,8 @@ export const App = observer((): ReactElement => {
         <Row gutter={24}>
           <Col offset={4} span={16}>
             <Form.Item
-              extra={<Typography.Text type="secondary">How many active validators blockchain can
-                have?</Typography.Text>}
-              label="Active Validator Length"
+              extra={<Typography.Text type="secondary">Minimum number of active validators on the network</Typography.Text>}
+              label={<Tooltip placement="right" title={<span>Your network can have a minimum amount of validators. <br /> More validators means more decentralization.<br />We suggest the minimum amount of validators not lower than 5 to maintain network availability and throughput. </span>}>Minimum Number of Active Validators <QuestionCircleOutlined/></Tooltip>}
               name="activeValidatorsLength"
               rules={[
                 {required: true, message: 'Required field'},
@@ -397,7 +406,7 @@ export const App = observer((): ReactElement => {
           <Col offset={4} span={16}>
             <Form.Item
               extra={<Typography.Text type="secondary">Length of the epoch in blocks</Typography.Text>}
-              label="Epoch Block Interval"
+              label={<Tooltip placement="right" title={<span>Length of an epoch, specified in blocks produced on the network. An epoch is a variable used in the calculatation of important blockchain events, such as gas consumption, rewards claiming period, duration of validator penalty, and so on.<br /> An optimal epoch length is very important. We suggest the length of 1 day (86400/3=28800, where 3s is constant block production time on BNB Chain).</span>}>Epoch Length <QuestionCircleOutlined/></Tooltip>}
               name="epochBlockInterval"
               rules={[
                 {required: true, message: 'Required field'},
@@ -411,10 +420,9 @@ export const App = observer((): ReactElement => {
           </Col>
           <Col offset={4} span={16}>
             <Form.Item
-              extra={<Typography.Text type="secondary">After missing this amount of blocks per day validator losses all
-                daily rewards (penalty)
+              extra={<Typography.Text type="secondary">Number of missed blocks for a validator to be penalized
               </Typography.Text>}
-              label="Misdemeanor Threshold"
+              label={<Tooltip placement="right" title={<span>Number of missed blocks for a validator to lose their rewards for the current epoch. <br /> A validator may sometimes miss blocks due to network hiccups or going offline.<br /> It is part of the incentive scheme to keep the network stable and protected from malicious intents.</span>}>Validator Misdemeanor Threshold <QuestionCircleOutlined/></Tooltip>}
               name="misdemeanorThreshold"
               rules={[
                 {required: true, message: 'Required field'},
@@ -428,9 +436,8 @@ export const App = observer((): ReactElement => {
           </Col>
           <Col offset={4} span={16}>
             <Form.Item
-              extra={<Typography.Text type="secondary">After missing this amount of blocks per day validator goes in
-                jail for N epochs</Typography.Text>}
-              label="Felony Threshold"
+              extra={<Typography.Text type="secondary">Number of missed blocks for a validator to be jailed</Typography.Text>}
+              label={<Tooltip placement="right" title={<span>Number of missed blocks for a validator to go to jail for N subsequent epochs. The duration of jail time is set via <b>Validator Jail Length</b>. <br /> A validator may sometimes miss blocks due to network hiccups or going offline.<br /> It is part of the incentive scheme to keep the network stable and protected from malicious intents.</span>}>Validator Felony Threshold <QuestionCircleOutlined/></Tooltip>}
               name="felonyThreshold"
               rules={[
                 {required: true, message: 'Required field'},
@@ -444,9 +451,8 @@ export const App = observer((): ReactElement => {
           </Col>
           <Col offset={4} span={16}>
             <Form.Item
-              extra={<Typography.Text type="secondary">How many epochs validator should stay in jail (7 epochs = ~7
-                days)</Typography.Text>}
-              label="Validator Jail Epoch Length"
+              extra={<Typography.Text type="secondary">Jail time duration for a validator</Typography.Text>}
+              label={<Tooltip placement="right" title={<span>Duration of jail time in epochs. A validator who missed N number of blocks set via <b>Validator Felony Threshold</b> An optimal epoch time is 1 day (28800).<br /> A validator may sometimes miss blocks due to network hiccups or going offline.<br /> It is part of the incentive scheme to keep the network stable and protected from malicious intents.</span>}>Validator Jail Length <QuestionCircleOutlined/></Tooltip>}
               name="validatorJailEpochLength"
               rules={[
                 {required: true, message: 'Required field'},
@@ -460,8 +466,8 @@ export const App = observer((): ReactElement => {
           </Col>
           <Col offset={4} span={16}>
             <Form.Item
-              extra={<Typography.Text type="secondary">Allow claiming funds only after N epochs</Typography.Text>}
-              label="Undelegate Period"
+              extra={<Typography.Text type="secondary">Number of epochs before allowing to claim rewards</Typography.Text>}
+              label={<Tooltip placement="right" title={<span>Number of epochs that should pass before users are able to claim their rewards.<br /> An optimal epoch time is 1 day (28800).<br /> It is part of the incentive scheme to keep the network stable and protected from malicious intents.</span>}>Undelegate Period <QuestionCircleOutlined/></Tooltip>}
               name="undelegatePeriod"
               rules={[
                 {required: true, message: 'Required field'},
@@ -475,9 +481,8 @@ export const App = observer((): ReactElement => {
           </Col>
           <Col offset={4} span={16}>
             <Form.Item
-              extra={<Typography.Text type="secondary">How many tokens validator must stake to create a validator (in
-                ether)</Typography.Text>}
-              label="Min Validator Stake Amount"
+              extra={<Typography.Text type="secondary">Minimum amount of tokens to create a validator</Typography.Text>}
+              label={<Tooltip placement="right" title={<span>Minimum amount of tokens in ether (10<sup>18</sup>) to create a validator. The stake is locked and secures the validator's position, and protects network from malicious validators, as a validator may lose their stake for misbehaving.</span>}>Validator's Minimum Stake Amount <QuestionCircleOutlined/></Tooltip>}
               name="minValidatorStakeAmount"
               rules={[
                 {required: true, message: 'Required field'},
@@ -491,9 +496,8 @@ export const App = observer((): ReactElement => {
           </Col>
           <Col offset={4} span={16}>
             <Form.Item
-              extra={<Typography.Text type="secondary">Minimum staking amount for delegators (in
-                ether)</Typography.Text>}
-              label="Min Staking Amount"
+              extra={<Typography.Text type="secondary">Minimum amount of tokens to create a delegated stake</Typography.Text>}
+              label={<Tooltip placement="right" title={<span>Minimum amount of tokens in ether (10<sup>18</sup>) to stake with a chosen validator.<br /> Ordinary users may not have enough tokens or hardware power to create a validator, but they still can stake with a validator and receive a portion of that validator's rewards. <br />This is called delegated staking.</span>}>User's Minimum Stake Amount <QuestionCircleOutlined/></Tooltip>}
               name="minStakingAmount"
               rules={[
                 {required: true, message: 'Required field'},
@@ -507,9 +511,9 @@ export const App = observer((): ReactElement => {
           </Col>
           <Col offset={4} span={16}>
             <Form.Item
-              extra={<Typography.Text type="secondary">Default voting period for the governance
-                proposals</Typography.Text>}
-              label="Governance Voting Period"
+              extra={<Typography.Text type="secondary">Default voting period for proposed changes to governance
+                </Typography.Text>}
+              label={<Tooltip placement="right" title={<span>Network users are able to propose changes to the governance rules. Each proposal lives a limited time span to be voted for.<br /> After a defined period they get stale and are discarded.</span>}>Governance Voting Period <QuestionCircleOutlined/></Tooltip>}
               name="votingPeriod"
               rules={[
                 {required: true, message: 'Required field'},
@@ -523,9 +527,9 @@ export const App = observer((): ReactElement => {
           </Col>
           <Col offset={4} span={16}>
             <Form.Item
-              extra={<Typography.Text type="secondary">Map with initial balances for faucet and other needs
+              extra={<Typography.Text type="secondary">Map of initial balances for faucet and other system needs
               </Typography.Text>}
-              label="Faucet"
+              label={<Tooltip placement="right" title={<span>Allocation scheme setting what address receives which number of tokens when the BNB Sidechain instance starts. <br /> These addresses are usually testnet faucets, system funds, and other necessary system tools.</span>}>Initial Allocation Scheme <QuestionCircleOutlined/></Tooltip>}
               name="faucet"
               rules={[
                 {required: true, message: 'Required field'},
