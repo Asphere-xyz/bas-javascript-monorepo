@@ -1,0 +1,39 @@
+.validator-collapse-content-card {
+  width: 100%;
+  height: 100%;
+  border: 2px solid var(--SD025);
+  border-radius: 15px;
+  padding: 1rem;
+  box-shadow: 0 0 10px 1px var(--SD075);
+}
+
+.validator-collapse-content-card.borderless {
+  border: none;
+  padding: 0.5rem;
+  box-shadow: none;
+}
+
+.validator-collapse-content-card > div {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  color: var(--SL100);
+}
+
+.validator-collapse-content-card .value {
+  font-size: 1.5rem;
+  display: flex;
+  align-items: center;
+  font-weight: bold;
+}
+
+.validator-collapse-content-container .info {
+  padding: 0;
+  align-items: flex-start !important;
+  text-align: left;
+}
+
+.validator-collapse-content-container .info span:not(.anticon) {
+  color: var(--SD010);
+}

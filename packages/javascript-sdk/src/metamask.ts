@@ -66,12 +66,13 @@ export const sendTransactionAsync = async (
     to: string;
     data?: string;
     gasLimit?: string;
+    gasPrice?: string;
     value?: string;
     nonce?: number;
   }
 ): Promise<IPendingTx> => {
-  const gasPrice = await web3.eth.getGasPrice();
-  console.log('Gas Price: ' + gasPrice);
+  const price = sendOptions.gasPrice || await web3.eth.getGasPrice();
+  console.log('Gas Price: ' + price);
   let nonce = sendOptions.nonce;
   if (!nonce) {
     nonce = await web3.eth.getTransactionCount(sendOptions.from);
@@ -83,7 +84,7 @@ export const sendTransactionAsync = async (
     to: sendOptions.to,
     value: numberToHex(sendOptions.value || '0'),
     gas: numberToHex(sendOptions.gasLimit || '1000000'),
-    gasPrice: gasPrice,
+    gasPrice: price,
     data: sendOptions.data,
     nonce: nonce,
     chainId: chainId,

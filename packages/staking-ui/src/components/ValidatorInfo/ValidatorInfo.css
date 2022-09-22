@@ -1,0 +1,15 @@
+.validator-info-wrapper > div > div {
+  border-radius: 5px;
+  background: linear-gradient(to bottom right, var(--SD075), var(--SD100));
+  padding: 1rem;
+  display: flex;
+  flex-direction: column;
+  text-align: center;
+}
+
+.validator-info-wrapper > div > div span {
+  color: var(--SD010);
+}
+.validator-info-wrapper > div > div b {
+  font-size: 2rem;
+}

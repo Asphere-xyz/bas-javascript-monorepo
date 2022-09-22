@@ -16,7 +16,9 @@
   "dependencies": {
     "@ant-design/icons": "^4.7.0",
     "@types/react": "^17.0.42",
+    "@types/react-copy-to-clipboard": "^5.0.4",
     "@types/react-router-dom": "^5.3.3",
+    "@types/react-router-hash-link": "^2.4.5",
     "@types/uuid": "^8.3.4",
     "antd": "^4.19.3",
     "antd-prompt": "^0.6.0",
@@ -30,10 +32,13 @@
     "pretty-time": "^1.1.0",
     "react": "^17.0.2",
     "react-cookie-consent": "^7.5.0",
+    "react-copy-to-clipboard": "^5.1.0",
     "react-dom": "^17.0.2",
     "react-router-dom": "^5.3.0",
+    "react-router-hash-link": "^2.4.3",
     "react-scripts": "4.0.1",
-    "web-vitals": "^2.1.4"
+    "web-vitals": "^2.1.4",
+    "web3-utils": "^1.8.0"
   },
   "peerDependencies": {
     "@ankr.com/bas-javascript-sdk": "0.0.1",
@@ -44,6 +49,7 @@
     "@ankr.com/bas-javascript-sdk": "*",
     "@babel/core": "^7.17.8",
     "@babel/preset-env": "^7.16.11",
+    "@types/react-copy-to-clipboard": "^5.0.4",
     "@types/react-dom": "^17.0.14",
     "env-cmd": "^10.1.0",
     "eslint-webpack-plugin": "^2.5.2",
@@ -60,7 +66,10 @@
     "build:local": "REACT_APP_ENVIRONMENT=local react-scripts build",
     "build:devnet": "REACT_APP_ENVIRONMENT=devnet react-scripts build",
     "build:jfin": "REACT_APP_ENVIRONMENT=jfin react-scripts build",
-    "build:jfintest": "REACT_APP_ENVIRONMENT=jfintest react-scripts build"
+    "build:jfintest": "REACT_APP_ENVIRONMENT=jfintest react-scripts build",
+    "deploy:mainnet": "yarn build:jfin && firebase deploy --only hosting:mainnet",
+    "deploy:testnet": "yarn build:jfintest && firebase deploy --only hosting:testnet",
+    "deploy": "yarn deploy:testnet && yarn deploy:mainnet"
   },
   "browserslist": {
     "production": [

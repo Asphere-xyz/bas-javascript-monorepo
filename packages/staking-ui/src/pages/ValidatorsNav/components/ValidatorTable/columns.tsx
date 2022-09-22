@@ -24,7 +24,7 @@ export const createTableColumns = (store: BasStore): ColumnProps<any>[] => {
     const {blockNumber, blockTime, epochBlockInterval, nextEpochBlock, epoch} = await store.getChainConfig();
     if (epoch < Number(validator.jailedBefore)) {
       const remainingBlocks = (Number(validator.jailedBefore) - epoch) * epochBlockInterval + (nextEpochBlock - blockNumber);
-      console.log(remainingBlocks)
+      // console.log(remainingBlocks)
       const remainingTime = prettyTime(remainingBlocks * blockTime * 1000 * 1000 * 1000, 'm')
       return alert(`This validator can't be released right now, epoch ${validator.jailedBefore} is not reached. Current epoch is ${epoch}, you should wait for ${remainingTime}.`);
     }

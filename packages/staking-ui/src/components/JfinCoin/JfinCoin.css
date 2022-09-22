@@ -1,0 +1,15 @@
+.jfin-coin-container {
+  background: var(--SL025);
+  border-radius: 50%;
+  height: 20px;
+  width: 20px;
+  padding: 1px;
+  display: inline-block;
+  margin-left: 0.5rem;
+}
+
+.jfin-coin-container img {
+  height: 100%;
+  width: 100%;
+  vertical-align: top;
+}

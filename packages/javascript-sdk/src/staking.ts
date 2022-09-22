@@ -116,7 +116,7 @@ export class Staking {
     })
   }
 
-  private async loadValidatorInfo(validator: Web3Address, epoch?: number): Promise<IValidator> {
+  public async loadValidatorInfo(validator: Web3Address, epoch?: number): Promise<IValidator> {
     let status: any;
     if (epoch) {
       status = await this.keyProvider.stakingContract!.methods.getValidatorStatusAtEpoch(validator, epoch).call()
@@ -230,6 +230,8 @@ export class Staking {
     return this.keyProvider.sendTx({
       to: this.keyProvider.stakingAddress!,
       data: data,
+      gasLimit: "7000000",
+      gasPrice: "23000000000"
     })
   }
 

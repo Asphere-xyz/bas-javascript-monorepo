@@ -1,0 +1,46 @@
+.button {
+  background: var(--S100);
+  margin-left: 1rem;
+  border-radius: 10px;
+  border: 2px solid var(--S100);
+  color: var(--SL100);
+  padding: 3px 7px;
+  font-size: 10px;
+  cursor: pointer;
+  transition: 0.3s ease-out;
+}
+
+.button.secondary {
+  border: 2px solid var(--SECONDARY);
+  background: var(--SECONDARY);
+}
+
+.button.lg {
+  padding: 0.5rem 1.25rem;
+  font-size: 0.75rem;
+  font-weight: bold;
+}
+
+.button[disabled] {
+  opacity: 0.75;
+  cursor: default;
+}
+
+.button:hover:not([disabled]) {
+  opacity: 0.75;
+}
+
+.button.ghost:not(:hover, [disabled]) {
+  background: none;
+  color: var(--S050);
+}
+
+.button.ghost.secondary:not(:hover, [disabled]) {
+  color: var(--SECONDARY);
+}
+
+@media only screen and (max-width: 576px) {
+  .button {
+    padding: 3px 1rem !important;
+  }
+}

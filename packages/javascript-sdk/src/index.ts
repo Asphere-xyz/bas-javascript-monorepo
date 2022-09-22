@@ -5,6 +5,7 @@ import {Staking} from "./staking";
 import {IChainConfig, IChainParams, Web3Address} from "./types";
 import {PastEventOptions} from "web3-eth-contract";
 import {RuntimeUpgrade} from "./runtime";
+import Web3 from "web3";
 
 export * from './config'
 export * from './governance'
@@ -28,6 +29,18 @@ export class BasSdk {
   public isConnected(): boolean {
     if (!this.keyProvider) return false
     return this.keyProvider.isConnected()
+  }
+
+  public async connectProvider() {
+    const keyProvider = new KeyProvider(this.config)
+    const httpProvider = new Web3.providers.HttpProvider(this.config.rpcUrl)
+    const web3 = new Web3(httpProvider);
+    await keyProvider.connect(web3, true)
+
+    this.keyProvider = keyProvider
+    this.staking = new Staking(keyProvider)
+    this.runtimeUpgrade = new RuntimeUpgrade(keyProvider)
+    this.governance = new Governance(keyProvider)
   }
 
   public async connect(): Promise<void> {

@@ -1,0 +1,17 @@
+{
+  "projects": {
+    "default": "jfin-staking-ui"
+  },
+  "targets": {
+    "jfin-staking-ui": {
+      "hosting": {
+        "mainnet": [
+          "jfin-staking-preview-mainnet"
+        ],
+        "testnet": [
+          "jfin-staking-preview-testnet"
+        ]
+      }
+    }
+  }
+}
