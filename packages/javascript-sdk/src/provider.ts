@@ -49,13 +49,15 @@ export class KeyProvider implements IKeyProvider {
     return !!this.web3;
   }
 
-  public async connect(web3: Web3): Promise<void> {
+  public async connect(web3: Web3, withoutWallet?: boolean): Promise<void> {
     const remoteChainId = await web3.eth.getChainId();
     if (remoteChainId != this.config.chainId) {
       await waitForExpectedNetworkOrThrow(web3, this.config);
     }
     // init web3 state
-    this.accounts = await this.unlockAccounts(web3);
+    if (!withoutWallet) {
+      this.accounts = await this.unlockAccounts(web3);
+    }
     this.web3 = web3;
     // init system smart contracts
     // addresses
@@ -181,12 +183,14 @@ export class KeyProvider implements IKeyProvider {
     return chainParams.epoch
   }
 
-  public async sendTx(sendOptions: { to: string; data?: string; value?: string; }): Promise<IPendingTx> {
+  public async sendTx(sendOptions: { to: string; data?: string; value?: string; gasLimit?: string; gasPrice?: string }): Promise<IPendingTx> {
     return await sendTransactionAsync(this.web3!, {
       from: this.accounts![0],
       to: sendOptions.to,
       value: sendOptions.value,
       data: sendOptions.data,
+      gasLimit: sendOptions.gasLimit,
+      gasPrice: sendOptions.gasPrice
     })
   }
 }

@@ -1,0 +1,55 @@
+.ant-modal-mask {
+  background-color: rgba(255, 255, 255, 0.25);
+}
+
+.ant-modal-content {
+  background-color: var(--SD075) !important;
+  border-radius: 15px;
+}
+
+.ant-modal-header {
+  color: var(--SL075);
+  border-bottom: none;
+  background: linear-gradient(to bottom right, var(--S075), var(--SD100));
+  border-top-left-radius: 15px;
+  border-top-right-radius: 15px;
+}
+
+.ant-modal-close-x,
+.ant-modal-title,
+.ant-modal-body {
+  color: var(--SL075);
+}
+
+.ant-modal-footer {
+  border-top: none;
+  border-bottom-right-radius: 15px;
+  padding: 5px 0;
+}
+
+.staking-input {
+  border-radius: 15px;
+  width: 100%;
+  padding: 1rem;
+  border: none;
+  background: var(--SD050);
+  transition: 0.3s ease-out;
+  text-align: right;
+  font-size: 1rem;
+  font-weight: bold;
+  appearance: none !important;
+  -moz-appearance: textfield !important;
+  -webkit-appearance: none !important;
+}
+
+.staking-input:focus-visible {
+  outline: none;
+}
+
+.staking-input[disabled] {
+  opacity: 0.75;
+}
+
+.staking-sub-input {
+  text-align: right;
+}

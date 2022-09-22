@@ -1,0 +1,18 @@
+.ant-pagination {
+}
+
+.ant-pagination-item a {
+  color: var(--SL075) !important;
+}
+
+.ant-pagination-item-active {
+  border-radius: 5px !important;
+}
+
+.ant-pagination-item-link {
+  color: var(--SL075) !important;
+}
+
+.ant-select-selector {
+  border-radius: 15px !important;
+}

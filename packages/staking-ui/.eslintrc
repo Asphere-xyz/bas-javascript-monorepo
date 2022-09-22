@@ -1,22 +1,15 @@
 {
   "extends": "../../.common-eslintrc",
   "settings": {
-    "import/core-modules": [
-      "javascript-sdk"
-    ],
+    "import/core-modules": ["javascript-sdk"],
     "import/parsers": {
-      "@typescript-eslint/parser": [
-        ".ts",
-        ".tsx"
-      ]
+      "@typescript-eslint/parser": [".ts", ".tsx"]
     },
     "import/internal-regex": "^(assets|modules|store|uiKit)/"
   },
   "overrides": [
     {
-      "files": [
-        "**/*.ts?(x)"
-      ],
+      "files": ["**/*.ts?(x)"],
       "rules": {
         "import/no-extraneous-dependencies": [
           "error",
@@ -41,9 +34,7 @@
         "no-unreachable": "error",
         "no-template-curly-in-string": "off",
         "prefer-template": "error",
-        "camelcase": [
-          "error"
-        ],
+        "camelcase": ["error"],
         "no-case-declarations": "error",
         "no-unused-vars": "warn",
         "no-use-before-define": "off",
@@ -88,7 +79,9 @@
               }
             }
           }
-        ]
+        ],
+        "lines-between-class-members": "off",
+        "@typescript-eslint/lines-between-class-members": "off"
       }
     }
   ]

@@ -11,21 +11,24 @@ import { createTableColumns } from "./columns";
 const ProposalTable = observer(() => {
   const store = useBasStore();
 
-  const grid = useLocalGridStore<IGovernanceProposal>(async (): Promise<[IGovernanceProposal[], boolean]> => {
-    const proposals = await store
-      .getBasSdk()
-      .getGovernance()
-      .getProposals({fromBlock: 'earliest', toBlock: 'latest'});
-    return [proposals, false]
-  });
+  const grid = useLocalGridStore<IGovernanceProposal>(
+    async (): Promise<[IGovernanceProposal[], boolean]> => {
+      const proposals = await store
+        .getBasSdk()
+        .getGovernance()
+        .getProposals({ fromBlock: "earliest", toBlock: "latest" });
+      return [proposals, false];
+    }
+  );
 
   return (
     <Table
-      columns={createTableColumns(store)} 
-      dataSource={grid.items} 
+      scroll={{ x: true }}
+      columns={createTableColumns(store)}
+      dataSource={grid.items}
       expandable={{
         expandedRowRender: (event: IGovernanceProposal) => {
-          return <ProposalExplainer event={event}/>
+          return <ProposalExplainer event={event} />;
         },
       }}
       loading={grid.isLoading}

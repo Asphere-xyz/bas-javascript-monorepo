@@ -8,7 +8,6 @@ import {claimRewards} from "src/utils/helpers";
 export const createTableColumns = (store: BasStore): ColumnProps<any>[] => {
 
   const handleClaimRewards = async (record: IStakingRewards) => {
-    console.log(record)
     await claimRewards(store, record.validator.validator);
   }
 

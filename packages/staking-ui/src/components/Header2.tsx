@@ -3,9 +3,8 @@ import { observer } from "mobx-react";
 import { Switch, Route } from "react-router-dom";
 import HomePage from "src/pages/HomePage";
 import CookieConsent from "react-cookie-consent";
-
-import BlockInfo from "./BlockInfo";
 import Conditions from "./Conditions";
+import BlockInfo from "./BlockInfo/BlockInfo";
 
 const Header = observer(() => {
   return (

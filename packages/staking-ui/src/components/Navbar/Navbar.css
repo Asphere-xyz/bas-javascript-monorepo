@@ -1,0 +1,145 @@
+.navbar-container {
+  width: 100%;
+  padding: 1.5rem 32px;
+  border-bottom: 1px solid var(--SD050);
+  position: relative;
+}
+
+.navbar-wrapper {
+  width: 100%;
+  display: flex;
+  align-items: center;
+}
+
+.navbar-container .navbar-menu {
+  margin-left: 64px;
+}
+
+.navbar-container .navbar-menu a {
+  font-display: inline-block;
+  color: var(--SD010);
+}
+
+.navbar-container .navbar-menu a.active {
+  font-weight: bold;
+  color: var(--SL100);
+}
+
+.navbar-container .navbar-menu a:not(:last-child),
+.navbar-menu span {
+  margin-right: 24px;
+}
+
+.navbar-container .navbar-wallet {
+  flex-grow: 2;
+  text-align: right;
+}
+
+.navbar-container .navbar-burger {
+  display: none;
+  flex-grow: 2;
+  text-align: right;
+}
+
+.navbar-container .navbar-burger button {
+  padding: 5px 2rem;
+  border: 1px solid #fff;
+  border-radius: 30px;
+  background: none;
+  transition: 0.3s ease-out;
+}
+
+.navbar-burger:hover button,
+.navbar-burger:focus button,
+.navbar-burger:active button {
+  color: var(--S050) !important;
+  border-color: var(--S050) !important;
+}
+
+.navbar-overlay {
+  z-index: 10;
+  width: 100%;
+  display: flex;
+  height: 0;
+  flex-direction: column;
+  text-align: center;
+  background: #f2f2f2;
+  background: var(--SD075);
+  border-bottom: 1px solid var(--SD050);
+  opacity: 0;
+  height: 0;
+  overflow: hidden;
+  transition: all 400ms ease-in-out;
+}
+
+.navbar-overlay.active {
+  opacity: 1;
+  height: 309px;
+}
+
+.navbar-overlay a {
+  color: var(--SD010);
+  padding: 15px;
+  font-weight: bold;
+  transition: 0.3s ease-out;
+}
+
+.navbar-overlay a:hover,
+.navbar-overlay a.active {
+  background: var(--SD100);
+  color: var(--SL100);
+}
+
+.wallet-overlay {
+  margin-top: 0.5rem;
+  color: var(--SL050);
+  display: flex;
+  flex-direction: column;
+}
+
+.wallet-overlay a {
+  padding: 0.5rem 1rem;
+  background: var(--SD050);
+  transition: 0.3s ease-out;
+  color: var(--SD010);
+}
+
+.wallet-overlay a:hover {
+  background: var(--SD075);
+  color: var(--SL025);
+}
+
+.wallet-overlay a:first-child {
+  border-top-left-radius: 15px;
+  border-top-right-radius: 15px;
+}
+
+.wallet-overlay a:last-child {
+  border-bottom-left-radius: 15px;
+  border-bottom-right-radius: 15px;
+}
+
+/* Breakpoint */
+@media only screen and (max-width: 900px) {
+  .navbar-container .navbar-wallet,
+  .navbar-container .navbar-menu {
+    display: none;
+  }
+
+  .navbar-container .navbar-burger {
+    display: block;
+  }
+}
+
+@media only screen and (min-width: 900px) {
+  .navbar-overlay {
+    opacity: 0 !important;
+    height: 0 !important;
+  }
+}
+
+@media only screen and (max-width: 576px) {
+  .navbar-container {
+    padding: 1rem 1rem;
+  }
+}
