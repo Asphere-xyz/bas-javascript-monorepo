@@ -126,7 +126,7 @@ const ValidatorCollapseHeader = observer(
           <div>
             <span className="col-title">Reward</span>
             <div>
-              {myStaked
+              {myReward
                 ? Number(myReward).toLocaleString(undefined, {
                     minimumFractionDigits: 2,
                     maximumFractionDigits: 2,

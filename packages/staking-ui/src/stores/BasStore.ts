@@ -251,19 +251,24 @@ export class BasStore {
       .getStaking()
       .getMyActiveDelegations();
 
-    const myValidatorFormat = await myValidator
-      .filter((i) => Number(i.amount))
-      .map(async (v) => {
-        return {
-          ...v,
-          amount: new BigNumber(v.amount).dividedBy(GWEI).toNumber(),
-          validatorProvider: await this.sdk
-            .getStaking()
-            .loadValidatorInfo(v.validator),
-        };
-      });
+    const promises = await myValidator.map(async (v) => {
+      return {
+        ...v,
+        reward: await this.sdk
+          .getStaking()
+          .loadValidatorInfo(v.validator)
+          .then((b: IValidator) => this.getMyValidatorReward(b)),
+        amount: new BigNumber(v.amount).dividedBy(GWEI).toNumber(),
+        validatorProvider: await this.sdk
+          .getStaking()
+          .loadValidatorInfo(v.validator),
+      };
+    });
 
-    return Promise.all(myValidatorFormat);
+    const myValidatorFormat = await Promise.all(promises);
+    return myValidatorFormat.filter(
+      (i) => Number(i.reward) || Number(i.amount)
+    );
   }
 
   public async getMyTransactionHistory(): Promise<
