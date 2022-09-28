@@ -1,1 +1,1 @@
-# B
+# Create Genesis config
