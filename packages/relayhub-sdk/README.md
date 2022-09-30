@@ -1,3 +1,3 @@
-# JavaScript SDK
+# SDK for managing proofs from RelayHub services
 ================
 
