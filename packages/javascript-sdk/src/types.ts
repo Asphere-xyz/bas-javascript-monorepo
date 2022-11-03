@@ -156,3 +156,10 @@ export interface IStakingRewards {
   validator: IValidator;
   amount: BigNumber;
 }
+
+export interface IValidatorDeposit {
+  event?: IEventData;
+  validator: Web3Address;
+  amount: Web3Uint256;
+  epoch: number;
+}

@@ -2,10 +2,8 @@ import {IConfig} from "./config";
 import {Governance} from "./governance";
 import {KeyProvider} from "./provider";
 import {Staking} from "./staking";
-import {IChainConfig, IChainParams, Web3Address} from "./types";
-import {PastEventOptions} from "web3-eth-contract";
+import {IChainConfig, IChainParams} from "./types";
 import {RuntimeUpgrade} from "./runtime";
-import BigNumber from "bignumber.js";
 
 export * from './config'
 export * from './governance'
@@ -64,9 +62,5 @@ export class BasSdk {
 
   public async getChainParams(): Promise<IChainParams> {
     return this.keyProvider!.getChainParams()
-  }
-
-  public async transferToChapel(amount: BigNumber): Promise<void> {
-    
   }
 }

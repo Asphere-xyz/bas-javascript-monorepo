@@ -202,7 +202,7 @@ export class FormStore {
                                                   }) => [address, '0x' + new BigNumber(amount).multipliedBy(10 ** 18).toString(16)]))
     };
     console.log(`Request: ${JSON.stringify(requestBody, null, 2)}`);
-    const resp = await fetch(`${window.location.protocol}//${window.location.hostname}:8080`, {
+    const resp = await fetch(`${window.location.protocol}//${window.location.hostname.replace('config', 'genesis-config')}`, {
       method: 'POST',
       body: JSON.stringify(requestBody),
     })

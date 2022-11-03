@@ -3,13 +3,13 @@ import {
   IDelegatorDelegation,
   IDelegatorOneOfEvent,
   IPendingTx, IStakingRewards,
-  IValidator, VALIDATOR_STATUS_MAPPING,
+  IValidator, IValidatorDeposit, VALIDATOR_STATUS_MAPPING,
   Web3Address,
   Web3Uint256
 } from "./types";
 import BigNumber from "bignumber.js";
 import {sortEventData, sortHasEventData} from "./utils";
-import {EventData} from "web3-eth-contract";
+import {EventData, PastEventOptions} from "web3-eth-contract";
 
 export class Staking {
 
@@ -109,7 +109,10 @@ export class Staking {
     let result = await Promise.all(validators.map(v => this.loadValidatorInfo(v, epoch)))
     const totalDelegatedAmount = result.reduce((result, validator) => result.plus(validator.totalDelegated), new BigNumber('0'))
     result = result.map(validator => {
-      return { ...validator, votingPower:  new BigNumber(validator.totalDelegated).dividedBy(totalDelegatedAmount).multipliedBy(100).toNumber() }
+      return {
+        ...validator,
+        votingPower: new BigNumber(validator.totalDelegated).dividedBy(totalDelegatedAmount).multipliedBy(100).toNumber()
+      }
     })
     return result.sort((a, b) => {
       return new BigNumber(b.totalDelegated).comparedTo(new BigNumber(a.totalDelegated))
@@ -150,15 +153,27 @@ export class Staking {
     })
   }
 
-  public async getDelegationHistory(filter: { validator?: Web3Address; staker?: Web3Address } = {}): Promise<IDelegatorDelegation[]> {
-    const events = await this.keyProvider.stakingContract!.getPastEvents('Delegated', {
+  public async getDelegationHistory(filter: { validator?: Web3Address; staker?: Web3Address; } = {}, opts: PastEventOptions = {}): Promise<IDelegatorDelegation[]> {
+    const events = await this.keyProvider.stakingContract!.getPastEvents('Delegated', Object.assign({}, opts, {
       fromBlock: 'earliest',
       toBlock: 'latest',
       filter: filter,
-    })
+    }))
     return events.map((event: EventData): IDelegatorDelegation => {
       const {validator, staker, amount, epoch} = event.returnValues
       return {event, validator, staker, amount, epoch}
+    })
+  }
+
+  public async getValidatorDeposits(filter: { validator?: Web3Address } = {}, opts: PastEventOptions = {}): Promise<IValidatorDeposit[]> {
+    const events = await this.keyProvider.stakingContract!.getPastEvents('ValidatorDeposited', Object.assign({}, opts, {
+      fromBlock: 'earliest',
+      toBlock: 'latest',
+      filter: filter,
+    }))
+    return events.map((event: EventData): IValidatorDeposit => {
+      const {validator, amount, epoch} = event.returnValues
+      return {event, validator, amount, epoch}
     })
   }
 
@@ -319,5 +334,43 @@ export class Staking {
       value: new BigNumber(initialStake).multipliedBy(10 ** 18).toString(10),
       data: data,
     })
+  }
+
+  public async getMonthlyStakingRewards(staker: Web3Address, validator?: Web3Address): Promise<BigNumber> {
+    let result = new BigNumber('0')
+    const {epochBlockInterval} = await this.keyProvider.getChainConfig(),
+      {blockTime} = await this.keyProvider.getChainParams()
+    const currentEpoch = await this.keyProvider.getCurrentEpoch(),
+      epochsInMonth = (2592000 / blockTime / epochBlockInterval) | 0
+    const monthStartsAtEpoch = currentEpoch - epochsInMonth,
+      monthStartsAtBlock = monthStartsAtEpoch * epochBlockInterval;
+    const delegationHistory = await this.getDelegationHistory({staker, validator}),
+      validatorDeposits = await this.getValidatorDeposits({validator})
+    const delegatedPerEpoch = delegationHistory.reduce<Record<number, BigNumber>>((result, val) => {
+      if (!result[val.epoch]) {
+        result[val.epoch] = new BigNumber('0')
+      }
+      result[val.epoch] = result[val.epoch].plus(new BigNumber(val.amount).dividedBy(10 ** 18))
+      return result
+    }, {})
+    const depositedPerEpoch = validatorDeposits.reduce<Record<number, BigNumber>>((result, val) => {
+      if (!result[val.epoch]) {
+        result[val.epoch] = new BigNumber('0')
+      }
+      result[val.epoch] = result[val.epoch].plus(new BigNumber(val.amount).dividedBy(10 ** 18))
+      return result
+    }, {})
+    let effectiveEpoch = monthStartsAtEpoch
+    for (const delegation of delegationHistory) {
+      delegation.epoch
+    }
+    for (const validatorDeposit of validatorDeposits) {
+
+      const {totalDelegated} = await this.loadValidatorInfo(validatorDeposit.validator)
+    }
+    // sum(ValidatorDeposited)*yourDelegatedAmount/totalDelegatedAmount
+
+    // await this.loadValidatorInfo(validator)
+    return result
   }
 }
